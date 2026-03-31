@@ -109,8 +109,48 @@ const Hero = () => {
       0
     );
 
-    // Phase B (0.65 → 1.0): reserved for future signature draw
-    // (will be wired to #signature-container in next phase)
+    // Phase B (0.65 → 1.0): Fetch and animate the SVG signature
+    const loadSignature = async () => {
+      try {
+        const res = await fetch('/file.svg');
+        const svgContent = await res.text();
+        const sigContainer = signatureRef.current;
+        
+        if (sigContainer) {
+          // Inject raw SVG markup
+          sigContainer.innerHTML = svgContent;
+          
+          // Select injected paths
+          const paths = Array.from(sigContainer.querySelectorAll('path'));
+          
+          // Prepare paths for drawing
+          paths.forEach((path) => {
+            const length = path.getTotalLength();
+            // Set dash array and offset to exactly the path length
+            path.style.strokeDasharray = `${length}`;
+            path.style.strokeDashoffset = `${length}`;
+            // The rest of the styling (fill, stroke color, width) is handled by CSS
+          });
+
+          // Add drawing animation to the end of the existing timeline 
+          // (">" means it starts exactly when the previous 'tl' animations end)
+          tl.to(
+            paths,
+            {
+              strokeDashoffset: 0,
+              ease: 'power2.inOut',
+              duration: 0.35,
+              stagger: 0.1, // Slight stagger if multiple paths exist
+            },
+            '>'
+          );
+        }
+      } catch (err) {
+        console.error('Failed to load signature SVG:', err);
+      }
+    };
+
+    loadSignature();
 
     // ── Cleanup ──
     return () => {
