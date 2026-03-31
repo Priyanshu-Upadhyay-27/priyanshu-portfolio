@@ -1,132 +1,238 @@
 /* ============================================
-   HERO — Cover-and-Reveal + Neon SVG Draw
-   Fixed bg text → shrinking portrait cover → swoosh
+   HERO — 3-Layer Architecture + GSAP Scroll Reveal
+   L1: Kinetic text  |  L2: Image mask  |  L3: UI
+   Background: #080808
    ============================================ */
 
-/* ── Scroll container ── */
-.hero-scroll-container {
+/* ── Hero wrapper (pinned by GSAP) ── */
+.hero {
   position: relative;
   width: 100%;
-  height: 300vh;
+  height: 100vh;
+  background-color: #080808;
+  overflow: hidden;
 }
 
 /* ════════════════════════════════════════════
-   LAYER 1: Background Text (FIXED)
+   LAYER 1: KINETIC TYPOGRAPHY BACKGROUND
+   position: fixed | z-index: 1 | overflow: hidden
+   Animated by GSAP (no CSS keyframes needed)
    ════════════════════════════════════════════ */
-.hero-bg-fixed {
+.hero-L1 {
   position: fixed;
   top: 0;
   left: 0;
   width: 100vw;
   height: 100vh;
   z-index: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  pointer-events: none;
   overflow: hidden;
-  background-color: #0a0a0a;
+  background-color: #080808;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 0.25rem;
+  will-change: transform;
 }
 
-.hero-bg-text {
+.hero-L1__track {
+  white-space: nowrap;
+  overflow: visible;
+}
+
+.hero-L1__text {
+  display: inline-block;
   font-family: 'Anton', sans-serif;
   font-weight: 400;
-  font-size: clamp(6rem, 20vw, 28rem);
-  line-height: 0.85;
+  font-size: clamp(4rem, 9vw, 9rem);
+  line-height: 1.0;
   text-transform: uppercase;
-  letter-spacing: -0.03em;
-  user-select: none;
-  white-space: nowrap;
+  letter-spacing: -0.02em;
   color: #ccff00;
-  opacity: 0.08;
+  opacity: 0.07;
+  user-select: none;
+  will-change: transform;
 }
 
 /* ════════════════════════════════════════════
-   LAYER 2: Portrait Cover (FIXED)
-   Full-screen, hides bg text on load.
-   GSAP will scale this down into a box.
+   LAYER 2: IMAGE MASK WRAPPER
+   Solid #080808 bg hides L1 on load.
+   GSAP animates clip-path: inset(...) to reveal.
    ════════════════════════════════════════════ */
-.hero-portrait-cover {
-  position: fixed;
+.hero-L2 {
+  position: absolute;
   top: 0;
   left: 0;
   width: 100vw;
   height: 100vh;
   z-index: 2;
-  background-color: #0a0a0a;
-  display: flex;
-  align-items: flex-end;
-  justify-content: center;
+  background-color: #080808;
   overflow: hidden;
-  transform-origin: center center;
-  will-change: transform, border-radius;
+
+  clip-path: inset(0% 0% 0% 0% round 0px);
+  will-change: clip-path;
 }
 
-.hero-portrait {
+.hero-L2__portrait {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
   width: auto;
-  height: 90vh;
-  max-width: 100%;
-  object-fit: contain;
+  height: 88vh;
+  object-fit: cover;
   object-position: bottom center;
-  filter: drop-shadow(0 0 80px rgba(0, 0, 0, 0.7));
+  filter: drop-shadow(0 0 100px rgba(0, 0, 0, 0.85));
 }
 
-/* ── Cover metadata ── */
-.hero-cover-meta {
+/* Dark overlay — starts fully transparent, GSAP fades to 50% */
+.hero-L2__overlay {
   position: absolute;
   inset: 0;
+  background-color: #000000;
+  opacity: 0;
+  pointer-events: none;
+  will-change: opacity;
+}
+
+/* ════════════════════════════════════════════
+   LAYER 3: FOREGROUND UI
+   ════════════════════════════════════════════ */
+.hero-L3 {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 3;
   pointer-events: none;
 }
 
-.hero-role {
+/* ── Navbar ── */
+.hero-nav {
   position: absolute;
-  top: 2.5rem;
-  left: 2.5rem;
+  top: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  padding: 1.75rem 2.5rem;
+  pointer-events: auto;
 }
 
-.hero-role__label {
-  font-family: 'Inter', sans-serif;
-  font-size: 0.7rem;
-  font-weight: 500;
-  letter-spacing: 0.22em;
-  text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.4);
-}
-
-.hero-identity {
-  position: absolute;
-  bottom: 3rem;
-  left: 2.5rem;
+.hero-nav__logo {
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
-  max-width: 420px;
-}
-
-.hero-identity__title {
-  font-family: 'Outfit', sans-serif;
-  font-size: clamp(1.5rem, 3vw, 2.5rem);
-  font-weight: 700;
   line-height: 1.1;
+}
+
+.hero-nav__name {
+  font-family: 'Outfit', sans-serif;
+  font-size: 1.1rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
   color: #ffffff;
-  letter-spacing: -0.02em;
-  margin: 0;
 }
 
-.hero-identity__accent {
+.hero-nav__surname {
+  font-family: 'Outfit', sans-serif;
+  font-size: 0.65rem;
+  font-weight: 500;
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.35);
+}
+
+.hero-nav__resume {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.55rem 1.3rem;
+  background: transparent;
   color: #ccff00;
-}
-
-.hero-identity__description {
   font-family: 'Inter', sans-serif;
-  font-size: 0.85rem;
-  font-weight: 400;
-  line-height: 1.65;
-  color: rgba(255, 255, 255, 0.5);
-  margin: 0;
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  text-decoration: none;
+  border: 1.5px solid #ccff00;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s ease, color 0.2s ease, transform 0.2s ease;
+  pointer-events: auto;
 }
 
-.hero-scroll-indicator {
+.hero-nav__resume:hover {
+  background-color: #ccff00;
+  color: #080808;
+  transform: scale(1.04);
+}
+
+.hero-nav__icon {
+  width: 13px;
+  height: 13px;
+}
+
+/* ════════════════════════════════════════════
+   YOLO BOUNDING BOX — Bottom Left
+   ════════════════════════════════════════════ */
+.hero-yolo {
+  position: absolute;
+  bottom: 2.5rem;
+  left: 2.5rem;
+  min-width: 260px;
+  padding: 1.1rem 1.3rem;
+  pointer-events: auto;
+  will-change: opacity;
+}
+
+.hero-yolo__corner {
+  position: absolute;
+  width: 16px;
+  height: 16px;
+}
+
+.hero-yolo__corner--tl { top: 0; left: 0; border-top: 2px solid #ccff00; border-left: 2px solid #ccff00; }
+.hero-yolo__corner--tr { top: 0; right: 0; border-top: 2px solid #ccff00; border-right: 2px solid #ccff00; }
+.hero-yolo__corner--bl { bottom: 0; left: 0; border-bottom: 2px solid #ccff00; border-left: 2px solid #ccff00; }
+.hero-yolo__corner--br { bottom: 0; right: 0; border-bottom: 2px solid #ccff00; border-right: 2px solid #ccff00; }
+
+.hero-yolo__body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.hero-yolo__row {
+  font-family: 'Courier New', 'Consolas', monospace;
+  font-size: 0.72rem;
+  line-height: 1.3;
+  color: rgba(255, 255, 255, 0.55);
+  letter-spacing: 0.04em;
+}
+
+.hero-yolo__key { color: rgba(255, 255, 255, 0.35); }
+.hero-yolo__val { color: #ffffff; font-weight: 700; }
+.hero-yolo__val--neon { color: #ccff00; }
+
+/* ════════════════════════════════════════════
+   SIGNATURE CONTAINER — Centered
+   ════════════════════════════════════════════ */
+.hero-signature {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 55vw;
+  height: 30vh;
+  max-width: 850px;
+  pointer-events: none;
+}
+
+/* ── Scroll Cue ── */
+.hero-scroll-cue {
   position: absolute;
   bottom: 2rem;
   left: 50%;
@@ -134,86 +240,64 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 0.6rem;
+  gap: 0.5rem;
+  will-change: opacity;
 }
 
-.hero-scroll-indicator__text {
+.hero-scroll-cue__text {
   font-family: 'Inter', sans-serif;
-  font-size: 0.6rem;
+  font-size: 0.55rem;
   font-weight: 500;
   letter-spacing: 0.3em;
   text-transform: uppercase;
-  color: #ccff00;
-  opacity: 0.6;
+  color: rgba(255, 255, 255, 0.3);
 }
 
-.hero-scroll-indicator__line {
+.hero-scroll-cue__line {
   width: 1px;
-  height: 3rem;
-  background: linear-gradient(to bottom, #ccff00, transparent);
-  opacity: 0.4;
-}
-
-/* ════════════════════════════════════════════
-   LAYER 3: SVG Overlay — Neon Swoosh
-   ════════════════════════════════════════════ */
-.hero-svg-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  z-index: 10;
-  pointer-events: none;
-}
-
-.hero-swoosh {
-  fill: none;
-  stroke: #ccff00;
-  stroke-width: 4;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-  /* dasharray & dashoffset are set dynamically by GSAP via getTotalLength() */
-  filter: drop-shadow(0 0 8px rgba(204, 255, 0, 0.5));
+  height: 2.5rem;
+  background: linear-gradient(to bottom, rgba(255, 255, 255, 0.2), transparent);
 }
 
 /* ════════════════════════════════════════════
    RESPONSIVE
    ════════════════════════════════════════════ */
 @media (max-width: 768px) {
-  .hero-bg-text {
-    font-size: clamp(4rem, 25vw, 7rem);
+  .hero-L1__text {
+    font-size: clamp(2.5rem, 14vw, 5rem);
   }
 
-  .hero-portrait {
-    height: 65vh;
+  .hero-L2__portrait {
+    height: 62vh;
   }
 
-  .hero-role {
-    top: 1.25rem;
-    left: 1.25rem;
+  .hero-nav {
+    padding: 1.25rem 1.25rem;
   }
 
-  .hero-identity {
-    bottom: 5.5rem;
-    left: 1.25rem;
-    right: 1.25rem;
-    max-width: none;
+  .hero-nav__name { font-size: 0.9rem; }
+
+  .hero-nav__resume {
+    padding: 0.45rem 0.9rem;
+    font-size: 0.55rem;
   }
 
-  .hero-identity__title {
-    font-size: 1.4rem;
-  }
-
-  .hero-identity__description {
-    font-size: 0.8rem;
-  }
-
-  .hero-scroll-indicator {
+  .hero-yolo {
     bottom: 1.25rem;
+    left: 1.25rem;
+    min-width: auto;
+    padding: 0.9rem 1rem;
   }
 
-  .hero-swoosh {
-    stroke-width: 2.5;
+  .hero-yolo__row { font-size: 0.6rem; }
+  .hero-yolo__corner { width: 12px; height: 12px; }
+
+  .hero-signature {
+    width: 80vw;
+    height: 22vh;
+  }
+
+  .hero-scroll-cue {
+    bottom: 1.25rem;
   }
 }
