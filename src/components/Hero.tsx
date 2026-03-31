@@ -86,8 +86,8 @@ const Hero = () => {
         >
           {/* Note: Using the new true transparent file allows us to render natively without any glitchy blend modes! */}
           <img
-            src="/portrait_nobg2.png"
-            onError={(e) => { (e.target as HTMLImageElement).src = '/portrait_nobg2.png'; }}
+            src="/portrait_nobg3.png"
+            onError={(e) => { (e.target as HTMLImageElement).src = '/portrait_nobg3.png'; }}
             alt="Priyanshu Upadhyay"
             className="w-auto h-[85vh] object-contain object-bottom drop-shadow-[0_0_40px_rgba(0,0,0,0.15)]"
           />
