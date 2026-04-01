@@ -119,6 +119,8 @@
   justify-content: space-between;
   padding: 1.75rem 2.5rem;
   pointer-events: auto;
+  will-change: transform;
+  translate: var(--px, 0) var(--py, 0);
 }
 
 .hero-nav__logo {
@@ -185,7 +187,8 @@
   min-width: 260px;
   padding: 1.1rem 1.3rem;
   pointer-events: auto;
-  will-change: opacity;
+  will-change: transform, opacity;
+  translate: var(--px, 0) var(--py, 0);
 }
 
 .hero-yolo__corner {
@@ -258,7 +261,8 @@
   flex-direction: column;
   align-items: center;
   gap: 0.5rem;
-  will-change: opacity;
+  will-change: transform, opacity;
+  translate: var(--px, 0) var(--py, 0);
 }
 
 .hero-scroll-cue__text {
