@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import './Hero.css';
@@ -22,6 +22,53 @@ const Hero = () => {
   // Kinetic text strings
   const row1 = 'BUILD-TRAIN-DEPLOY ⸻ ';
   const row2 = 'APPLIED AI . END-TO-END MACHINE LEARNING . ';
+
+  // Python Terminal Ticker State
+  const [tickerText, setTickerText] = useState('');
+
+  // Ticker Typing Effect
+  useEffect(() => {
+    const strings = [
+      'import about_section',
+      'from portfolio import projects',
+      'import skills as tools',
+      'from contact import connect',
+    ];
+    let currentIndex = 0;
+    let currentText = '';
+    let isDeleting = false;
+    let typingSpeed = 100;
+    let timeout: ReturnType<typeof setTimeout>;
+
+    const type = () => {
+      const fullString = strings[currentIndex];
+
+      if (isDeleting) {
+        currentText = fullString.substring(0, currentText.length - 1);
+        typingSpeed = 40;
+      } else {
+        currentText = fullString.substring(0, currentText.length + 1);
+        typingSpeed = 80;
+      }
+
+      setTickerText(currentText);
+
+      if (!isDeleting && currentText === fullString) {
+        typingSpeed = 3000; // Pause loudly for reading
+        isDeleting = true;
+      } else if (isDeleting && currentText === '') {
+        isDeleting = false;
+        currentIndex = (currentIndex + 1) % strings.length;
+        typingSpeed = 500; // Pause before launching the next string
+      }
+
+      timeout = setTimeout(type, typingSpeed);
+    };
+
+    // Begin standard loop delay
+    timeout = setTimeout(type, 1500);
+    return () => clearTimeout(timeout);
+  }, []);
 
   useEffect(() => {
     const hero = heroRef.current;
@@ -479,14 +526,20 @@ const Hero = () => {
             <span className="hero-nav__name">Priyanshu</span>
             <span className="hero-nav__surname">Upadhyay</span>
           </div>
-          <a href="/resume.pdf" download className="hero-nav__resume">
-            <span>RESUME</span>
-            <svg className="hero-nav__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-              <polyline points="7 10 12 15 17 10" />
-              <line x1="12" y1="15" x2="12" y2="3" />
-            </svg>
-          </a>
+          <div className="hero-nav__right">
+            <div className="hero-terminal-ticker">
+              <span aria-hidden="true">&gt;&gt;&gt; {tickerText}</span>
+              <span className="hero-terminal-cursor">_</span>
+            </div>
+            <a href="/resume.pdf" download className="hero-nav__resume">
+              <span>RESUME</span>
+              <svg className="hero-nav__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                <polyline points="7 10 12 15 17 10" />
+                <line x1="12" y1="15" x2="12" y2="3" />
+              </svg>
+            </a>
+          </div>
         </nav>
 
         {/* YOLO Bounding Box */}
