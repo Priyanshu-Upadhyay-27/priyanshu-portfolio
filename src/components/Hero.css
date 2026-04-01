@@ -35,6 +35,27 @@
   will-change: transform;
 }
 
+/* ── Topographic Contour Lines ── */
+.hero-topo {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 0;
+  pointer-events: none;
+  overflow: visible;
+}
+
+.hero-topo__path {
+  fill: none;
+  stroke: #1a1a1a;
+  stroke-width: 1.2px;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  will-change: transform;
+}
+
 .hero-L1__track {
   white-space: nowrap;
   overflow: visible;
@@ -78,6 +99,7 @@
   bottom: 0;
   left: 50%;
   transform: translateX(-50%);
+  transform-origin: bottom center;
   width: auto;
   height: 88vh;
   object-fit: cover;
@@ -227,12 +249,13 @@
   position: absolute;
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%);
-  width: 55vw;
-  height: 30vh;
-  max-width: 850px;
+  width: 85vw;
+  max-width: 1200px;
+  height: auto;
   pointer-events: none;
   z-index: 4;
+  opacity: 0;
+  will-change: transform;
 }
 
 /* Injected SVG and path base styles */
@@ -243,9 +266,9 @@
 }
 
 .hero-signature path {
-  fill: none;
+  fill: transparent;
   stroke: #ccff00;
-  stroke-width: 3px;
+  stroke-width: 4px;
   stroke-linecap: round;
   stroke-linejoin: round;
   filter: drop-shadow(0 0 6px rgba(204, 255, 0, 0.4));

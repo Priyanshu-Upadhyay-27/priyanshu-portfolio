@@ -16,6 +16,8 @@ const Hero = () => {
   const yoloRef = useRef<HTMLDivElement>(null);
   const scrollCueRef = useRef<HTMLDivElement>(null);
   const navRef = useRef<HTMLElement>(null);
+  const topoRef = useRef<SVGSVGElement>(null);
+  const portraitRef = useRef<HTMLImageElement>(null);
 
   // Kinetic text strings
   const row1 = 'BUILD-TRAIN-DEPLOY ⸻ ';
@@ -28,7 +30,8 @@ const Hero = () => {
     const row2El = row2Ref.current;
     const wrapper = imageWrapperRef.current;
     const overlay = overlayRef.current;
-    if (!hero || !bgLayer || !row1El || !row2El || !wrapper || !overlay) return;
+    const portrait = portraitRef.current;
+    if (!hero || !bgLayer || !row1El || !row2El || !wrapper || !overlay || !portrait) return;
 
     // ════════════════════════════════════════════
     // 1. KINETIC MARQUEES — infinite GSAP tweens
@@ -46,6 +49,31 @@ const Hero = () => {
       { xPercent: -50 },
       { xPercent: 0, ease: 'none', duration: 70, repeat: -1 }
     );
+
+    // ════════════════════════════════════════════
+    // 1b. TOPOGRAPHIC CONTOUR DRIFT
+    //     Each SVG path gets its own slow, randomized
+    //     drift tween so they float independently.
+    //     The SVG lives inside bgLayer, so it also
+    //     inherits the parent's mouse-parallax for free.
+    // ════════════════════════════════════════════
+    const topoEl = topoRef.current;
+    const topoDrifts: gsap.core.Tween[] = [];
+    if (topoEl) {
+      const topoPaths = topoEl.querySelectorAll('.hero-topo__path');
+      topoPaths.forEach((path) => {
+        const drift = gsap.to(path, {
+          x: (Math.random() - 0.5) * 60,   // −30 to +30
+          y: (Math.random() - 0.5) * 60,   // −30 to +30
+          duration: 15 + Math.random() * 10, // 15–25s
+          ease: 'sine.inOut',
+          repeat: -1,
+          yoyo: true,
+          delay: Math.random() * 5,          // stagger starts
+        });
+        topoDrifts.push(drift);
+      });
+    }
 
     // ════════════════════════════════════════════
     // 2. MOUSE PARALLAX on Layer 1
@@ -79,15 +107,26 @@ const Hero = () => {
       },
     });
 
-    // Phase A (0 → 0.65): Clip-path crops L2 into a centered rectangle
+    // Phase A (0 → 0.65): Clip-path crops L2 into a 5:3 centered rectangle
+    //   Visible height = 60vh  →  top/bottom = 20vh
+    //   Visible width  = 100vh →  left/right = calc(50vw − 50vh)
+    //   Ratio: 100vh ÷ 60vh = 5 : 3  ✓
     tl.fromTo(
       wrapper,
       { clipPath: 'inset(0% 0% 0% 0% round 0px)' },
       {
-        clipPath: 'inset(10% 25% 10% 25% round 16px)',
+        clipPath: 'inset(20vh calc(50vw - 50vh) 20vh calc(50vw - 50vh) round 16px)',
         ease: 'none',
         duration: 0.65,
       },
+      0
+    );
+
+    // Inner portrait scales down and shifts down for a cinematic zoom-out
+    tl.fromTo(
+      portrait,
+      { scale: 1.05, y: '0%', xPercent: -50 },
+      { scale: 1, y: '2%', xPercent: -50, ease: 'none', duration: 0.65 },
       0
     );
 
@@ -118,14 +157,14 @@ const Hero = () => {
         const res = await fetch('/file.svg');
         const svgContent = await res.text();
         const sigContainer = signatureRef.current;
-        
+
         if (sigContainer) {
           // Inject raw SVG markup
           sigContainer.innerHTML = svgContent;
-          
+
           // Select injected paths
           const paths = Array.from(sigContainer.querySelectorAll('path'));
-          
+
           // Prepare paths for drawing
           paths.forEach((path) => {
             const length = path.getTotalLength();
@@ -135,15 +174,33 @@ const Hero = () => {
             // The rest of the styling (fill, stroke color, width) is handled by CSS
           });
 
-          // Add drawing animation to the end of the existing timeline 
-          // (">" means it starts exactly when the previous 'tl' animations end)
+          // First, snap the entire container's opacity from 0 (CSS) to 1 exactly when drawing starts
+          // so initial neon connection dot artifacts remain invisible at the top of the page.
+          tl.set(signatureRef.current, { opacity: 1 }, 0.65);
+
+          // Phase B — Draw the signature paths
+          //   Starts at 0.65 = exactly when Phase A clip-path completes.
+          //   Paths draw sequentially with 0.15s stagger.
           tl.to(
             paths,
             {
               strokeDashoffset: 0,
               ease: 'power2.inOut',
               duration: 0.35,
-              stagger: 0.1, // Slight stagger if multiple paths exist
+              stagger: 0.15,
+            },
+            0.65
+          );
+
+          // Phase C — Fill the signature after drawing completes
+          //   ">" = immediately after the previous tween (Phase B) ends.
+          tl.to(
+            paths,
+            {
+              fill: '#ccff00',
+              ease: 'power1.inOut',
+              duration: 0.15,
+              stagger: 0.08,
             },
             '>'
           );
@@ -152,8 +209,29 @@ const Hero = () => {
         console.error('Failed to load signature SVG:', err);
       }
     };
-
     loadSignature();
+
+    // ════════════════════════════════════════════
+    // 3.5 SIGNATURE PARALLAX
+    //    Dedicated ScrollTrigger for the signature container
+    //    so it drifts upward faster than the background layers,
+    //    creating extreme deep parallax.
+    // ════════════════════════════════════════════
+    // Explicitly set the base CSS transform coordinates via GSAP
+    // to prevent the matrix from overwriting horizontal centering.
+    // Shifted x to -65 to organically balance the visual weight of the asymmetrical signature.
+    gsap.set(signatureRef.current, { xPercent: -65, yPercent: -50 });
+
+    gsap.to(signatureRef.current, {
+      yPercent: -85,
+      ease: 'none',
+      scrollTrigger: {
+        trigger: hero,
+        start: 'top top',
+        end: '+=200%',
+        scrub: 1,
+      },
+    });
 
     // ════════════════════════════════════════════
     // 4. ANTI-GRAVITY FLOAT — Continuous zero-gravity drift
@@ -313,6 +391,7 @@ const Hero = () => {
       gsap.ticker.remove(tickerCallback);
       floatTimelines.forEach((ftl) => ftl.kill());
       ScrollTrigger.getAll().forEach((t) => t.kill());
+      if (topoDrifts.length) topoDrifts.forEach((t) => t.kill());
       gsap.killTweensOf([row1El, row2El, bgLayer, wrapper, overlay]);
       floatingElements.forEach(({ el }) => gsap.killTweensOf(el));
     };
@@ -325,6 +404,43 @@ const Hero = () => {
           LAYER 1 — KINETIC TYPOGRAPHY BACKGROUND
       ════════════════════════════════════════ */}
       <div ref={bgLayerRef} className="hero-L1">
+
+        {/* Topographic contour lines — large freeform paths behind text */}
+        <svg
+          ref={topoRef}
+          className="hero-topo"
+          viewBox="0 0 1920 1080"
+          xmlns="http://www.w3.org/2000/svg"
+          preserveAspectRatio="none"
+          aria-hidden="true"
+        >
+          {/* Contour 1 — sweeping arc across upper-left quadrant */}
+          <path
+            className="hero-topo__path"
+            d="M-80 320 C180 280, 420 140, 680 200 C940 260, 1060 420, 1340 380 C1620 340, 1800 180, 2020 240"
+          />
+          {/* Contour 2 — deep curve through the center */}
+          <path
+            className="hero-topo__path"
+            d="M-40 580 C200 520, 380 680, 620 640 C860 600, 1020 440, 1280 500 C1540 560, 1720 720, 1980 660"
+          />
+          {/* Contour 3 — gentle wave across lower third */}
+          <path
+            className="hero-topo__path"
+            d="M-60 820 C160 780, 340 900, 560 860 C780 820, 960 700, 1200 760 C1440 820, 1640 940, 2000 880"
+          />
+          {/* Contour 4 — tight elevation line near top */}
+          <path
+            className="hero-topo__path"
+            d="M-100 140 C120 100, 360 220, 540 160 C720 100, 900 40, 1140 120 C1380 200, 1560 80, 2040 160"
+          />
+          {/* Contour 5 — fluid dynamics curve spanning full width */}
+          <path
+            className="hero-topo__path"
+            d="M-40 960 C220 920, 480 1020, 740 980 C1000 940, 1180 840, 1460 900 C1740 960, 1860 1060, 2040 1000"
+          />
+        </svg>
+
         <div className="hero-L1__track">
           <span ref={row1Ref} className="hero-L1__text" aria-hidden="true">
             {row1.repeat(12)}
@@ -343,6 +459,7 @@ const Hero = () => {
       ════════════════════════════════════════ */}
       <div ref={imageWrapperRef} className="hero-L2">
         <img
+          ref={portraitRef}
           src="/portrait_nobg3.png"
           alt="Priyanshu Upadhyay — Applied AI Engineer"
           className="hero-L2__portrait"
