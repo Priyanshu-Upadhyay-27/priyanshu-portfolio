@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import NeuralHUD from './NeuralHUD';
 import './Hero.css';
 
 gsap.registerPlugin(ScrollTrigger);
@@ -13,7 +14,6 @@ const Hero = () => {
   const imageWrapperRef = useRef<HTMLDivElement>(null);
   const overlayRef = useRef<HTMLDivElement>(null);
   const signatureRef = useRef<HTMLDivElement>(null);
-  const yoloRef = useRef<HTMLDivElement>(null);
   const scrollCueRef = useRef<HTMLDivElement>(null);
   const navRef = useRef<HTMLElement>(null);
   const topoRef = useRef<SVGSVGElement>(null);
@@ -362,15 +362,6 @@ const Hero = () => {
 
     // ── Assign float orbits ──
 
-    // YOLO bounding box — strongest float, primary visual anchor
-    createFloat(yoloRef.current, {
-      driftX: 10,
-      driftY: 14,
-      rotation: 1.8,
-      durationBase: 5,
-      parallaxFactor: 1.4,
-    });
-
     // Scroll cue — gentle, mostly vertical bob
     createFloat(scrollCueRef.current, {
       driftX: 4,
@@ -542,25 +533,10 @@ const Hero = () => {
           </div>
         </nav>
 
-        {/* YOLO Bounding Box */}
-        <div ref={yoloRef} className="hero-yolo">
-          <div className="hero-yolo__corner hero-yolo__corner--tl" />
-          <div className="hero-yolo__corner hero-yolo__corner--tr" />
-          <div className="hero-yolo__corner hero-yolo__corner--bl" />
-          <div className="hero-yolo__corner hero-yolo__corner--br" />
-          <div className="hero-yolo__body">
-            <span className="hero-yolo__row">
-              <span className="hero-yolo__key">TASK:</span>{' '}
-              <span className="hero-yolo__val">Teaching machines to learn</span>
-            </span>
-            <span className="hero-yolo__row">
-              <span className="hero-yolo__key">OUTPUT:</span>{' '}
-              <span className="hero-yolo__val hero-yolo__val--neon">
-                Transforming Ideas into Impact
-              </span>
-            </span>
-          </div>
-        </div>
+        {/* ════════════════════════════════════════
+            Neural HUD Graphic (Bottom Left)
+        ════════════════════════════════════════ */}
+        <NeuralHUD />
 
         {/* Signature Container */}
         <div

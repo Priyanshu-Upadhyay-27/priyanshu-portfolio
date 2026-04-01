@@ -148,24 +148,26 @@
 .hero-nav__logo {
   display: flex;
   flex-direction: column;
-  line-height: 1.1;
+  line-height: 0.85; /* Extremely tight stack. Possible now because ALL-CAPS have no descenders (like 'y' or 'p' going below the line) */
 }
 
 .hero-nav__name {
-  font-family: 'Outfit', sans-serif;
-  font-size: 1.1rem;
-  font-weight: 700;
-  letter-spacing: 0.05em;
+  font-family: 'Playfair Display', 'Bodoni MT', serif;
+  font-size: 1.95rem;
+  font-weight: 500;
+  font-style: normal; /* Removed italic to match the solid structural feel of 'LANDO' */
+  text-transform: uppercase; /* ALL CAPS */
+  letter-spacing: -0.01em; 
   color: #ffffff;
 }
 
 .hero-nav__surname {
-  font-family: 'Outfit', sans-serif;
-  font-size: 0.65rem;
-  font-weight: 500;
-  letter-spacing: 0.35em;
+  font-family: 'Montserrat Black', 'Arial Black', sans-serif;
+  font-size: 1.48rem; /* Scaled up massively to physically act as a solid block bottom */
+  font-weight: 900;
+  letter-spacing: 0.02em; /* Removed the extreme stretching. We want the text itself to be thick and punchy. */
   text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.35);
+  color: #ffffff;
 }
 
 .hero-nav__right {
