@@ -1,4 +1,5 @@
 import React from 'react';
+import Header from './components/Header';
 import Hero from './components/Hero';
 import About from './components/About';
 import FeaturedProjects from './components/FeaturedProjects';
@@ -10,7 +11,7 @@ import Footer from './components/Footer';
 
 function App() {
   return (
-    <div className="min-h-screen bg-charcoal text-soft-white selection:bg-teal selection:text-white">
+    <div>
       <Hero />
       <About />
       <FeaturedProjects />
@@ -19,6 +20,7 @@ function App() {
       <Certifications />
       <Contact />
       <Footer />
+      <Header />
     </div>
   );
 }
