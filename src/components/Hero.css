@@ -177,54 +177,179 @@
   pointer-events: auto;
 }
 
-.hero-terminal-ticker {
-  font-family: 'Courier New', 'Consolas', monospace;
-  font-size: 0.85rem;
-  color: #6e6e80;
-  letter-spacing: 0.05em;
-  display: none;
-}
-
-@media (min-width: 768px) {
-  .hero-terminal-ticker {
-    display: block; /* Hide on very small screens to save space */
-  }
-}
-
-.hero-terminal-cursor {
-  color: #ccff00;
-  animation: blink 1s step-start infinite;
-}
-
-.hero-nav__resume {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.55rem 1.3rem;
-  background: #ccff00;
-  color: #080808;
-  font-family: 'Inter', sans-serif;
-  font-size: 0.65rem;
-  font-weight: 700;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  text-decoration: none;
-  border: 1px solid #ccff00;
-  border-radius: 0;
-  cursor: pointer;
-  transition: background-color 0.2s ease, color 0.2s ease, transform 0.2s ease;
+/* ── Navbar Dropdown Group ── */
+.hero-nav__dropdown-wrapper {
+  position: relative;
   pointer-events: auto;
 }
 
-.hero-nav__resume:hover {
-  background-color: transparent;
-  color: #ccff00;
-  transform: scale(1.04);
+.hero-nav__ticker-btn {
+  background: #ccff00;
+  color: #080808;
+  border: none;
+  font-family: 'Courier New', 'Consolas', monospace;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  padding: 0;
+  width: 210px;
+  height: 42px;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: background-color 0.2s ease;
+  white-space: nowrap;
+  overflow: hidden;
+}
+.hero-terminal-cursor {
+  /* Inherit cursor block logic, set to dark for neon ground */
+  color: #080808;
+  font-weight: 900;
+  animation: blink 1s step-start infinite;
 }
 
-.hero-nav__icon {
-  width: 13px;
-  height: 13px;
+@media (max-width: 900px) {
+  .hero-nav__dropdown-wrapper {
+    display: none; 
+  }
+}
+
+.hero-nav__dropdown {
+  position: absolute;
+  top: calc(100% + 15px);
+  right: 0;
+  width: 210px;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid #ccff00;
+  opacity: 0;
+  transform: translateY(-10px);
+  pointer-events: none;
+  transition: opacity 0.35s ease, transform 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  z-index: 100;
+}
+
+.hero-nav__dropdown.is-open {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+.hero-nav__dropdown-list {
+  list-style: none;
+  margin: 0;
+  padding: 0.5rem 0;
+}
+
+.hero-nav__dropdown-list li a {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.8rem 1.6rem;
+  color: #ffffff;
+  text-decoration: none;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.75rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  transition: color 0.2s ease, background 0.2s ease;
+}
+
+.hero-nav__dropdown-list li a:hover {
+  background: rgba(204, 255, 0, 0.15);
+  color: #ccff00;
+}
+
+.nav-index {
+  color: #ccff00;
+  opacity: 0.8;
+  font-family: 'Courier New', monospace;
+  font-size: 0.65rem;
+  font-weight: bold;
+}
+
+/* ── Bifurcating Resume Button ── */
+.hero-nav__resume-wrapper {
+  position: relative;
+  width: 155px; /* Compacted width */
+  height: 42px;
+  overflow: hidden;
+  pointer-events: auto;
+  cursor: pointer;
+  background: #ccff00;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.resume-btn-front,
+.resume-btn-back {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.3s ease;
+}
+
+.resume-btn-front {
+  opacity: 1;
+}
+
+.resume-btn-front span {
+  color: #080808;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.resume-btn-back {
+  opacity: 0;
+  background: #080808;
+  gap: 1.5rem;
+  border: 1px solid #ccff00; /* Neon boundary on hover */
+  pointer-events: none; /* Ignore pointer so it doesn't block hover when invisible */
+}
+
+.hero-nav__resume-wrapper:hover .resume-btn-front {
+  opacity: 0;
+}
+.hero-nav__resume-wrapper:hover .resume-btn-back {
+  opacity: 1;
+  pointer-events: auto; /* Re-enable clicks when visible */
+}
+
+.resume-icon-link {
+  color: #ccff00;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.2s ease, filter 0.2s ease;
+}
+
+.resume-icon-link:hover {
+  transform: scale(1.15);
+  filter: drop-shadow(0 0 5px rgba(204, 255, 0, 0.5));
+}
+
+.resume-icon-link svg {
+  width: 18px;
+  height: 18px;
+}
+
+.resume-icon-divider {
+  width: 1px;
+  height: 50%;
+  background: rgba(204, 255, 0, 0.3);
 }
 
 /* ════════════════════════════════════════════

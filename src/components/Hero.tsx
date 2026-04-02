@@ -23,16 +23,18 @@ const Hero = () => {
   const row1 = 'BUILD-TRAIN-DEPLOY ⸻ ';
   const row2 = 'APPLIED AI . END-TO-END MACHINE LEARNING . ';
 
-  // Python Terminal Ticker State
+  // Python Terminal Ticker & Nav State
   const [tickerText, setTickerText] = useState('');
+  const [isNavOpen, setIsNavOpen] = useState(false);
 
   // Ticker Typing Effect
   useEffect(() => {
     const strings = [
-      'import about_section',
-      'from portfolio import projects',
-      'import skills as tools',
-      'from contact import connect',
+      'importing about',
+      'importing projects',
+      'importing skills',
+      'importing tools',
+      'importing contact',
     ];
     let currentIndex = 0;
     let currentText = '';
@@ -191,9 +193,9 @@ const Hero = () => {
       0
     );
 
-    // YOLO box fades out
+    // Neural HUD fades out
     tl.to(
-      '.hero-yolo',
+      '.neural-hud-container',
       { opacity: 0, ease: 'none', duration: 0.25 },
       0
     );
@@ -518,18 +520,54 @@ const Hero = () => {
             <span className="hero-nav__surname">Upadhyay</span>
           </div>
           <div className="hero-nav__right">
-            <div className="hero-terminal-ticker">
-              <span aria-hidden="true">&gt;&gt;&gt; {tickerText}</span>
-              <span className="hero-terminal-cursor">_</span>
+            
+            {/* ── Bifurcating Resume Button ── */}
+            <div className="hero-nav__resume-wrapper">
+                <div className="resume-btn-front">
+                  <span>RESUME</span>
+                </div>
+                <div className="resume-btn-back">
+                  <a href="/resume.pdf" download className="resume-icon-link" aria-label="Download Resume" title="Download">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                      <polyline points="7 10 12 15 17 10" />
+                      <line x1="12" y1="15" x2="12" y2="3" />
+                    </svg>
+                  </a>
+                  <div className="resume-icon-divider"/>
+                  <a href="/resume.pdf" target="_blank" rel="noopener noreferrer" className="resume-icon-link" aria-label="Preview Resume" title="Preview">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                      <circle cx="12" cy="12" r="3"></circle>
+                    </svg>
+                  </a>
+                </div>
             </div>
-            <a href="/resume.pdf" download className="hero-nav__resume">
-              <span>RESUME</span>
-              <svg className="hero-nav__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-                <polyline points="7 10 12 15 17 10" />
-                <line x1="12" y1="15" x2="12" y2="3" />
-              </svg>
-            </a>
+
+            {/* ── Navbar Dropdown Group ── */}
+            <div className="hero-nav__dropdown-wrapper">
+              <button 
+                className="hero-nav__ticker-btn" 
+                onClick={() => setIsNavOpen(!isNavOpen)}
+                aria-expanded={isNavOpen}
+              >
+                <div className="ticker-btn-content">
+                  <span aria-hidden="true">&gt;&gt;&gt; {tickerText}</span>
+                  <span className="hero-terminal-cursor">_</span>
+                </div>
+              </button>
+
+              <div className={`hero-nav__dropdown ${isNavOpen ? 'is-open' : ''}`}>
+                <ul className="hero-nav__dropdown-list">
+                  <li><a href="#about" onClick={() => setIsNavOpen(false)}><span className="nav-index">01</span> About</a></li>
+                  <li><a href="#projects" onClick={() => setIsNavOpen(false)}><span className="nav-index">02</span> Projects</a></li>
+                  <li><a href="#skills" onClick={() => setIsNavOpen(false)}><span className="nav-index">03</span> Skills</a></li>
+                  <li><a href="#tools" onClick={() => setIsNavOpen(false)}><span className="nav-index">04</span> Tools</a></li>
+                  <li><a href="#contact" onClick={() => setIsNavOpen(false)}><span className="nav-index">05</span> Contact</a></li>
+                </ul>
+              </div>
+            </div>
+
           </div>
         </nav>
 
