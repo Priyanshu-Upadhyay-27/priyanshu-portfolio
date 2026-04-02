@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import NeuralHUD from './NeuralHUD';
@@ -15,7 +15,6 @@ const Hero = () => {
   const overlayRef = useRef<HTMLDivElement>(null);
   const signatureRef = useRef<HTMLDivElement>(null);
   const scrollCueRef = useRef<HTMLDivElement>(null);
-  const navRef = useRef<HTMLElement>(null);
   const topoRef = useRef<SVGSVGElement>(null);
   const portraitRef = useRef<HTMLImageElement>(null);
 
@@ -23,54 +22,7 @@ const Hero = () => {
   const row1 = 'BUILD-TRAIN-DEPLOY ⸻ ';
   const row2 = 'APPLIED AI . END-TO-END MACHINE LEARNING . ';
 
-  // Python Terminal Ticker & Nav State
-  const [tickerText, setTickerText] = useState('');
-  const [isNavOpen, setIsNavOpen] = useState(false);
 
-  // Ticker Typing Effect
-  useEffect(() => {
-    const strings = [
-      'importing about',
-      'importing projects',
-      'importing skills',
-      'importing tools',
-      'importing contact',
-    ];
-    let currentIndex = 0;
-    let currentText = '';
-    let isDeleting = false;
-    let typingSpeed = 100;
-    let timeout: ReturnType<typeof setTimeout>;
-
-    const type = () => {
-      const fullString = strings[currentIndex];
-
-      if (isDeleting) {
-        currentText = fullString.substring(0, currentText.length - 1);
-        typingSpeed = 40;
-      } else {
-        currentText = fullString.substring(0, currentText.length + 1);
-        typingSpeed = 80;
-      }
-
-      setTickerText(currentText);
-
-      if (!isDeleting && currentText === fullString) {
-        typingSpeed = 3000; // Pause loudly for reading
-        isDeleting = true;
-      } else if (isDeleting && currentText === '') {
-        isDeleting = false;
-        currentIndex = (currentIndex + 1) % strings.length;
-        typingSpeed = 500; // Pause before launching the next string
-      }
-
-      timeout = setTimeout(type, typingSpeed);
-    };
-
-    // Begin standard loop delay
-    timeout = setTimeout(type, 1500);
-    return () => clearTimeout(timeout);
-  }, []);
 
   useEffect(() => {
     const hero = heroRef.current;
@@ -373,14 +325,7 @@ const Hero = () => {
       parallaxFactor: 1.0,
     });
 
-    // Navbar — very subtle, barely perceptible drift
-    createFloat(navRef.current, {
-      driftX: 3,
-      driftY: 4,
-      rotation: 0.3,
-      durationBase: 7,
-      parallaxFactor: 0.5,
-    });
+
 
     // ════════════════════════════════════════════
     // 5. MOUSE PARALLAX on L3 floating elements
@@ -426,7 +371,6 @@ const Hero = () => {
 
     // ── Cleanup ──
     return () => {
-      window.removeEventListener('mousemove', onMouseMove);
       window.removeEventListener('mousemove', onMouseMoveL3);
       gsap.ticker.remove(tickerCallback);
       floatTimelines.forEach((ftl) => ftl.kill());
@@ -438,8 +382,7 @@ const Hero = () => {
   }, []);
 
   return (
-    <div ref={heroRef} className="hero">
-
+    <div ref={heroRef} id="hero" className="hero">
       {/* ════════════════════════════════════════
           LAYER 1 — KINETIC TYPOGRAPHY BACKGROUND
       ════════════════════════════════════════ */}
@@ -513,63 +456,7 @@ const Hero = () => {
       ════════════════════════════════════════ */}
       <div className="hero-L3">
 
-        {/* Navbar */}
-        <nav ref={navRef} className="hero-nav">
-          <div className="hero-nav__logo">
-            <span className="hero-nav__name">Priyanshu</span>
-            <span className="hero-nav__surname">Upadhyay</span>
-          </div>
-          <div className="hero-nav__right">
-            
-            {/* ── Bifurcating Resume Button ── */}
-            <div className="hero-nav__resume-wrapper">
-                <div className="resume-btn-front">
-                  <span>RESUME</span>
-                </div>
-                <div className="resume-btn-back">
-                  <a href="/resume.pdf" download className="resume-icon-link" aria-label="Download Resume" title="Download">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                      <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-                      <polyline points="7 10 12 15 17 10" />
-                      <line x1="12" y1="15" x2="12" y2="3" />
-                    </svg>
-                  </a>
-                  <div className="resume-icon-divider"/>
-                  <a href="/resume.pdf" target="_blank" rel="noopener noreferrer" className="resume-icon-link" aria-label="Preview Resume" title="Preview">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                      <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
-                      <circle cx="12" cy="12" r="3"></circle>
-                    </svg>
-                  </a>
-                </div>
-            </div>
 
-            {/* ── Navbar Dropdown Group ── */}
-            <div className="hero-nav__dropdown-wrapper">
-              <button 
-                className="hero-nav__ticker-btn" 
-                onClick={() => setIsNavOpen(!isNavOpen)}
-                aria-expanded={isNavOpen}
-              >
-                <div className="ticker-btn-content">
-                  <span aria-hidden="true">&gt;&gt;&gt; {tickerText}</span>
-                  <span className="hero-terminal-cursor">_</span>
-                </div>
-              </button>
-
-              <div className={`hero-nav__dropdown ${isNavOpen ? 'is-open' : ''}`}>
-                <ul className="hero-nav__dropdown-list">
-                  <li><a href="#about" onClick={() => setIsNavOpen(false)}><span className="nav-index">01</span> About</a></li>
-                  <li><a href="#projects" onClick={() => setIsNavOpen(false)}><span className="nav-index">02</span> Projects</a></li>
-                  <li><a href="#skills" onClick={() => setIsNavOpen(false)}><span className="nav-index">03</span> Skills</a></li>
-                  <li><a href="#tools" onClick={() => setIsNavOpen(false)}><span className="nav-index">04</span> Tools</a></li>
-                  <li><a href="#contact" onClick={() => setIsNavOpen(false)}><span className="nav-index">05</span> Contact</a></li>
-                </ul>
-              </div>
-            </div>
-
-          </div>
-        </nav>
 
         {/* ════════════════════════════════════════
             Neural HUD Graphic (Bottom Left)
