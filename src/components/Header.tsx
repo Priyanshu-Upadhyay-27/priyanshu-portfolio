@@ -9,6 +9,16 @@ const Header: React.FC = () => {
   // ── Smart Nav — fully decoupled from Hero's ScrollTrigger ──
   const { isHidden, isPastHero } = useSmartNav('#about');
 
+  // ── Smooth Scroll Navigation Handler ──
+  const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, targetId: string) => {
+    e.preventDefault();
+    setIsNavOpen(false); // Close dropdown if open
+    const targetElement = document.querySelector(targetId);
+    if (targetElement) {
+      targetElement.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
   // ── Ticker Typing Effect ──
   useEffect(() => {
     const strings = [
@@ -110,11 +120,11 @@ const Header: React.FC = () => {
 
             <div className={`nav-dropdown ${isNavOpen ? 'is-open' : ''}`}>
               <ul className="nav-dropdown-list">
-                <li><a href="#about" onClick={() => setIsNavOpen(false)}><span className="nav-index">01</span> About</a></li>
-                <li><a href="#projects" onClick={() => setIsNavOpen(false)}><span className="nav-index">02</span> Projects</a></li>
-                <li><a href="#skills" onClick={() => setIsNavOpen(false)}><span className="nav-index">03</span> Skills</a></li>
-                <li><a href="#tools" onClick={() => setIsNavOpen(false)}><span className="nav-index">04</span> Tools</a></li>
-                <li><a href="#contact" onClick={() => setIsNavOpen(false)}><span className="nav-index">05</span> Contact</a></li>
+                <li><a href="#about" onClick={(e) => handleNavClick(e, '#about')}><span className="nav-index">01</span> About</a></li>
+                <li><a href="#projects" onClick={(e) => handleNavClick(e, '#projects')}><span className="nav-index">02</span> Projects</a></li>
+                <li><a href="#skills" onClick={(e) => handleNavClick(e, '#skills')}><span className="nav-index">03</span> Skills</a></li>
+                <li><a href="#tools" onClick={(e) => handleNavClick(e, '#tools')}><span className="nav-index">04</span> Tools</a></li>
+                <li><a href="#contact" onClick={(e) => handleNavClick(e, '#contact')}><span className="nav-index">05</span> Contact</a></li>
               </ul>
             </div>
           </div>

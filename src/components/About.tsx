@@ -1,7 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { useAntiGravity } from '../hooks/useAntiGravity';
 import './About.css';
 
 gsap.registerPlugin(ScrollTrigger);
@@ -12,13 +11,6 @@ const About: React.FC = () => {
   const portalImageHeadRef = useRef<HTMLImageElement>(null);
   const textStackRef = useRef<HTMLDivElement>(null);
 
-  // Floats the anchored figure organically left/right and rotates
-  // rangeY is set to 0 to guarantee the absolute bottom anchoring is NEVER violated by the float
-  useAntiGravity([portalImageBaseRef, portalImageHeadRef], {
-    rangeX: 8,
-    rangeY: 0,
-    rangeRot: 1.5
-  });
 
   // ── Typewriter Logic ──
   const roles = ["RAG Engineer", "AI Architect", "GSOC '26 Scholar", "ML Developer"];
@@ -66,7 +58,7 @@ const About: React.FC = () => {
         ease: 'power3.out',
       });
 
-      // 2. Portrait Parallax
+      // 2. Portrait Parallax (Scroll Driven)
       gsap.fromTo([portalImageBaseRef.current, portalImageHeadRef.current], 
         { scale: 1 },
         {
