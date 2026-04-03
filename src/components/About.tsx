@@ -1,14 +1,24 @@
 import React, { useEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { useAntiGravity } from '../hooks/useAntiGravity';
 import './About.css';
 
 gsap.registerPlugin(ScrollTrigger);
 
 const About: React.FC = () => {
   const sectionRef = useRef<HTMLDivElement>(null);
-  const portalImageRef = useRef<HTMLImageElement>(null);
+  const portalImageBaseRef = useRef<HTMLImageElement>(null);
+  const portalImageHeadRef = useRef<HTMLImageElement>(null);
   const textStackRef = useRef<HTMLDivElement>(null);
+
+  // Floats the anchored figure organically left/right and rotates
+  // rangeY is set to 0 to guarantee the absolute bottom anchoring is NEVER violated by the float
+  useAntiGravity([portalImageBaseRef, portalImageHeadRef], {
+    rangeX: 8,
+    rangeY: 0,
+    rangeRot: 1.5
+  });
 
   // ── Typewriter Logic ──
   const roles = ["RAG Engineer", "AI Architect", "GSOC '26 Scholar", "ML Developer"];
@@ -57,16 +67,20 @@ const About: React.FC = () => {
       });
 
       // 2. Portrait Parallax
-      gsap.to(portalImageRef.current, {
-        yPercent: -15,
-        ease: 'none',
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: 'top bottom',
-          end: 'bottom top',
-          scrub: true,
-        },
-      });
+      gsap.fromTo([portalImageBaseRef.current, portalImageHeadRef.current], 
+        { scale: 1 },
+        {
+          scale: 1.15,
+          transformOrigin: 'bottom center',
+          ease: 'none',
+          scrollTrigger: {
+            trigger: sectionRef.current,
+            start: 'top bottom',
+            end: 'bottom top',
+            scrub: true,
+          },
+        }
+      );
     }, sectionRef);
 
     return () => ctx.revert();
@@ -100,13 +114,23 @@ const About: React.FC = () => {
 
         {/* ── RIGHT PORTAL ── */}
         <div className="about-right">
-          <div className="portal-circle">
-            <div className="portal-image-container">
+          <div className="portal-wrapper">
+            {/* Layer 1: Base inside hidden overflow */}
+            <div className="portal-circle">
               <img 
-                ref={portalImageRef}
+                ref={portalImageBaseRef}
                 src="/head_out_portrait.png" 
-                alt="Priyanshu Upadhyay Portrait" 
-                className="portal-portrait" 
+                alt="Priyanshu Upadhyay Portrait Base" 
+                className="portal-image-base" 
+              />
+            </div>
+            {/* Layer 2: Head breaking out (visible overflow, clipped) */}
+            <div className="portal-overflow">
+              <img 
+                ref={portalImageHeadRef}
+                src="/head_out_portrait.png" 
+                alt="Priyanshu Upadhyay Portrait Head" 
+                className="portal-image-head" 
               />
             </div>
           </div>
