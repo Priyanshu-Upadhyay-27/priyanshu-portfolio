@@ -85,7 +85,7 @@ const Header: React.FC = () => {
                   <line x1="12" y1="15" x2="12" y2="3" />
                 </svg>
               </a>
-              <div className="resume-icon-divider"/>
+              <div className="resume-icon-divider" />
               <a href="/resume.pdf" target="_blank" rel="noopener noreferrer" className="resume-icon-link" aria-label="Preview Resume" title="Preview">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                   <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
@@ -97,8 +97,8 @@ const Header: React.FC = () => {
 
           {/* ── Navbar Dropdown Group ── */}
           <div className="nav-dropdown-wrapper">
-            <button 
-              className="ticker-btn" 
+            <button
+              className="ticker-btn"
               onClick={() => setIsNavOpen(!isNavOpen)}
               aria-expanded={isNavOpen}
             >
