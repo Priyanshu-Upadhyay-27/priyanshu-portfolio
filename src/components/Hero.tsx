@@ -153,6 +153,9 @@ const Hero = () => {
     );
 
     // Phase B (0.65 → 1.0): Fetch and animate the SVG signature
+    //   Uses the stroke-dashoffset technique (no paid DrawSVG plugin).
+    //   Paths are sorted left-to-right by bounding box so the pen-stroke
+    //   flows naturally like real handwriting.
     const loadSignature = async () => {
       try {
         const res = await fetch('/file.svg');
@@ -163,45 +166,70 @@ const Hero = () => {
           // Inject raw SVG markup
           sigContainer.innerHTML = svgContent;
 
-          // Select injected paths
-          const paths = Array.from(sigContainer.querySelectorAll('path'));
+          // Select injected paths and sort LEFT → RIGHT by bounding box
+          // so the drawing order matches natural handwriting direction.
+          const paths = Array.from(sigContainer.querySelectorAll('path'))
+            .sort((a, b) => {
+              const aBox = a.getBBox();
+              const bBox = b.getBBox();
+              return aBox.x - bBox.x;
+            });
 
-          // Prepare paths for drawing
+          // ── Prepare paths for stroke-dashoffset drawing ──
+          //  1. Measure each path's total length via getTotalLength()
+          //  2. Set stroke-dasharray = length  (defines the dash pattern)
+          //  3. Set stroke-dashoffset = length  (hides the entire stroke)
+          //  4. GSAP will animate offset → 0, progressively revealing the stroke
+          const pathLengths: number[] = [];
           paths.forEach((path) => {
             const length = path.getTotalLength();
-            // Set dash array and offset to exactly the path length
-            path.style.strokeDasharray = `${length}`;
+            pathLengths.push(length);
+            path.style.strokeDasharray  = `${length}`;
             path.style.strokeDashoffset = `${length}`;
-            // The rest of the styling (fill, stroke color, width) is handled by CSS
+            // fill: none + stroke: #ccff00 + stroke-width are set in Hero.css
           });
 
-          // First, snap the entire container's opacity from 0 (CSS) to 1 exactly when drawing starts
-          // so initial neon connection dot artifacts remain invisible at the top of the page.
+          // ── Calculate proportional durations ──
+          //   Longer paths take more time, shorter ones less.
+          //   Total budget = 0.30 in timeline units (0.65 → 0.95)
+          const totalLength = pathLengths.reduce((s, l) => s + l, 0);
+          const DRAW_BUDGET = 0.30; // total timeline units for all draws
+          const GAP = 0.02;         // tiny overlap between sequential paths
+
+          // Snap container visible exactly when drawing begins
           tl.set(signatureRef.current, { opacity: 1 }, 0.65);
 
-          // Phase B — Draw the signature paths
-          //   Starts at 0.65 = exactly when Phase A clip-path completes.
-          //   Paths draw sequentially with 0.15s stagger.
-          tl.to(
-            paths,
-            {
-              strokeDashoffset: 0,
-              ease: 'power2.inOut',
-              duration: 0.35,
-              stagger: 0.15,
-            },
-            0.65
-          );
+          // Phase B — Draw each path sequentially, left to right
+          //   Each path's duration is proportional to its stroke length.
+          //   ease: "power2.inOut" gives a natural pen acceleration/deceleration.
+          let cursor = 0.65;
+          paths.forEach((path, i) => {
+            const proportion = pathLengths[i] / totalLength;
+            const duration = Math.max(proportion * DRAW_BUDGET, 0.04); // min 0.04
 
-          // Phase C — Fill the signature after drawing completes
-          //   ">" = immediately after the previous tween (Phase B) ends.
+            tl.to(
+              path,
+              {
+                strokeDashoffset: 0,
+                ease: 'power2.inOut',
+                duration,
+              },
+              cursor
+            );
+
+            cursor += duration - GAP; // slight overlap for seamless flow
+          });
+
+          // Phase C — Fill flood after drawing completes
+          //   ">" = immediately after the last Phase B tween ends.
+          //   Paths fill in the same left-to-right order.
           tl.to(
             paths,
             {
               fill: '#ccff00',
               ease: 'power1.inOut',
-              duration: 0.15,
-              stagger: 0.08,
+              duration: 0.12,
+              stagger: 0.04,
             },
             '>'
           );
