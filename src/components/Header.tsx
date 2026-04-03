@@ -1,40 +1,13 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useSmartNav } from '../hooks/useSmartNav';
 import './Header.css';
 
 const Header: React.FC = () => {
   const [isNavOpen, setIsNavOpen] = useState(false);
   const [tickerText, setTickerText] = useState('');
-  const [scrollDir, setScrollDir] = useState<'up' | 'down' | null>(null);
-  const [isFixed, setIsFixed] = useState(false);
-  const [isHidden, setIsHidden] = useState(false);
-  const lastScrollY = useRef(0);
 
-  // ── Scroll Direction & Smart Reveal Logic ──
-  useEffect(() => {
-    const handleScroll = () => {
-      const currentScrollY = window.scrollY;
-
-      if (currentScrollY > 100) {
-        setIsFixed(true);
-        if (currentScrollY > lastScrollY.current) {
-          setScrollDir('down');
-          setIsHidden(true);
-        } else {
-          setScrollDir('up');
-          setIsHidden(false);
-        }
-      } else {
-        setIsFixed(false);
-        setIsHidden(false);
-        setScrollDir(null);
-      }
-
-      lastScrollY.current = currentScrollY;
-    };
-
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+  // ── Smart Nav — fully decoupled from Hero's ScrollTrigger ──
+  const { isHidden, isPastHero } = useSmartNav('#about');
 
   // ── Ticker Typing Effect ──
   useEffect(() => {
@@ -80,10 +53,17 @@ const Header: React.FC = () => {
     return () => clearTimeout(timeout);
   }, []);
 
+  // Build class list
+  const classes = [
+    'site-header',
+    isPastHero ? 'is-scrolled' : '',
+    isHidden ? 'is-hidden' : '',
+  ]
+    .filter(Boolean)
+    .join(' ');
+
   return (
-    <header 
-      className={`site-header ${isFixed ? 'is-fixed' : 'is-absolute'} ${isHidden ? 'is-hidden' : ''}`}
-    >
+    <header className={classes}>
       <div className="header-container">
         {/* Logo */}
         <div className="header-logo">

@@ -1,5 +1,8 @@
+/* ═══════════════════════════════════════════
+   HEADER — Always fixed, decoupled from Hero
+   ═══════════════════════════════════════════ */
 .site-header {
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
   right: 0;
@@ -9,16 +12,14 @@
   justify-content: center;
   padding: 1.75rem 0;
   z-index: 1000;
-  transition: transform 0.4s cubic-bezier(0.165, 0.84, 0.44, 1), 
-              background-color 0.3s ease, 
-              backdrop-filter 0.3s ease;
   pointer-events: none;
-}
 
-.site-header.is-absolute {
-  position: absolute;
+  /* Smooth transitions for reveal / glassmorphism */
+  transition: transform 0.4s cubic-bezier(0.165, 0.84, 0.44, 1),
+              background-color 0.3s ease,
+              backdrop-filter 0.3s ease,
+              -webkit-backdrop-filter 0.3s ease;
 }
-
 
 .header-container {
   width: 100%;
@@ -31,19 +32,22 @@
 }
 
 /* ── Smart Reveal States ── */
-.site-header.is-fixed {
-  position: fixed;
+
+/*  Past the Hero → frosted glass bar  */
+.site-header.is-scrolled {
   background: rgba(8, 8, 8, 0.45);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   border-bottom: 1px solid rgba(255, 255, 255, 0.05);
 }
 
+/*  Scrolling down past threshold → slide off-screen  */
 .site-header.is-hidden {
   transform: translateY(-100%);
 }
 
-.site-header.is-fixed:not(.is-hidden) {
+/*  Scrolled + visible (scroll-up) → slide in  */
+.site-header.is-scrolled:not(.is-hidden) {
   transform: translateY(0);
 }
 
