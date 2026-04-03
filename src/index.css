@@ -5,6 +5,10 @@
 @tailwind utilities;
 
 @layer base {
+  html {
+    scroll-padding-top: 80px;
+    scroll-behavior: smooth;
+  }
   body {
     @apply bg-charcoal text-soft-white font-sans antialiased overflow-x-hidden m-0 p-0;
   }
