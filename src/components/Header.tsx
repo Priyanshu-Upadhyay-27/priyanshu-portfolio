@@ -88,7 +88,7 @@ const Header: React.FC = () => {
               <span>RESUME</span>
             </div>
             <div className="resume-btn-back">
-              <a href="/resume.pdf" download className="resume-icon-link" aria-label="Download Resume" title="Download">
+              <a href="/resume.pdf" download="priyanshu_upadhyay_resume.pdf" className="resume-icon-link" aria-label="Download Resume" title="Download">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                   <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
                   <polyline points="7 10 12 15 17 10" />
@@ -124,7 +124,8 @@ const Header: React.FC = () => {
                 <li><a href="#projects" onClick={(e) => handleNavClick(e, '#projects')}><span className="nav-index">02</span> Projects</a></li>
                 <li><a href="#skills" onClick={(e) => handleNavClick(e, '#skills')}><span className="nav-index">03</span> Skills</a></li>
                 <li><a href="#tools" onClick={(e) => handleNavClick(e, '#tools')}><span className="nav-index">04</span> Tools</a></li>
-                <li><a href="#contact" onClick={(e) => handleNavClick(e, '#contact')}><span className="nav-index">05</span> Contact</a></li>
+                <li><a href="#certifications" onClick={(e) => handleNavClick(e, '#certifications')}><span className="nav-index">05</span> Certifications</a></li>
+                <li><a href="#contact" onClick={(e) => handleNavClick(e, '#contact')}><span className="nav-index">06</span> Contact</a></li>
               </ul>
             </div>
           </div>
