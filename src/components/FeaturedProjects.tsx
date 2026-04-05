@@ -33,7 +33,12 @@ const projects = [
     stack: ["OpenCV", "MediaPipe", "YOLOv8", "React"],
     repo: "#",
     live: "#",
-    images: ['/img1.jpg', '/img2.jpg', '/img3.jpg', '/img4.jpg']
+    images: [
+      '/projects/project_visual_1.png',
+      '/projects/project_visual_2.png',
+      '/projects/project_visual_3.png',
+      '/projects/project_visual_4.png'
+    ]
   }
 ];
 
