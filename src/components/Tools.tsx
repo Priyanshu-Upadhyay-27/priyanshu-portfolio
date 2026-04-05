@@ -34,7 +34,7 @@ const Tools = () => {
               href={tool.url}
               target="_blank"
               rel="noopener noreferrer"
-              className="marquee-item"
+              className="marquee-item text-teal/50 transition-colors duration-300 hover:text-teal"
             >
               {tool.name}
             </a>
@@ -51,7 +51,7 @@ const Tools = () => {
               href={tool.url}
               target="_blank"
               rel="noopener noreferrer"
-              className="marquee-item"
+              className="marquee-item text-[#ccff00]/50 transition-colors duration-300 hover:text-[#ccff00]"
             >
               {tool.name}
             </a>

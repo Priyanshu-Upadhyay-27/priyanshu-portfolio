@@ -20,13 +20,23 @@
 }
 
 @keyframes scroll-left {
-  from { transform: translateX(0); }
-  to   { transform: translateX(-50%); }
+  from {
+    transform: translateX(0);
+  }
+
+  to {
+    transform: translateX(-50%);
+  }
 }
 
 @keyframes scroll-right {
-  from { transform: translateX(-50%); }
-  to   { transform: translateX(0); }
+  from {
+    transform: translateX(-50%);
+  }
+
+  to {
+    transform: translateX(0);
+  }
 }
 
 .marquee-item {
@@ -40,8 +50,4 @@
   transition: color 0.3s ease;
   white-space: nowrap;
   flex-shrink: 0;
-}
-
-.marquee-item:hover {
-  color: #008080;
 }
