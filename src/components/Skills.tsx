@@ -73,16 +73,19 @@ const FlipCard = ({ cluster, index }: { cluster: typeof skillClusters[0], index:
 
         {/* BACK */}
         <div 
-          className="absolute inset-0 bg-teal border border-teal flex flex-col justify-center p-8"
+          className="absolute inset-0 bg-[#0d0d0d] border border-teal/20 shadow-[0_0_20px_rgba(0,255,255,0.05)] flex flex-col justify-center p-8"
           style={{ backfaceVisibility: 'hidden', transform: 'rotateY(180deg)' }}
         >
-          <h4 className="font-sans text-charcoal font-bold uppercase tracking-widest text-xs mb-6 border-b border-charcoal/20 pb-4">
+          <h4 className="text-teal font-sans font-black uppercase tracking-[0.15em] text-sm mb-4 border-b border-teal/20 pb-2">
             {cluster.domain} Toolkit
           </h4>
           <ul className="space-y-3">
             {cluster.skills.map((skill, i) => (
-              <li key={i} className="text-charcoal font-medium font-sans text-sm md:text-base flex items-center">
-                <span className="w-1.5 h-1.5 bg-charcoal rounded-full mr-3 opacity-50 block" />
+              <li 
+                key={i} 
+                className="text-white/80 font-mono text-sm md:text-base leading-relaxed flex items-center gap-3 hover:text-white hover:translate-x-1 transition-all duration-300 cursor-default"
+              >
+                <span className="text-[#ccff00] text-lg">▹</span>
                 {skill}
               </li>
             ))}
