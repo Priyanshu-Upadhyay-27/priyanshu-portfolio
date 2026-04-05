@@ -38,7 +38,7 @@ const FlipCard = ({ cluster, index }: { cluster: typeof skillClusters[0], index:
   };
 
   return (
-    <div 
+    <div
       className="relative w-full min-h-[350px] lg:min-h-[400px] cursor-pointer"
       style={{ perspective: '1000px' }}
       onMouseEnter={handleMouseEnter}
@@ -52,15 +52,15 @@ const FlipCard = ({ cluster, index }: { cluster: typeof skillClusters[0], index:
         style={{ transformStyle: 'preserve-3d' }}
       >
         {/* FRONT */}
-        <div 
+        <div
           className="absolute inset-0 bg-[#161616] border border-white/5 p-8 flex flex-col justify-between overflow-hidden"
           style={{ backfaceVisibility: 'hidden' }}
         >
           {/* Subtle image texture */}
-          <img 
-            src={cluster.image} 
-            className="absolute inset-0 w-full h-full object-cover opacity-40 pointer-events-none" 
-            alt="" 
+          <img
+            src={cluster.image}
+            className="absolute inset-0 w-full h-full object-cover opacity-40 pointer-events-none"
+            alt=""
           />
           <div className="relative z-10 flex flex-col justify-between h-full">
             <div />
@@ -72,7 +72,7 @@ const FlipCard = ({ cluster, index }: { cluster: typeof skillClusters[0], index:
         </div>
 
         {/* BACK */}
-        <div 
+        <div
           className="absolute inset-0 bg-[#0d0d0d] border border-white/20 shadow-[0_0_15px_rgba(255,255,255,0.08)] flex flex-col justify-center p-8"
           style={{ backfaceVisibility: 'hidden', transform: 'rotateY(180deg)' }}
         >
@@ -81,8 +81,8 @@ const FlipCard = ({ cluster, index }: { cluster: typeof skillClusters[0], index:
           </h4>
           <ul className="space-y-3">
             {cluster.skills.map((skill, i) => (
-              <li 
-                key={i} 
+              <li
+                key={i}
                 className="text-white/80 font-mono text-sm md:text-base leading-relaxed flex items-center gap-3 hover:text-white hover:translate-x-1 transition-all duration-300 cursor-default"
               >
                 <span className="text-[#ccff00] text-lg">▹</span>
@@ -98,7 +98,7 @@ const FlipCard = ({ cluster, index }: { cluster: typeof skillClusters[0], index:
 
 const Skills = () => {
   return (
-    <section className="bg-charcoal py-32 px-8 lg:px-16 border-b border-white/5">
+    <section id="skills" className="bg-charcoal py-32 px-8 lg:px-16 border-b border-white/5">
       <div className="max-w-7xl mx-auto">
         <h2 className="font-display text-4xl md:text-5xl font-light text-soft-white mb-20 border-b border-white/10 pb-6 inline-block">
           Index 03 <span className="text-teal ml-4">//</span> Skills and Tools

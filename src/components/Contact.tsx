@@ -3,13 +3,13 @@ import { Mail, Github, Linkedin, Download, FileText } from 'lucide-react';
 
 const Contact = () => {
   return (
-    <section className="bg-charcoal py-32 px-8 lg:px-16">
+    <section id="contact" className="bg-charcoal py-32 px-8 lg:px-16">
       <div className="max-w-6xl mx-auto flex flex-col lg:flex-row gap-16 lg:gap-24">
         
         {/* Left Side: Contact Info & Future Space */}
         <div className="w-full lg:w-1/2 flex flex-col">
           <h2 className="font-display text-4xl md:text-5xl font-light text-soft-white mb-12 border-b border-white/10 pb-6 inline-block w-fit">
-            Index 05 <span className="text-teal ml-4">//</span> Connect
+            Index 06 <span className="text-teal ml-4">//</span> Connect
           </h2>
           
           <p className="text-soft-white/70 font-sans text-lg md:text-xl font-light leading-relaxed mb-12 max-w-lg">

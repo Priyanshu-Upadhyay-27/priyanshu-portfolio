@@ -144,7 +144,7 @@ const ProjectFeature = ({ project }: { project: typeof projects[0] }) => {
 
 const FeaturedProjects = () => {
   return (
-    <section className="bg-charcoal w-full border-t border-white/5 relative z-20">
+    <section id="projects" className="bg-charcoal w-full border-t border-white/5 relative z-20">
       <div className="py-24 px-8 lg:px-16 border-b border-white/5">
         <h2 className="font-display text-4xl md:text-5xl font-light text-soft-white inline-block">
           Index 02 <span className="text-teal ml-4">//</span> Featured Work

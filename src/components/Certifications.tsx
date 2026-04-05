@@ -36,7 +36,7 @@ const certifications = [
 
 const Certifications = () => {
   return (
-    <section className="w-full bg-[#0a0a0a] py-20 border-t border-white/5 relative">
+    <section id="certifications" className="w-full bg-[#0a0a0a] py-20 border-t border-white/5 relative">
       <div className="max-w-7xl mx-auto px-8 lg:px-16">
         <h2 className="font-display text-4xl md:text-5xl font-light text-soft-white mb-8 border-b border-white/10 pb-6 inline-block">
           Index 05 <span className="text-teal ml-4">//</span> Credentials & Certifications
