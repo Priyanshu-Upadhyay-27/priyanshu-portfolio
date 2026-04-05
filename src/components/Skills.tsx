@@ -63,7 +63,7 @@ const FlipCard = ({ cluster, index }: { cluster: typeof skillClusters[0], index:
             alt="" 
           />
           <div className="relative z-10 flex flex-col justify-between h-full">
-            <span className="text-teal font-mono text-sm">0{index + 1}</span>
+            <div />
             <h3 className="font-display text-2xl md:text-3xl font-light text-soft-white">
               {cluster.domain}
             </h3>
@@ -73,7 +73,7 @@ const FlipCard = ({ cluster, index }: { cluster: typeof skillClusters[0], index:
 
         {/* BACK */}
         <div 
-          className="absolute inset-0 bg-[#0d0d0d] border border-teal/20 shadow-[0_0_20px_rgba(0,255,255,0.05)] flex flex-col justify-center p-8"
+          className="absolute inset-0 bg-[#0d0d0d] border border-white/20 shadow-[0_0_15px_rgba(255,255,255,0.08)] flex flex-col justify-center p-8"
           style={{ backfaceVisibility: 'hidden', transform: 'rotateY(180deg)' }}
         >
           <h4 className="text-teal font-sans font-black uppercase tracking-[0.15em] text-sm mb-4 border-b border-teal/20 pb-2">
