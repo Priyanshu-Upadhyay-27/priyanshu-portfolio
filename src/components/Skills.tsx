@@ -39,7 +39,7 @@ const FlipCard = ({ cluster, index }: { cluster: typeof skillClusters[0], index:
 
   return (
     <div 
-      className="relative w-full aspect-square md:aspect-[4/3] cursor-pointer"
+      className="relative w-full min-h-[350px] lg:min-h-[400px] cursor-pointer"
       style={{ perspective: '1000px' }}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
