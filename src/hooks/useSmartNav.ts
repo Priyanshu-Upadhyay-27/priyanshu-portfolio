@@ -12,21 +12,9 @@ interface SmartNavState {
  * useSmartNav
  *
  * Tracks `window.scrollY` and returns two booleans that drive the header's
- * visibility. The header is always `position: fixed` in CSS — this hook
- * only tells it *when* to hide/show and when to switch on the frosted
- * backdrop.
- *
- * Behaviour:
- *  ┌─────────────────────────────────────────────────────┐
- *  │ Zone A  (scrollY < aboutSectionTop)                 │
- *  │   → isHidden: false   isPastHero: false             │
- *  │   → header sits over the Hero, transparent bg       │
- *  ├─────────────────────────────────────────────────────┤
- *  │ Zone B  (scrollY ≥ aboutSectionTop)                 │
- *  │   → scrolling ↓  → isHidden: true                  │
- *  │   → scrolling ↑  → isHidden: false, isPastHero: true│
- *  │   → glassmorphism bg + slide-in from top            │
- *  └─────────────────────────────────────────────────────┘
+ * visibility. The header is always `position: fixed` in CSS. 
+ * Includes an accumulated scroll delta logic (e.g. 50px) for upwards scroll
+ * to prevent jittery accidental reveals.
  *
  * @param thresholdSelector — CSS selector for the element that marks the
  *   transition from Zone A → Zone B.  Default: `'#about'`
@@ -38,6 +26,7 @@ export function useSmartNav(thresholdSelector = '#about'): SmartNavState {
   // Mutable refs so the scroll handler never stales
   const lastScrollY = useRef(0);
   const thresholdY = useRef<number>(99999);
+  const scrollUpStartPoint = useRef(0);
 
   // ── Cache the threshold element's pageY offset ──
   const cacheThreshold = useCallback(() => {
@@ -64,11 +53,33 @@ export function useSmartNav(thresholdSelector = '#about'): SmartNavState {
       if (y >= thresholdY.current) {
         // Zone B — smart reveal
         setIsPastHero(true);
-        setIsHidden(y > lastScrollY.current); // down → hide, up → show
+        
+        if (y > lastScrollY.current) {
+          // Scrolling down
+          setIsHidden(true);
+          scrollUpStartPoint.current = 0;
+        } else if (y < lastScrollY.current) {
+          // Scrolling up
+          if (scrollUpStartPoint.current === 0) {
+            scrollUpStartPoint.current = y;
+          }
+          
+          const distanceScrolledUp = scrollUpStartPoint.current - y;
+          
+          if (distanceScrolledUp > 50) {
+             setIsHidden(false);
+          }
+        }
       } else {
         // Zone A — always visible, transparent
         setIsPastHero(false);
         setIsHidden(false);
+        scrollUpStartPoint.current = 0; // reset
+      }
+
+      // Edge Case: Absolute Top
+      if (y < 50) {
+         setIsHidden(false);
       }
 
       lastScrollY.current = y;
