@@ -50,3 +50,5 @@ Thumbs.db
 # Hosting platforms
 .vercel
 .netlify
+
+public/rough_project_images/
