@@ -46,7 +46,7 @@ const Certifications = () => {
           {certifications.map((cert, i) => (
             <div 
               key={i} 
-              className="bg-[#111111] border border-white/5 p-8 hover:border-teal/30 transition-colors duration-300 flex flex-col justify-between min-h-[200px]"
+              className="bg-[#111111] border border-white/5 p-8 relative overflow-hidden transition-all duration-500 hover:border-teal/50 hover:shadow-[0_0_20px_rgba(0,255,255,0.1)] hover:-translate-y-1 hover:bg-[#151515] flex flex-col justify-between min-h-[200px]"
             >
               <div>
                 <span className="text-teal font-mono text-xs tracking-widest uppercase mb-2 block">{cert.issuer}</span>
