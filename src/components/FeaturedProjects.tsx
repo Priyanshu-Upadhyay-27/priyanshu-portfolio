@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ExternalLink, Github, ChevronLeft, ChevronRight, X } from 'lucide-react';
+import { ExternalLink, Github, ChevronLeft, ChevronRight, X, Play } from 'lucide-react';
 
 const projects = [
   {
@@ -8,8 +8,8 @@ const projects = [
     description: "An intelligent Retrieval-Augmented Generation (RAG) assistant directly integrated into the Jupyter ecosystem. Allows researchers and engineers to query their notebook data naturally, retrieving exact code cells, documentation context, and generated insights.",
     bullets: ["Context-aware embeddings tailored for Python code structure.", "Local LLM integration to preserve data privacy.", "Seamless Jupyter extension UI."],
     stack: ["LangChain", "OpenAI", "Python", "Jupyter API"],
-    repo: "#",
-    live: "#",
+    repo: "https://github.com/Priyanshu-Upadhyay-27/QnA_With_Jupyter",
+    live: "",
     images: [
       '/projects/pro_jy_1.png',
       '/projects/pro_jy_2.png',
@@ -22,8 +22,8 @@ const projects = [
     description: "A production-grade machine learning pipeline predicting customer churn. Engineered with a full MLOps lifecycle from data ingestion to model serving.",
     bullets: ["Automated feature engineering and drift detection.", "Model registry and versioning system.", "RESTful inference API handling high traffic."],
     stack: ["scikit-learn", "FastAPI", "Docker", "Pandas"],
-    repo: "#",
-    live: "#",
+    repo: "https://github.com/Priyanshu-Upadhyay-27/end-to-end-churn-ml",
+    live: "https://priyanshu-retention-intelligence.streamlit.app/",
     images: [
       '/projects/pro_ch_1.png',
       '/projects/pro_ch_2.png',
@@ -32,12 +32,12 @@ const projects = [
     ]
   },
   {
-    title: "2047 Visual Shop",
+    title: "Vision Board",
     description: "A futuristic computer vision retail prototype. Utilizes advanced pose estimation and object detection to power a seamless, checkout-free shopping experience mimicking physical stores.",
     bullets: ["Real-time multi-person tracking and action recognition.", "Low-latency inference optimized for edge devices.", "Responsive dashboard for inventory analytics."],
     stack: ["OpenCV", "MediaPipe", "YOLOv8", "React"],
-    repo: "#",
-    live: "#",
+    repo: "https://github.com/Priyanshu-Upadhyay-27/2047-Visual-Shop/tree/new_updates",
+    live: "https://www.youtube.com/watch?v=U_d6wnP3iDM",
     images: [
       '/projects/pro_note_1.png',
       '/projects/pro_note_2.png',
@@ -138,11 +138,13 @@ const ProjectFeature = ({ project }: { project: typeof projects[0] }) => {
         </div>
 
         <div className="flex items-center gap-6 mt-auto">
-          <a href={project.live} className="flex items-center gap-2 text-soft-white hover:text-teal transition-colors uppercase tracking-widest text-sm font-semibold">
-            <span>View Live</span>
-            <ExternalLink size={16} />
-          </a>
-          <a href={project.repo} className="flex items-center gap-2 text-soft-white/50 hover:text-soft-white transition-colors uppercase tracking-widest text-sm font-semibold">
+          {project.live && (
+            <a href={project.live} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-soft-white hover:text-teal transition-colors uppercase tracking-widest text-sm font-semibold">
+              <span>{project.live.includes('youtube.com') || project.live.includes('youtu.be') ? 'Watch Demo' : 'View Live'}</span>
+              {project.live.includes('youtube.com') || project.live.includes('youtu.be') ? <Play size={16} /> : <ExternalLink size={16} />}
+            </a>
+          )}
+          <a href={project.repo} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-soft-white/50 hover:text-soft-white transition-colors uppercase tracking-widest text-sm font-semibold">
             <span>Source</span>
             <Github size={16} />
           </a>
