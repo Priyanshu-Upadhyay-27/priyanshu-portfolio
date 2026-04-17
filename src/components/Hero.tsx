@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import NeuralHUD from './NeuralHUD';
@@ -7,6 +7,12 @@ import './Hero.css';
 gsap.registerPlugin(ScrollTrigger);
 
 const Hero = () => {
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+
+  const handleMouseMove = (e: React.MouseEvent) => {
+    setMousePosition({ x: e.clientX, y: e.clientY });
+  };
+
   const heroRef = useRef<HTMLDivElement>(null);
   const bgLayerRef = useRef<HTMLDivElement>(null);
   const row1Ref = useRef<HTMLSpanElement>(null);
@@ -184,7 +190,7 @@ const Hero = () => {
           paths.forEach((path) => {
             const length = path.getTotalLength();
             pathLengths.push(length);
-            path.style.strokeDasharray  = `${length}`;
+            path.style.strokeDasharray = `${length}`;
             path.style.strokeDashoffset = `${length}`;
             // fill: none + stroke: #ccff00 + stroke-width are set in Hero.css
           });
@@ -410,7 +416,24 @@ const Hero = () => {
   }, []);
 
   return (
-    <div ref={heroRef} id="hero" className="hero">
+    <div ref={heroRef} id="hero" className="hero" onMouseMove={handleMouseMove}>
+      {/* ════════════════════════════════════════
+          CURSOR SPOTLIGHT (FLASHLIGHT EFFECT)
+      ════════════════════════════════════════ */}
+      <div
+        style={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          pointerEvents: 'none',
+          zIndex: 50,
+          background: `radial-gradient(800px circle at ${mousePosition.x}px ${mousePosition.y}px, rgba(204, 255, 0, 0.12), transparent 40%)`,
+          transition: 'background 0.1s ease',
+        }}
+      />
+
       {/* ════════════════════════════════════════
           LAYER 1 — KINETIC TYPOGRAPHY BACKGROUND
       ════════════════════════════════════════ */}

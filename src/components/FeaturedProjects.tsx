@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import { motion } from 'framer-motion';
-import { ExternalLink, Github } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { ExternalLink, Github, ChevronLeft, ChevronRight, X } from 'lucide-react';
 
 const projects = [
   {
@@ -11,10 +11,10 @@ const projects = [
     repo: "#",
     live: "#",
     images: [
-      '/projects/project_jupyter_1.png', 
-      '/projects/project_jupyter_2.png', 
-      '/projects/project_jupyter_3.png', 
-      '/projects/project_jupyter_4.png'
+      '/projects/pro_jy_1.png',
+      '/projects/pro_jy_2.png',
+      '/projects/pro_jy_3.png',
+      '/projects/pro_jy_4.png'
     ]
   },
   {
@@ -24,7 +24,12 @@ const projects = [
     stack: ["scikit-learn", "FastAPI", "Docker", "Pandas"],
     repo: "#",
     live: "#",
-    images: ['/img1.jpg', '/img2.jpg', '/img3.jpg']
+    images: [
+      '/projects/pro_ch_1.png',
+      '/projects/pro_ch_2.png',
+      '/projects/pro_ch_3.png',
+      '/projects/pro_ch_4.png'
+    ]
   },
   {
     title: "2047 Visual Shop",
@@ -34,21 +39,22 @@ const projects = [
     repo: "#",
     live: "#",
     images: [
-      '/projects/project_visual_1.png',
-      '/projects/project_visual_2.png',
-      '/projects/project_visual_3.png',
-      '/projects/project_visual_4.png'
+      '/projects/pro_note_1.png',
+      '/projects/pro_note_2.png',
+      '/projects/pro_note_3.png',
+      '/projects/pro_note_4.png'
     ]
   }
 ];
 
 const ProjectFeature = ({ project }: { project: typeof projects[0] }) => {
   const [isSpread, setIsSpread] = useState(false);
+  const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
 
   const images = project.images || [
-    '/placeholder.jpg', 
-    '/placeholder.jpg', 
-    '/placeholder.jpg', 
+    '/placeholder.jpg',
+    '/placeholder.jpg',
+    '/placeholder.jpg',
     '/placeholder.jpg'
   ];
 
@@ -68,34 +74,38 @@ const ProjectFeature = ({ project }: { project: typeof projects[0] }) => {
   };
 
   const getStackedAnimation = (index: number, total: number) => {
-    return { 
-      top: "10%", left: "10%", width: "80%", height: "80%", 
-      rotate: index * 4 - (total * 2), 
-      zIndex: total - index 
+    return {
+      top: "10%", left: "10%", width: "80%", height: "80%",
+      rotate: index * 4 - (total * 2),
+      zIndex: total - index
     };
   };
 
   return (
     <div className="flex flex-col lg:flex-row w-full min-h-[70vh] items-stretch border-b border-white/5 group">
       {/* LEFT 60%: Visual Showcase */}
-      <div className="w-full lg:w-[60%] bg-[#0f0f0f] relative overflow-hidden flex items-center justify-center p-4 lg:p-6 border-r border-white/5">
+      <div
+        className="w-full lg:w-[60%] bg-[#0f0f0f] relative overflow-hidden flex items-center justify-center p-4 lg:p-6 border-r border-white/5"
+        onMouseEnter={() => setIsSpread(true)}
+        onMouseLeave={() => setIsSpread(false)}
+      >
         <div className="absolute inset-0 bg-teal/5 opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
-        <div 
-          className="relative w-full max-w-6xl aspect-square md:aspect-[4/3] cursor-pointer group"
-          onClick={() => setIsSpread(!isSpread)}
+        <div
+          className="relative w-full max-w-6xl aspect-square md:aspect-[4/3]"
         >
           {images.map((imgSrc, index) => (
             <motion.img
               key={index}
               src={imgSrc}
-              className="absolute object-cover rounded-md shadow-2xl border border-white/10"
+              className="absolute object-cover rounded-md shadow-2xl border border-white/10 cursor-zoom-in"
               initial={false}
-              animate={isSpread 
-                ? getSpreadAnimation(index, images.length) 
+              animate={isSpread
+                ? getSpreadAnimation(index, images.length)
                 : getStackedAnimation(index, images.length)
               }
               style={{ zIndex: isSpread ? 10 : images.length - index }}
               transition={{ type: "spring", stiffness: 220, damping: 25 }}
+              onClick={() => setLightboxIndex(index)}
             />
           ))}
         </div>
@@ -138,6 +148,74 @@ const ProjectFeature = ({ project }: { project: typeof projects[0] }) => {
           </a>
         </div>
       </div>
+
+      {/* ════════════════════════════════════════
+          FULLSCREEN LIGHTBOX GALLERY
+      ════════════════════════════════════════ */}
+      <AnimatePresence>
+        {lightboxIndex !== null && (
+          <motion.div
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 backdrop-blur-md"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.3 }}
+            onClick={() => setLightboxIndex(null)}
+          >
+            {/* Central content — stop propagation so clicks here don't close */}
+            <div
+              className="relative flex items-center justify-center"
+              onClick={(e) => e.stopPropagation()}
+            >
+              {/* Active Image */}
+              <motion.img
+                key={lightboxIndex}
+                src={images[lightboxIndex]}
+                className="max-w-[90vw] max-h-[85vh] object-contain drop-shadow-2xl rounded-lg"
+                initial={{ opacity: 0, scale: 0.92 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.92 }}
+                transition={{ duration: 0.25 }}
+              />
+            </div>
+
+            {/* Close Button — Top Right */}
+            <button
+              className="absolute top-6 right-6 text-white/50 hover:text-white transition-colors cursor-pointer"
+              onClick={() => setLightboxIndex(null)}
+            >
+              <X size={28} />
+            </button>
+
+            {/* Left Arrow — Center Left */}
+            <button
+              className="absolute left-6 top-1/2 -translate-y-1/2 text-white/50 hover:text-[#ccff00] transition-colors cursor-pointer"
+              onClick={(e) => {
+                e.stopPropagation();
+                setLightboxIndex((prev) => (prev === 0 ? images.length - 1 : prev! - 1));
+              }}
+            >
+              <ChevronLeft size={36} />
+            </button>
+
+            {/* Right Arrow — Center Right */}
+            <button
+              className="absolute right-6 top-1/2 -translate-y-1/2 text-white/50 hover:text-[#ccff00] transition-colors cursor-pointer"
+              onClick={(e) => {
+                e.stopPropagation();
+                setLightboxIndex((prev) => (prev === images.length - 1 ? 0 : prev! + 1));
+              }}
+            >
+              <ChevronRight size={36} />
+            </button>
+
+            {/* Image Counter — Bottom Center */}
+            <div className="absolute bottom-6 left-1/2 -translate-x-1/2 text-white/40 text-sm font-mono tracking-widest">
+              {lightboxIndex + 1} / {images.length}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 };
@@ -161,3 +239,4 @@ const FeaturedProjects = () => {
 };
 
 export default FeaturedProjects;
+

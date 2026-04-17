@@ -150,10 +150,33 @@
   height: 16px;
 }
 
-.hero-yolo__corner--tl { top: 0; left: 0; border-top: 2px solid #ccff00; border-left: 2px solid #ccff00; }
-.hero-yolo__corner--tr { top: 0; right: 0; border-top: 2px solid #ccff00; border-right: 2px solid #ccff00; }
-.hero-yolo__corner--bl { bottom: 0; left: 0; border-bottom: 2px solid #ccff00; border-left: 2px solid #ccff00; }
-.hero-yolo__corner--br { bottom: 0; right: 0; border-bottom: 2px solid #ccff00; border-right: 2px solid #ccff00; }
+.hero-yolo__corner--tl {
+  top: 0;
+  left: 0;
+  border-top: 2px solid #ccff00;
+  border-left: 2px solid #ccff00;
+}
+
+.hero-yolo__corner--tr {
+  top: 0;
+  right: 0;
+  border-top: 2px solid #ccff00;
+  border-right: 2px solid #ccff00;
+}
+
+.hero-yolo__corner--bl {
+  bottom: 0;
+  left: 0;
+  border-bottom: 2px solid #ccff00;
+  border-left: 2px solid #ccff00;
+}
+
+.hero-yolo__corner--br {
+  bottom: 0;
+  right: 0;
+  border-bottom: 2px solid #ccff00;
+  border-right: 2px solid #ccff00;
+}
 
 .hero-yolo__body {
   display: flex;
@@ -169,9 +192,18 @@
   letter-spacing: 0.04em;
 }
 
-.hero-yolo__key { color: rgba(255, 255, 255, 0.35); }
-.hero-yolo__val { color: #ffffff; font-weight: 700; }
-.hero-yolo__val--neon { color: #ccff00; }
+.hero-yolo__key {
+  color: rgba(255, 255, 255, 0.35);
+}
+
+.hero-yolo__val {
+  color: #ffffff;
+  font-weight: 700;
+}
+
+.hero-yolo__val--neon {
+  color: #ccff00;
+}
 
 /* ════════════════════════════════════════════
    SIGNATURE CONTAINER — Centered
@@ -250,7 +282,9 @@
     padding: 1.25rem 1.25rem;
   }
 
-  .hero-nav__name { font-size: 0.9rem; }
+  .hero-nav__name {
+    font-size: 0.9rem;
+  }
 
   .hero-nav__resume {
     padding: 0.45rem 0.9rem;
@@ -264,8 +298,14 @@
     padding: 0.9rem 1rem;
   }
 
-  .hero-yolo__row { font-size: 0.6rem; }
-  .hero-yolo__corner { width: 12px; height: 12px; }
+  .hero-yolo__row {
+    font-size: 0.6rem;
+  }
+
+  .hero-yolo__corner {
+    width: 12px;
+    height: 12px;
+  }
 
   .hero-signature {
     width: 80vw;
