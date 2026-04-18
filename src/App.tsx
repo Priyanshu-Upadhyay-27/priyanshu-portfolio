@@ -3,6 +3,7 @@ import Header from './components/Header';
 import Hero from './components/Hero';
 import About from './components/About';
 import FeaturedProjects from './components/FeaturedProjects';
+import ArchiveLink from './components/ArchiveLink';
 import Skills from './components/Skills';
 import Tools from './components/Tools';
 import Certifications from './components/Certifications';
@@ -17,6 +18,7 @@ function App() {
       <Hero />
       <About />
       <FeaturedProjects />
+      <ArchiveLink />
       <Skills />
       <Tools />
       <Certifications />
