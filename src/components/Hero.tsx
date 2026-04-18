@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import NeuralHUD from './NeuralHUD';
@@ -7,11 +7,6 @@ import './Hero.css';
 gsap.registerPlugin(ScrollTrigger);
 
 const Hero = () => {
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
-
-  const handleMouseMove = (e: React.MouseEvent) => {
-    setMousePosition({ x: e.clientX, y: e.clientY });
-  };
 
   const heroRef = useRef<HTMLDivElement>(null);
   const bgLayerRef = useRef<HTMLDivElement>(null);
@@ -23,6 +18,7 @@ const Hero = () => {
   const scrollCueRef = useRef<HTMLDivElement>(null);
   const topoRef = useRef<SVGSVGElement>(null);
   const portraitRef = useRef<HTMLImageElement>(null);
+  const bottomFadeRef = useRef<HTMLDivElement>(null);
 
   // Kinetic text strings
   const row1 = 'BUILD-TRAIN-DEPLOY ⸻ ';
@@ -38,7 +34,8 @@ const Hero = () => {
     const wrapper = imageWrapperRef.current;
     const overlay = overlayRef.current;
     const portrait = portraitRef.current;
-    if (!hero || !bgLayer || !row1El || !row2El || !wrapper || !overlay || !portrait) return;
+    const bottomFade = bottomFadeRef.current;
+    if (!hero || !bgLayer || !row1El || !row2El || !wrapper || !overlay || !portrait || !bottomFade) return;
 
     // ════════════════════════════════════════════
     // 1. KINETIC MARQUEES — infinite GSAP tweens
@@ -114,33 +111,37 @@ const Hero = () => {
       },
     });
 
-    // Phase A (0 → 0.65): Clip-path crops L2 into a 5:3 centered rectangle
-    //   Visible height = 60vh  →  top/bottom = 20vh
-    //   Visible width  = 100vh →  left/right = calc(50vw − 50vh)
-    //   Ratio: 100vh ÷ 60vh = 5 : 3  ✓
+    // Phase A (0 → 0.65): Clip-path crops L2 into a balanced portrait card
+    //   Visible height = 60vh (20vh inset top + bottom)
+    //   Visible width  = 40vw (30vw inset left + right)
+    //   Portrait aspect — sharp edges, no border-radius
     tl.fromTo(
       wrapper,
-      { clipPath: 'inset(0% 0% 0% 0% round 0px)' },
+      { clipPath: 'inset(0% 0% 0% 0%)' },
       {
-        clipPath: 'inset(20vh calc(50vw - 50vh) 20vh calc(50vw - 50vh) round 16px)',
+        clipPath: 'inset(28vh 31.5vw 28vh 31.5vw)',
         ease: 'none',
         duration: 0.65,
       },
       0
     );
 
-    // Inner portrait scales down and shifts down for a cinematic zoom-out
+    // Inner portrait holds position during mask shrink
+    // No scale-down or vertical drift — the mask crops around the
+    // stationary image, keeping the face perfectly framed.
+    // bottom:0 CSS anchoring + 95vh height means image top at ~5vh,
+    // well inside the 20vh clip → hair margin + full face + shoulders visible.
     tl.fromTo(
       portrait,
       { scale: 1.05, y: '0%', xPercent: -50 },
-      { scale: 1, y: '2%', xPercent: -50, ease: 'none', duration: 0.65 },
+      { scale: 1, y: '0%', xPercent: -50, ease: 'none', duration: 0.65 },
       0
     );
 
     // Dark overlay fades in over the portrait
     tl.to(
       overlay,
-      { opacity: 0.5, ease: 'none', duration: 0.65 },
+      { opacity: 0.75, ease: 'none', duration: 0.65 },
       0
     );
 
@@ -156,6 +157,14 @@ const Hero = () => {
       '.neural-hud-container',
       { opacity: 0, ease: 'none', duration: 0.25 },
       0
+    );
+
+    // Bottom gradient fade — starts invisible, fades in after card begins shrinking
+    tl.fromTo(
+      bottomFade,
+      { opacity: 0 },
+      { opacity: 1, ease: 'power1.in', duration: 0.45 },
+      0.2
     );
 
     // Phase B (0.65 → 1.0): Fetch and animate the SVG signature
@@ -416,23 +425,7 @@ const Hero = () => {
   }, []);
 
   return (
-    <div ref={heroRef} id="hero" className="hero" onMouseMove={handleMouseMove}>
-      {/* ════════════════════════════════════════
-          CURSOR SPOTLIGHT (FLASHLIGHT EFFECT)
-      ════════════════════════════════════════ */}
-      <div
-        style={{
-          position: 'absolute',
-          top: 0,
-          left: 0,
-          right: 0,
-          bottom: 0,
-          pointerEvents: 'none',
-          zIndex: 50,
-          background: `radial-gradient(800px circle at ${mousePosition.x}px ${mousePosition.y}px, rgba(204, 255, 0, 0.12), transparent 40%)`,
-          transition: 'background 0.1s ease',
-        }}
-      />
+    <div ref={heroRef} id="hero" className="hero">
 
       {/* ════════════════════════════════════════
           LAYER 1 — KINETIC TYPOGRAPHY BACKGROUND
@@ -526,6 +519,11 @@ const Hero = () => {
           <span className="hero-scroll-cue__text">Scroll to explore</span>
           <div className="hero-scroll-cue__line" />
         </div>
+
+        {/* ════════════════════════════════════════
+            GRADIENT FADE — Smooth Hero → About transition
+        ════════════════════════════════════════ */}
+        <div ref={bottomFadeRef} className="hero-bottom-fade" />
       </div>
     </div>
   );
