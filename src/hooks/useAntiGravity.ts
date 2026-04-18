@@ -5,18 +5,22 @@ interface AntiGravityOptions {
   rangeX?: number;
   rangeY?: number;
   rangeRot?: number;
+  isPaused?: boolean;
 }
 
 export const useAntiGravity = (
   refs: React.RefObject<HTMLElement | null>[],
   options: AntiGravityOptions = {}
 ) => {
-  const { rangeX = 10, rangeY = 10, rangeRot = 1.5 } = options;
+  const { rangeX = 10, rangeY = 10, rangeRot = 1.5, isPaused = false } = options;
 
   // Use a stable ref for the refs array to avoid dependency issues if passed inline
   const targetRefs = useRef(refs);
   // Update it to ensure it always holds the latest refs
   targetRefs.current = refs;
+
+  const xTweenRef = useRef<gsap.core.Tween | null>(null);
+  const rTweenRef = useRef<gsap.core.Tween | null>(null);
 
   useEffect(() => {
     const targets = targetRefs.current.map((r) => r.current).filter(Boolean);
@@ -32,7 +36,7 @@ export const useAntiGravity = (
         const delay = gsap.utils.random(0, 1.5);
 
         // Make sure to use targets directly here so they animate as a cohesive unit
-        gsap.to(targets, {
+        xTweenRef.current = gsap.to(targets, {
           x,
           y,
           duration,
@@ -47,7 +51,7 @@ export const useAntiGravity = (
         const rotation = gsap.utils.random(-rangeRot, rangeRot);
         const duration = gsap.utils.random(4, 7);
 
-        gsap.to(targets, {
+        rTweenRef.current = gsap.to(targets, {
           rotation,
           duration,
           ease: 'sine.inOut', // silky organic movement
@@ -62,4 +66,15 @@ export const useAntiGravity = (
 
     return () => ctx.revert();
   }, [rangeX, rangeY, rangeRot]);
+
+  // Step 4: Handle Pause/Play via isPaused dependency
+  useEffect(() => {
+    if (isPaused) {
+      xTweenRef.current?.pause();
+      rTweenRef.current?.pause();
+    } else {
+      xTweenRef.current?.play();
+      rTweenRef.current?.play();
+    }
+  }, [isPaused]);
 };

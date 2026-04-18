@@ -1,6 +1,7 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ExternalLink, Github, ChevronLeft, ChevronRight, X, Play } from 'lucide-react';
+import { useAntiGravity } from '../hooks/useAntiGravity';
 
 const projects = [
   {
@@ -50,6 +51,15 @@ const projects = [
 const ProjectFeature = ({ project }: { project: typeof projects[0] }) => {
   const [isSpread, setIsSpread] = useState(false);
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
+  const stackParentRef = useRef<HTMLDivElement>(null);
+
+  // Apply AntiGravity to the whole image stack parent. Pause when dispersed (isSpread)
+  useAntiGravity([stackParentRef], { 
+    rangeX: 12, 
+    rangeY: 12, 
+    rangeRot: 1.5, 
+    isPaused: isSpread 
+  });
 
   const images = project.images || [
     '/placeholder.jpg',
@@ -91,6 +101,7 @@ const ProjectFeature = ({ project }: { project: typeof projects[0] }) => {
       >
         <div className="absolute inset-0 bg-teal/5 opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
         <div
+          ref={stackParentRef}
           className="relative w-full max-w-6xl aspect-square md:aspect-[4/3]"
         >
           {images.map((imgSrc, index) => (
