@@ -101,6 +101,21 @@
   aspect-ratio: 1 / 1;
 }
 
+.portal-wrapper::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 200%;
+  height: 200%;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(204, 255, 0, 0.15) 0%, rgba(0, 245, 212, 0.05) 35%, transparent 60%);
+  z-index: -1;
+  pointer-events: none;
+  animation: pulse-glow 4s ease-in-out infinite alternate;
+}
+
 .portal-circle {
   position: absolute;
   top: 0;
@@ -147,6 +162,17 @@
 
 @keyframes blink-teal {
   50% { opacity: 0; }
+}
+
+@keyframes pulse-glow {
+  0% { 
+    transform: translate(-50%, -50%) scale(0.95); 
+    opacity: 0.6; 
+  }
+  100% { 
+    transform: translate(-50%, -50%) scale(1.05); 
+    opacity: 1; 
+  }
 }
 
 /* ── Responsive ── */

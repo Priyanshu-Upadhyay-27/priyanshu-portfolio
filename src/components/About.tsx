@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { useAntiGravity } from '../hooks/useAntiGravity';
 import './About.css';
 
 gsap.registerPlugin(ScrollTrigger);
@@ -9,7 +10,11 @@ const About: React.FC = () => {
   const sectionRef = useRef<HTMLDivElement>(null);
   const portalImageBaseRef = useRef<HTMLImageElement>(null);
   const portalImageHeadRef = useRef<HTMLImageElement>(null);
+  const portalWrapperRef = useRef<HTMLDivElement>(null);
   const textStackRef = useRef<HTMLDivElement>(null);
+
+  // Apply AntiGravity to the whole portal wrapper
+  useAntiGravity([portalWrapperRef], { rangeX: 12, rangeY: 15, rangeRot: 2 });
 
 
   // ── Typewriter Logic ──
@@ -46,17 +51,38 @@ const About: React.FC = () => {
   // ── GSAP Animations ──
   useEffect(() => {
     const ctx = gsap.context(() => {
-      // 1. Text Stack Entrance (x: -50)
-      gsap.from(textStackRef.current, {
+      // 1. Text Animations (Timeline for staggering)
+      const tl = gsap.timeline({
         scrollTrigger: {
           trigger: sectionRef.current,
-          start: 'top 75%',
+          start: 'top 80%', // Only fires when section reaches 80% of viewport
         },
-        x: -50,
-        opacity: 0,
-        duration: 1,
-        ease: 'power3.out',
       });
+
+      // A. Slide up the heading & badge
+      tl.fromTo(
+        gsap.utils.toArray('.reveal-up'),
+        { y: 50, opacity: 0 },
+        {
+          y: 0,
+          opacity: 1,
+          duration: 1,
+          stagger: 0.15,
+          ease: 'power3.out',
+        }
+      );
+
+      // B. Sweep in the paragraph (overlapping)
+      tl.fromTo(
+        '.reveal-mask',
+        { clipPath: 'inset(0% 100% 0% 0%)' },
+        {
+          clipPath: 'inset(0% 0% 0% 0%)',
+          duration: 1.2,
+          ease: 'power3.inOut',
+        },
+        "-=0.6" // overlaps with the heading slide animation
+      );
 
       // 2. Portrait Parallax (Scroll Driven)
       gsap.fromTo([portalImageBaseRef.current, portalImageHeadRef.current], 
@@ -83,18 +109,18 @@ const About: React.FC = () => {
       <div className="about-container">
         {/* ── LEFT TEXT STACK ── */}
         <div className="about-left" ref={textStackRef}>
-          <p className="about-label">— ABOUT ME</p>
+          <p className="about-label reveal-up">— ABOUT ME</p>
           
-          <h2 className="about-header">
+          <h2 className="about-header reveal-up">
             Hi, I'm <span className="about-name-accent">Priyanshu</span> —
           </h2>
 
-          <h3 className="about-typewriter">
+          <h3 className="about-typewriter reveal-up">
             a <span className="accent-teal">{displayText}</span>
             <span className="typewriter-cursor">|</span>
           </h3>
 
-          <div className="about-bio-editorial">
+          <div className="about-bio-editorial reveal-mask">
             <p>
               A 3rd-year CS undergrad at KIET obsessed with building at the intersection of machine learning and real-world products. From training <strong>YOLO models</strong> to deploying <strong>RAG pipelines</strong>, I turn complex ideas into working systems.
             </p>
@@ -106,7 +132,7 @@ const About: React.FC = () => {
 
         {/* ── RIGHT PORTAL ── */}
         <div className="about-right">
-          <div className="portal-wrapper">
+          <div className="portal-wrapper" ref={portalWrapperRef}>
             {/* Layer 1: Base inside hidden overflow */}
             <div className="portal-circle">
               <img 
