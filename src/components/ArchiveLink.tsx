@@ -23,8 +23,8 @@ const ArchiveLink: React.FC = () => {
       tweenRef.current = gsap.to(marqueeRef.current, {
         xPercent: -50,
         repeat: -1,
-        // High duration since there are many images
-        duration: 35,
+        // Increased speed based on request (about 30-50% faster than 35s)
+        duration: 20,
         ease: 'none',
       });
     }
@@ -37,6 +37,9 @@ const ArchiveLink: React.FC = () => {
   // Handle interaction state
   useEffect(() => {
     if (isHovered) {
+      if (tweenRef.current) {
+        gsap.to(tweenRef.current, { timeScale: 0.2, duration: 0.8, ease: 'power2.out' });
+      }
       // Bring thumbnails into crystal clear focus (stream ignores hover and keeps moving)
       gsap.to('.archive-stream-img', { 
         opacity: 1, 
@@ -46,6 +49,9 @@ const ArchiveLink: React.FC = () => {
         ease: 'power3.out' 
       });
     } else {
+      if (tweenRef.current) {
+        gsap.to(tweenRef.current, { timeScale: 1, duration: 0.8, ease: 'power2.out' });
+      }
       // Return thumbnails to heavy blur and low opacity
       gsap.to('.archive-stream-img', { 
         opacity: 0.3, 
