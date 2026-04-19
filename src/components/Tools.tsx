@@ -53,7 +53,7 @@ const Tools = () => {
       topTweenRef.current = gsap.to(topMarqueeRef.current, {
         xPercent: -50,
         repeat: -1,
-        duration: 25, // noticeable, medium-fast pace
+        duration: 35, // Slower default resting speed (-25-30%)
         ease: 'none',
       });
     }
@@ -63,7 +63,7 @@ const Tools = () => {
       botTweenRef.current = gsap.to(botMarqueeRef.current, {
         xPercent: 0,
         repeat: -1,
-        duration: 25, // noticeable, medium-fast pace
+        duration: 35, // Slower default resting speed (-25-30%)
         ease: 'none',
       });
     }
@@ -88,7 +88,7 @@ const Tools = () => {
   return (
     <section
       id="tools"
-      className="group w-full bg-[#111111] border-y border-white/5 py-8 overflow-hidden relative"
+      className="group w-full bg-[#111111] py-8 overflow-hidden relative"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
@@ -111,7 +111,7 @@ const Tools = () => {
               href={tool.url}
               target="_blank"
               rel="noopener noreferrer"
-              className="marquee-item text-white/40 blur-[2px] transition-all duration-[800ms] group-hover:blur-0 hover:text-teal hover:drop-shadow-[0_0_15px_rgba(45,212,191,0.8)]"
+              className="marquee-item text-white/40 blur-[1.5px] transition-all duration-500 group-hover:blur-0 hover:text-teal hover:drop-shadow-[0_0_15px_rgba(45,212,191,0.8)]"
             >
               {tool.name}
             </a>
@@ -128,7 +128,7 @@ const Tools = () => {
               href={tool.url}
               target="_blank"
               rel="noopener noreferrer"
-              className="marquee-item text-white/40 blur-[2px] transition-all duration-[800ms] group-hover:blur-0 hover:text-[#ccff00] hover:drop-shadow-[0_0_15px_rgba(204,255,0,0.8)]"
+              className="marquee-item text-white/40 blur-[1.5px] transition-all duration-500 group-hover:blur-0 hover:text-[#ccff00] hover:drop-shadow-[0_0_15px_rgba(204,255,0,0.8)]"
             >
               {tool.name}
             </a>
