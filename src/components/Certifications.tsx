@@ -59,9 +59,9 @@ const HolographicCard = ({ badge }: { badge: typeof featuredBadges[0] }) => {
     const centerX = rect.width / 2;
     const centerY = rect.height / 2;
 
-    // Rotation calculation (max 15 degrees)
-    const rotateX = ((y - centerY) / centerY) * -15;
-    const rotateY = ((x - centerX) / centerX) * 15;
+    // Rotation calculation (max 7 degrees)
+    const rotateX = ((y - centerY) / centerY) * -7.5;
+    const rotateY = ((x - centerX) / centerX) * 7.5;
 
     // Glare position calculation (percentage)
     const glareX = (x / rect.width) * 100;
@@ -102,7 +102,7 @@ const HolographicCard = ({ badge }: { badge: typeof featuredBadges[0] }) => {
           
           {/* AWS Badge Display */}
           <div className="w-full aspect-[3/2] flex items-center justify-center bg-black/40 border border-white/5 rounded-lg mb-8 relative p-6">
-             <img src={`/badges/${badge.imagePlaceholder}.png`} alt={badge.title} className="absolute inset-0 w-full h-full object-contain p-6 drop-shadow-[0_0_25px_rgba(0,212,255,0.15)]" />
+             <img src={`/badges/${badge.imagePlaceholder}.png`} alt={badge.title} className="holo-badge-img absolute inset-0 w-full h-full object-contain p-6 drop-shadow-[0_0_25px_rgba(0,212,255,0.15)]" />
           </div>
 
           <div className="mt-auto pointer-events-auto">
@@ -131,7 +131,82 @@ const HolographicCard = ({ badge }: { badge: typeof featuredBadges[0] }) => {
   );
 };
 
+const MinorCard = ({ cert, index, isActive, onHover }: { cert: typeof standardCerts[0]; index: number; isActive: boolean; onHover: () => void }) => {
+  const cardRef = useRef<HTMLDivElement>(null);
+  const [rotation, setRotation] = useState({ x: 0, y: 0 });
+  const [isResetting, setIsResetting] = useState(false);
+
+  const handleMouseMove = (e: MouseEvent<HTMLDivElement>) => {
+    if (!cardRef.current || !isActive) return;
+    setIsResetting(false);
+
+    const card = cardRef.current;
+    const rect = card.getBoundingClientRect();
+    
+    // Calculate cursor position relative to center
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    const centerX = rect.width / 2;
+    const centerY = rect.height / 2;
+
+    // Ultra-subtle rotation limit (max 4.5 degrees)
+    const rotateX = ((y - centerY) / centerY) * -4.5;
+    const rotateY = ((x - centerX) / centerX) * 4.5;
+
+    setRotation({ x: rotateX, y: rotateY });
+  };
+
+  const handleMouseLeave = () => {
+    setIsResetting(true);
+    setRotation({ x: 0, y: 0 });
+  };
+
+  return (
+    <div 
+      className="holo-card-container w-full relative"
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
+      onMouseEnter={onHover}
+    >
+      <div 
+        ref={cardRef}
+        className={`holo-card bg-[#111111]/80 backdrop-blur-md border p-8 rounded-xl relative overflow-hidden transition-all duration-500 ease-out flex flex-col min-h-[240px] ${isResetting ? 'resetting' : ''}
+          ${isActive 
+            ? 'border-[#00d4ff]/50 bg-white/[0.03] -translate-y-1 shadow-[inset_0_0_20px_rgba(0,212,255,0.05),0_0_20px_rgba(0,212,255,0.1)]' 
+            : 'border-white/[0.02] opacity-70'
+          }`}
+        style={{ transform: isActive ? `rotateX(${rotation.x}deg) rotateY(${rotation.y}deg)` : 'rotateX(0deg) rotateY(0deg)' }}
+      >
+        <div className="holo-layer-content flex-1 flex flex-col pointer-events-none">
+          <span className={`font-mono text-xs tracking-widest uppercase mb-3 block transition-colors duration-500 ${isActive ? 'text-[#00d4ff]' : 'text-white/20'}`}>
+            {cert.issuer}
+          </span>
+          <h3 className={`font-sans font-bold text-xl leading-snug mb-2 transition-colors duration-500 ${isActive ? 'text-white' : 'text-white/40'}`}>
+            {cert.title}
+          </h3>
+          <span className="text-white/40 font-mono text-sm mb-6 block">
+            {cert.date}
+          </span>
+        </div>
+        
+        <div className="holo-layer-content mt-auto pointer-events-auto">
+          <a 
+            href={cert.link}
+            target="_blank"
+            rel="noopener noreferrer"
+            className={`font-mono text-sm uppercase tracking-wider transition-colors duration-500 flex items-center gap-2 pt-5 border-t border-white/5 w-full ${isActive ? 'text-[#ccff00]' : 'text-white/20'}`}
+          >
+            Verify Credential <ExternalLink size={14} />
+          </a>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 const Certifications = () => {
+  const [hoveredIndex, setHoveredIndex] = useState<number>(0);
+
   return (
     <section id="certifications" className="w-full bg-[#0a0a0a] py-32 border-t border-white/5 relative">
       <div className="max-w-7xl mx-auto px-8 lg:px-16">
@@ -156,29 +231,12 @@ const Certifications = () => {
           </div>
         </div>
 
-        {/* Level 2: Standard Certs Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 w-full">
-          {standardCerts.map((cert, i) => (
-            <div 
-              key={i} 
-              className="bg-[#111111] border border-white/5 p-8 relative overflow-hidden transition-all duration-500 hover:border-[#00d4ff]/50 hover:shadow-[0_0_20px_rgba(0,212,255,0.1)] hover:-translate-y-1 hover:bg-[#151515] flex flex-col justify-between min-h-[200px]"
-            >
-              <div>
-                <span className="text-[#00d4ff] font-mono text-xs tracking-widest uppercase mb-2 block">{cert.issuer}</span>
-                <h3 className="text-soft-white font-sans font-bold text-xl leading-snug mb-4">{cert.title}</h3>
-                <p className="text-white/40 font-mono text-sm mb-6">{cert.date}</p>
-              </div>
-              
-              <a 
-                href={cert.link}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-white/60 font-mono text-sm uppercase tracking-wider hover:text-[#ccff00] transition-colors duration-300 flex items-center gap-2 mt-auto"
-              >
-                Verify Credential <ExternalLink size={14} />
-              </a>
-            </div>
-          ))}
+        {/* Level 2: Mini-Cards Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 w-full mt-12 border-t border-white/5 pt-12">
+          {standardCerts.map((cert, i) => {
+            const isActive = hoveredIndex === i;
+            return <MinorCard key={i} cert={cert} index={i} isActive={isActive} onHover={() => setHoveredIndex(i)} />;
+          })}
         </div>
 
       </div>

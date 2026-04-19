@@ -20,6 +20,15 @@
   transform: translateZ(50px); /* Pushes content forward in 3D space */
 }
 
+.holo-badge-img {
+  transition: transform 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+  transform: translateZ(0) scale(1);
+}
+
+.holo-card-container:hover .holo-badge-img {
+  transform: translateZ(40px) scale(1.05); /* True 3D pop off the tilted plane */
+}
+
 .holo-glare {
   position: absolute;
   top: 0;
