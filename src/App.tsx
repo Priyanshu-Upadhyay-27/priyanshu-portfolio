@@ -9,12 +9,10 @@ import Tools from './components/Tools';
 import Certifications from './components/Certifications';
 import Contact from './components/Contact';
 import Footer from './components/Footer';
-import CustomCursor from './components/CustomCursor';
 
 function App() {
   return (
     <div>
-      <CustomCursor />
       <Hero />
       <About />
       <FeaturedProjects />
