@@ -1,0 +1,55 @@
+.holo-card-container {
+  perspective: 1000px;
+}
+
+.holo-card {
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+
+/* Smooth transition only when resetting to center */
+.holo-card.resetting {
+  transition: transform 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.holo-layer-bg {
+  transform: translateZ(0);
+}
+
+.holo-layer-content {
+  transform: translateZ(50px); /* Pushes content forward in 3D space */
+}
+
+.holo-glare {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  background: radial-gradient(
+    circle at var(--glare-x, 50%) var(--glare-y, 50%),
+    rgba(255, 255, 255, 0.25) 0%,
+    rgba(0, 212, 255, 0.1) 20%,
+    rgba(255, 255, 255, 0) 60%
+  );
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  z-index: 10;
+  mix-blend-mode: overlay;
+}
+
+.holo-card-container:hover .holo-glare {
+  opacity: 1;
+}
+
+/* Terminal Log Rows */
+.terminal-row {
+  border-left: 2px solid transparent;
+  transition: all 0.3s ease;
+}
+
+.terminal-row:hover {
+  border-left-color: #00d4ff; /* Neon Cyan */
+  background: rgba(0, 212, 255, 0.03); /* Faint cyan bg */
+}
