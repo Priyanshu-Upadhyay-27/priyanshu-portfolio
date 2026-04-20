@@ -52,3 +52,5 @@ Thumbs.db
 .netlify
 
 public/rough_project_images/
+
+deno.lock
