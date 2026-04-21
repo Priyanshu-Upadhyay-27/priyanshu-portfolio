@@ -5,24 +5,14 @@ import { useAntiGravity } from '../hooks/useAntiGravity';
 
 const projects = [
   {
-    title: "QnA With Jupyter",
-    description: "An intelligent Retrieval-Augmented Generation (RAG) assistant directly integrated into the Jupyter ecosystem. Allows researchers and engineers to query their notebook data naturally, retrieving exact code cells, documentation context, and generated insights.",
-    bullets: ["Context-aware embeddings tailored for Python code structure.", "Local LLM integration to preserve data privacy.", "Seamless Jupyter extension UI."],
-    stack: ["LangChain", "OpenAI", "Python", "Jupyter API"],
-    repo: "https://github.com/Priyanshu-Upadhyay-27/QnA_With_Jupyter",
-    live: "",
-    images: [
-      '/projects/pro_jy_1.png',
-      '/projects/pro_jy_2.png',
-      '/projects/pro_jy_3.png',
-      '/projects/pro_jy_4.png'
-    ]
-  },
-  {
-    title: "End-to-end Churn ML",
-    description: "A production-grade machine learning pipeline predicting customer churn. Engineered with a full MLOps lifecycle from data ingestion to model serving.",
-    bullets: ["Automated feature engineering and drift detection.", "Model registry and versioning system.", "RESTful inference API handling high traffic."],
-    stack: ["scikit-learn", "FastAPI", "Docker", "Pandas"],
+    title: "End-to-End Churn & MLOps Pipeline",
+    description: "A production-grade machine learning system designed to predict telecom customer churn, optimized for business decision-making (Recall@20). Built with a decoupled architecture featuring a FastAPI inference engine and a Streamlit UI.",
+    bullets: [
+      "Engineered a custom scikit-learn pipeline with Pydantic validation to handle real-world edge cases like the 'Zero Tenure Trap'.",
+      "Containerized with Docker and exposed via a RESTful API for seamless, high-traffic serving.",
+      "Implemented continuous monitoring to simulate concept drift, triggering automated challenger model retraining."
+    ],
+    stack: ["FastAPI", "Docker", "scikit-learn", "Streamlit"],
     repo: "https://github.com/Priyanshu-Upadhyay-27/end-to-end-churn-ml",
     live: "https://priyanshu-retention-intelligence.streamlit.app/",
     images: [
@@ -33,17 +23,39 @@ const projects = [
     ]
   },
   {
-    title: "Vision Board",
-    description: "A futuristic computer vision retail prototype. Utilizes advanced pose estimation and object detection to power a seamless, checkout-free shopping experience mimicking physical stores.",
-    bullets: ["Real-time multi-person tracking and action recognition.", "Low-latency inference optimized for edge devices.", "Responsive dashboard for inventory analytics."],
-    stack: ["OpenCV", "MediaPipe", "YOLOv8", "React"],
-    repo: "https://github.com/Priyanshu-Upadhyay-27/2047-Visual-Shop/tree/new_updates",
-    live: "https://www.youtube.com/watch?v=U_d6wnP3iDM",
+    title: "Context-Aware RAG for Jupyter",
+    description: "An intelligent Retrieval-Augmented Generation system that understands deep dependencies across Jupyter Notebook cells, rather than treating them as disjointed chunks. Reconstructs multi-cell context for highly accurate code retrieval.",
+    bullets: [
+      "Implemented AST-based parsing to map metadata-linked document structures and execution flows.",
+      "Achieved ~85% retrieval accuracy with sub-2 second latency locally by enabling dependency-aware context reconstruction.",
+      "Integrated local LLMs to maintain strict data privacy while processing complex Python repositories."
+    ],
+    stack: ["LangChain", "Python", "Local LLMs", "AST"],
+    repo: "https://github.com/Priyanshu-Upadhyay-27/QnA_With_Jupyter",
+    live: "",
     images: [
-      '/projects/pro_note_1.png',
-      '/projects/pro_note_2.png',
-      '/projects/pro_note_3.png',
-      '/projects/pro_note_4.png'
+      '/projects/pro_jy_1.png',
+      '/projects/pro_jy_2.png',
+      '/projects/pro_jy_3.png',
+      '/projects/pro_jy_4.png'
+    ]
+  },
+  {
+    title: "Loan Risk Modeling System",
+    description: "A hybrid machine learning system combining unsupervised and supervised learning to predict loan default risks. Processed and analyzed a massive 2.2 million record dataset to build a robust risk classification engine.",
+    bullets: [
+      "Designed a two-stage architecture leveraging KMeans for customer segmentation and XGBoost for classification.",
+      "Processed large-scale tabular data, ensuring robust feature engineering and pipeline efficiency.",
+      "Integrated SHAP values for model explainability, providing transparent risk assessments via an interactive dashboard."
+    ],
+    stack: ["XGBoost", "KMeans", "SHAP", "Pandas"],
+    repo: "https://github.com/Priyanshu-Upadhyay-27/YOUR_LOAN_REPO", // UPDATE THIS LINK
+    live: "YOUR_LIVE_LINK_HERE", // UPDATE THIS LINK IF APPLICABLE
+    images: [
+      '/projects/pro_loan_1.png', // UPDATE THESE IMAGES IN YOUR PUBLIC FOLDER
+      '/projects/pro_loan_2.png',
+      '/projects/pro_loan_3.png',
+      '/projects/pro_loan_4.png'
     ]
   }
 ];
