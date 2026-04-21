@@ -1,6 +1,5 @@
 import { useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Link } from 'react-router-dom';
 import { ExternalLink, Github, ChevronLeft, ChevronRight, X, Play } from 'lucide-react';
 import { useAntiGravity } from '../hooks/useAntiGravity';
 
@@ -50,10 +49,10 @@ const projects = [
       "Integrated SHAP values for model explainability, providing transparent risk assessments via an interactive dashboard."
     ],
     stack: ["XGBoost", "KMeans", "SHAP", "Pandas"],
-    repo: "https://github.com/Priyanshu-Upadhyay-27/LoanClassinator", 
-    live: "https://loanclassinator-classifier-cluster.streamlit.app/", 
+    repo: "https://github.com/Priyanshu-Upadhyay-27/LoanClassinator",
+    live: "https://loanclassinator-classifier-cluster.streamlit.app/",
     images: [
-      '/projects/pro_loan_1.png', 
+      '/projects/pro_loan_1.png',
       '/projects/pro_loan_2.png',
       '/projects/pro_loan_3.png',
       '/projects/pro_loan_4.png'
@@ -66,11 +65,11 @@ const ProjectFeature = ({ project }: { project: typeof projects[0] }) => {
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
   const stackParentRef = useRef<HTMLDivElement>(null);
 
-  useAntiGravity([stackParentRef], { 
-    rangeX: 12, 
-    rangeY: 12, 
-    rangeRot: 1.5, 
-    isPaused: isSpread 
+  useAntiGravity([stackParentRef], {
+    rangeX: 12,
+    rangeY: 12,
+    rangeRot: 1.5,
+    isPaused: isSpread
   });
 
   const images = project.images || [
@@ -246,15 +245,6 @@ const FeaturedProjects = () => {
         {projects.map((project, i) => (
           <ProjectFeature key={i} project={project} />
         ))}
-      </div>
-
-      <div className="py-16 px-8 flex justify-center border-b border-white/5">
-        <Link 
-          to="/archive" 
-          className="px-8 py-4 border border-white/20 text-[#f4f4f5] text-sm uppercase tracking-widest font-mono hover:bg-[#ccff00] hover:text-[#0a0a0a] hover:border-[#ccff00] transition-colors duration-300"
-        >
-          View Full Project Archive
-        </Link>
       </div>
     </section>
   );

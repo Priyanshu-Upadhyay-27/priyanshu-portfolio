@@ -15,6 +15,7 @@ import Footer from './components/Footer';
 const Home = () => {
   return (
     <>
+      <Header />
       <Hero />
       <About />
       <FeaturedProjects />
@@ -23,6 +24,7 @@ const Home = () => {
       <Tools />
       <Certifications />
       <Contact />
+      <Footer />
     </>
   );
 };
@@ -34,8 +36,6 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/archive" element={<Archive />} />
       </Routes>
-      <Footer />
-      <Header />
     </Router>
   );
 }

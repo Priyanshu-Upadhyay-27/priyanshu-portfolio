@@ -1,5 +1,6 @@
 import React, { useRef, useState, useEffect } from 'react';
 import gsap from 'gsap';
+import { Link } from 'react-router-dom';
 import './ArchiveLink.css';
 
 const archiveImages = [
@@ -84,10 +85,8 @@ const ArchiveLink: React.FC = () => {
 
       {/* ── Interactable Central Button ── */}
       <div className="relative z-20">
-        <a 
-          href="https://github.com/Priyanshu-Upadhyay-27" 
-          target="_blank" 
-          rel="noopener noreferrer"
+        <Link 
+          to="/archive" 
           className="archive-btn group flex items-center gap-4 md:gap-6 text-decoration-none px-6 py-4 cursor-pointer"
           onMouseEnter={() => setIsHovered(true)}
           onMouseLeave={() => setIsHovered(false)}
@@ -102,7 +101,7 @@ const ArchiveLink: React.FC = () => {
           <span className="archive-btn-bracket text-white/20 font-mono text-[clamp(2rem,5vw,5rem)] font-light transition-all duration-300">
             ]
           </span>
-        </a>
+        </Link>
       </div>
     </section>
   );
