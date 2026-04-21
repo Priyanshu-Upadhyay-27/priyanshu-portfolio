@@ -9,9 +9,9 @@ const Footer = () => {
       </div>
       
       <div className="flex gap-8 items-center">
-        <a href="#" className="text-xs font-mono uppercase tracking-widest text-soft-white/40 hover:text-teal transition-colors">GitHub</a>
-        <a href="#" className="text-xs font-mono uppercase tracking-widest text-soft-white/40 hover:text-teal transition-colors">LinkedIn</a>
-        <a href="mailto:contact@priyanshu.example" className="text-xs font-mono uppercase tracking-widest text-soft-white/40 hover:text-teal transition-colors">Email</a>
+        <a href="https://github.com/Priyanshu-Upadhyay-27" target="_blank" rel="noopener noreferrer" className="text-xs font-mono uppercase tracking-widest text-soft-white/40 hover:text-teal transition-colors">GitHub</a>
+        <a href="https://www.linkedin.com/in/priyanshu-upadhyay-cse" target="_blank" rel="noopener noreferrer" className="text-xs font-mono uppercase tracking-widest text-soft-white/40 hover:text-teal transition-colors">LinkedIn</a>
+        <a href="mailto:priyanshuupadhyay2005@gmail.com" className="text-xs font-mono uppercase tracking-widest text-soft-white/40 hover:text-teal transition-colors">Email</a>
       </div>
     </footer>
   );

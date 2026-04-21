@@ -61,17 +61,17 @@ const Contact = () => {
           </p>
           
           <div className="flex flex-col gap-6 mb-16">
-            <a href="mailto:contact@priyanshu.example" className="flex items-center gap-4 text-soft-white hover:text-teal transition-colors w-fit group">
+            <a href="mailto:priyanshuupadhyay2005@gmail.com" className="flex items-center gap-4 text-soft-white hover:text-teal transition-colors w-fit group">
               <span className="w-10 h-10 border border-white/10 flex items-center justify-center group-hover:border-teal/50 transition-colors">
                 <Mail size={16} />
               </span>
-              <span className="font-mono text-sm uppercase tracking-widest">contact@priyanshu.example</span>
+              <span className="font-mono text-sm tracking-widest lowercase">priyanshuupadhyay2005@gmail.com</span>
             </a>
             <div className="flex gap-4">
-              <a href="#" className="w-10 h-10 border border-white/10 flex items-center justify-center text-soft-white hover:text-teal hover:border-teal/50 transition-colors">
+              <a href="https://github.com/Priyanshu-Upadhyay-27" target="_blank" rel="noopener noreferrer" className="w-10 h-10 border border-white/10 flex items-center justify-center text-soft-white hover:text-teal hover:border-teal/50 transition-colors">
                 <Github size={16} />
               </a>
-              <a href="#" className="w-10 h-10 border border-white/10 flex items-center justify-center text-soft-white hover:text-teal hover:border-teal/50 transition-colors">
+              <a href="https://www.linkedin.com/in/priyanshu-upadhyay-cse" target="_blank" rel="noopener noreferrer" className="w-10 h-10 border border-white/10 flex items-center justify-center text-soft-white hover:text-teal hover:border-teal/50 transition-colors">
                 <Linkedin size={16} />
               </a>
             </div>

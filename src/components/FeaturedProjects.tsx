@@ -49,10 +49,10 @@ const projects = [
       "Integrated SHAP values for model explainability, providing transparent risk assessments via an interactive dashboard."
     ],
     stack: ["XGBoost", "KMeans", "SHAP", "Pandas"],
-    repo: "https://github.com/Priyanshu-Upadhyay-27/YOUR_LOAN_REPO", // UPDATE THIS LINK
-    live: "YOUR_LIVE_LINK_HERE", // UPDATE THIS LINK IF APPLICABLE
+    repo: "https://github.com/Priyanshu-Upadhyay-27/LoanClassinator",
+    live: "https://loanclassinator-classifier-cluster.streamlit.app/",
     images: [
-      '/projects/pro_loan_1.png', // UPDATE THESE IMAGES IN YOUR PUBLIC FOLDER
+      '/projects/pro_loan_1.png',
       '/projects/pro_loan_2.png',
       '/projects/pro_loan_3.png',
       '/projects/pro_loan_4.png'
