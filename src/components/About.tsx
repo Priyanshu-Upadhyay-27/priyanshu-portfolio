@@ -18,7 +18,12 @@ const About: React.FC = () => {
 
 
   // ── Typewriter Logic ──
-  const roles = ["RAG Engineer", "AI Architect", "GSOC '26 Scholar", "ML Developer"];
+  const roles = [
+    "ML Systems Builder", 
+    "Python Developer", 
+    "GenAI Practitioner", 
+    "MLOps Programmer"
+  ];
   const [roleIndex, setRoleIndex] = useState(0);
   const [displayText, setDisplayText] = useState('');
   const [isDeleting, setIsDeleting] = useState(false);
@@ -122,10 +127,10 @@ const About: React.FC = () => {
 
           <div className="about-bio-editorial reveal-mask">
             <p>
-              A 3rd-year CS undergrad at KIET obsessed with building at the intersection of machine learning and real-world products. From training <strong>YOLO models</strong> to deploying <strong>RAG pipelines</strong>, I turn complex ideas into working systems.
+              A 3rd-year CS undergrad at KIET focused on designing and building practical <strong>Machine Learning and GenAI systems</strong>. I don't just train models—I focus on the entire ML lifecycle, from writing robust data processing pipelines to deploying models as accessible REST APIs.
             </p>
             <p>
-              Currently preparing for <strong>GSOC 2026</strong> with <strong>scikit-learn</strong>, exploring <strong>LangGraph</strong> & <strong>AI agents</strong>, and building production-grade projects. <strong>AWS Cloud Practitioner</strong> certified.
+              Currently diving deep into the architecture of open-source ML libraries, mastering decoupled architectures using <strong>Docker</strong> and <strong>FastAPI</strong>, and building scalable systems that solve real-world problems. <strong>AWS Cloud Practitioner</strong> certified.
             </p>
           </div>
         </div>
