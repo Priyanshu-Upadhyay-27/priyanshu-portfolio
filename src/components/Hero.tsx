@@ -417,7 +417,7 @@ const Hero = () => {
       window.removeEventListener('mousemove', onMouseMoveL3);
       gsap.ticker.remove(tickerCallback);
       floatTimelines.forEach((ftl) => ftl.kill());
-      ScrollTrigger.getAll().forEach((t) => t.kill());
+      ScrollTrigger.getAll().forEach((t) => t.kill(true));
       if (topoDrifts.length) topoDrifts.forEach((t) => t.kill());
       gsap.killTweensOf([row1El, row2El, bgLayer, wrapper, overlay]);
       floatingElements.forEach(({ el }) => gsap.killTweensOf(el));

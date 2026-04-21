@@ -1,6 +1,5 @@
 import React, { useRef, useState, useEffect } from 'react';
 import gsap from 'gsap';
-import { Link } from 'react-router-dom';
 import './ArchiveLink.css';
 
 const archiveImages = [
@@ -64,7 +63,7 @@ const ArchiveLink: React.FC = () => {
   }, [isHovered]);
 
   return (
-    <section className="bg-[#121212] w-full min-h-[60vh] relative overflow-hidden flex items-center justify-center border-t border-white/5">
+    <section id="archive-link" className="bg-[#121212] w-full min-h-[60vh] relative overflow-hidden flex items-center justify-center border-t border-white/5">
       
       {/* ── Background Stream Layer ── */}
       <div className="absolute top-1/2 left-0 -translate-y-1/2 w-screen pointer-events-none z-0 overflow-hidden">
@@ -85,8 +84,8 @@ const ArchiveLink: React.FC = () => {
 
       {/* ── Interactable Central Button ── */}
       <div className="relative z-20">
-        <Link 
-          to="/archive" 
+        <a 
+          href="/archive" 
           className="archive-btn group flex items-center gap-4 md:gap-6 text-decoration-none px-6 py-4 cursor-pointer"
           onMouseEnter={() => setIsHovered(true)}
           onMouseLeave={() => setIsHovered(false)}
@@ -101,7 +100,7 @@ const ArchiveLink: React.FC = () => {
           <span className="archive-btn-bracket text-white/20 font-mono text-[clamp(2rem,5vw,5rem)] font-light transition-all duration-300">
             ]
           </span>
-        </Link>
+        </a>
       </div>
     </section>
   );
