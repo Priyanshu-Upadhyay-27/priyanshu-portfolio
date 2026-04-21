@@ -1,5 +1,6 @@
 import { useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { Link } from 'react-router-dom';
 import { ExternalLink, Github, ChevronLeft, ChevronRight, X, Play } from 'lucide-react';
 import { useAntiGravity } from '../hooks/useAntiGravity';
 
@@ -49,10 +50,10 @@ const projects = [
       "Integrated SHAP values for model explainability, providing transparent risk assessments via an interactive dashboard."
     ],
     stack: ["XGBoost", "KMeans", "SHAP", "Pandas"],
-    repo: "https://github.com/Priyanshu-Upadhyay-27/LoanClassinator",
-    live: "https://loanclassinator-classifier-cluster.streamlit.app/",
+    repo: "https://github.com/Priyanshu-Upadhyay-27/LoanClassinator", 
+    live: "https://loanclassinator-classifier-cluster.streamlit.app/", 
     images: [
-      '/projects/pro_loan_1.png',
+      '/projects/pro_loan_1.png', 
       '/projects/pro_loan_2.png',
       '/projects/pro_loan_3.png',
       '/projects/pro_loan_4.png'
@@ -65,7 +66,6 @@ const ProjectFeature = ({ project }: { project: typeof projects[0] }) => {
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
   const stackParentRef = useRef<HTMLDivElement>(null);
 
-  // Apply AntiGravity to the whole image stack parent. Pause when dispersed (isSpread)
   useAntiGravity([stackParentRef], { 
     rangeX: 12, 
     rangeY: 12, 
@@ -81,12 +81,11 @@ const ProjectFeature = ({ project }: { project: typeof projects[0] }) => {
   ];
 
   const getSpreadAnimation = (index: number, total: number) => {
-    if (total === 3) { // Top full, bottom 50/50
+    if (total === 3) {
       if (index === 0) return { top: "0%", left: "0%", width: "100%", height: "49%", rotate: 0 };
       if (index === 1) return { top: "51%", left: "0%", width: "49%", height: "49%", rotate: 0 };
       if (index === 2) return { top: "51%", left: "51%", width: "49%", height: "49%", rotate: 0 };
     }
-    // 4 Images (2x2 Grid)
     if (index === 0) return { top: "0%", left: "0%", width: "49%", height: "49%", rotate: 0 };
     if (index === 1) return { top: "0%", left: "51%", width: "49%", height: "49%", rotate: 0 };
     if (index === 2) return { top: "51%", left: "0%", width: "49%", height: "49%", rotate: 0 };
@@ -105,7 +104,6 @@ const ProjectFeature = ({ project }: { project: typeof projects[0] }) => {
 
   return (
     <div className="flex flex-col lg:flex-row w-full min-h-[70vh] items-stretch border-b border-white/5 group">
-      {/* LEFT 60%: Visual Showcase */}
       <div
         className="w-full lg:w-[60%] bg-[#0f0f0f] relative overflow-hidden flex items-center justify-center p-4 lg:p-6 border-r border-white/5"
         onMouseEnter={() => setIsSpread(true)}
@@ -134,7 +132,6 @@ const ProjectFeature = ({ project }: { project: typeof projects[0] }) => {
         </div>
       </div>
 
-      {/* RIGHT 40%: Editorial Description */}
       <div className="w-full lg:w-[40%] bg-charcoal p-8 lg:p-16 flex flex-col justify-center">
         <h3 className="text-3xl lg:text-5xl font-display font-light text-soft-white mb-6 tracking-tight">
           {project.title}
@@ -174,9 +171,6 @@ const ProjectFeature = ({ project }: { project: typeof projects[0] }) => {
         </div>
       </div>
 
-      {/* ════════════════════════════════════════
-          FULLSCREEN LIGHTBOX GALLERY
-      ════════════════════════════════════════ */}
       <AnimatePresence>
         {lightboxIndex !== null && (
           <motion.div
@@ -187,12 +181,10 @@ const ProjectFeature = ({ project }: { project: typeof projects[0] }) => {
             transition={{ duration: 0.3 }}
             onClick={() => setLightboxIndex(null)}
           >
-            {/* Central content — stop propagation so clicks here don't close */}
             <div
               className="relative flex items-center justify-center"
               onClick={(e) => e.stopPropagation()}
             >
-              {/* Active Image */}
               <motion.img
                 key={lightboxIndex}
                 src={images[lightboxIndex]}
@@ -204,7 +196,6 @@ const ProjectFeature = ({ project }: { project: typeof projects[0] }) => {
               />
             </div>
 
-            {/* Close Button — Top Right */}
             <button
               className="absolute top-6 right-6 text-white/50 hover:text-white transition-colors cursor-pointer"
               onClick={() => setLightboxIndex(null)}
@@ -212,7 +203,6 @@ const ProjectFeature = ({ project }: { project: typeof projects[0] }) => {
               <X size={28} />
             </button>
 
-            {/* Left Arrow — Center Left */}
             <button
               className="absolute left-6 top-1/2 -translate-y-1/2 text-white/50 hover:text-[#ccff00] transition-colors cursor-pointer"
               onClick={(e) => {
@@ -223,7 +213,6 @@ const ProjectFeature = ({ project }: { project: typeof projects[0] }) => {
               <ChevronLeft size={36} />
             </button>
 
-            {/* Right Arrow — Center Right */}
             <button
               className="absolute right-6 top-1/2 -translate-y-1/2 text-white/50 hover:text-[#ccff00] transition-colors cursor-pointer"
               onClick={(e) => {
@@ -234,7 +223,6 @@ const ProjectFeature = ({ project }: { project: typeof projects[0] }) => {
               <ChevronRight size={36} />
             </button>
 
-            {/* Image Counter — Bottom Center */}
             <div className="absolute bottom-6 left-1/2 -translate-x-1/2 text-white/40 text-sm font-mono tracking-widest">
               {lightboxIndex + 1} / {images.length}
             </div>
@@ -259,9 +247,17 @@ const FeaturedProjects = () => {
           <ProjectFeature key={i} project={project} />
         ))}
       </div>
+
+      <div className="py-16 px-8 flex justify-center border-b border-white/5">
+        <Link 
+          to="/archive" 
+          className="px-8 py-4 border border-white/20 text-[#f4f4f5] text-sm uppercase tracking-widest font-mono hover:bg-[#ccff00] hover:text-[#0a0a0a] hover:border-[#ccff00] transition-colors duration-300"
+        >
+          View Full Project Archive
+        </Link>
+      </div>
     </section>
   );
 };
 
 export default FeaturedProjects;
-
