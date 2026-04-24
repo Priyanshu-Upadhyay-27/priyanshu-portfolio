@@ -3,24 +3,24 @@ import { motion } from 'framer-motion';
 
 const skillClusters = [
   {
-    domain: "Applied Machine Learning",
+    domain: "Machine Learning & Data",
     image: "/skills/ml.jpeg",
-    skills: ["scikit-learn", "XGBoost", "Deep Learning Foundations", "Time-series Analysis", "Predictive Modeling"]
-  },
-  {
-    domain: "LLMs & RAG Architectures",
-    image: "/skills/llm_rag.png",
-    skills: ["Vector DBs (Pinecone, Chroma)", "LangChain / LlamaIndex", "Prompt Engineering", "Semantic Search", "OpenAI / Open-source LLMs"]
-  },
-  {
-    domain: "Computer Vision Edge AI",
-    image: "/skills/cv.png",
-    skills: ["OpenCV", "MediaPipe", "YOLO Architecture", "Image Segmentation", "OCR (Tesseract)"]
+    skills: ["Python (OOP) & SQL", "Scikit-Learn & XGBoost", "Pandas, NumPy & Matplotlib", "Feature Engineering", "Evaluation Metrics & Algorithms"]
   },
   {
     domain: "MLOps & Deployment",
     image: "/skills/deploy.png",
-    skills: ["FastAPI / Flask", "Docker Containerization", "RESTful Architecture", "Cloud Deployment", "Model Serving"]
+    skills: ["FastAPI & REST APIs", "Docker Containerization", "AWS Cloud Infrastructure", "End-to-End Pipelines", "Streamlit UI & Model Drift"]
+  },
+  {
+    domain: "Generative AI",
+    image: "/skills/llm_rag.png",
+    skills: ["LangChain & RAG Architectures", "Hugging Face Models", "Vector Databases (VectorDB)", "LLM API Integration", "Prompt Engineering"]
+  },
+  {
+    domain: "Deep Learning & Vision",
+    image: "/skills/cv.png",
+    skills: ["OpenCV & Image Processing", "YOLO Object Detection", "MediaPipe", "CNNs & Perceptrons"]
   }
 ];
 
