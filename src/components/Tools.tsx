@@ -44,7 +44,7 @@ const Tools = () => {
       topTweenRef.current = gsap.to(topMarqueeRef.current, {
         xPercent: -50,
         repeat: -1,
-        duration: 35, // Slower default resting speed (-25-30%)
+        duration: 15, // Fast linear moving speed
         ease: 'none',
       });
     }
@@ -54,7 +54,7 @@ const Tools = () => {
       botTweenRef.current = gsap.to(botMarqueeRef.current, {
         xPercent: 0,
         repeat: -1,
-        duration: 35, // Slower default resting speed (-25-30%)
+        duration: 15, // Must match top for same speed
         ease: 'none',
       });
     }
@@ -66,13 +66,13 @@ const Tools = () => {
   }, []);
 
   useEffect(() => {
-    // "Heavy machine braking" feel -> use power3.out and longer duration
+    // Adding overwrite: "auto" prevents any conflicting timeScale tweens and glitching on fast hover
     if (isHovered) {
-      if (topTweenRef.current) gsap.to(topTweenRef.current, { timeScale: 0.15, duration: 1.5, ease: 'power3.out' });
-      if (botTweenRef.current) gsap.to(botTweenRef.current, { timeScale: 0.15, duration: 1.5, ease: 'power3.out' });
+      if (topTweenRef.current) gsap.to(topTweenRef.current, { timeScale: 0.15, duration: 1.5, ease: 'power3.out', overwrite: "auto" });
+      if (botTweenRef.current) gsap.to(botTweenRef.current, { timeScale: 0.15, duration: 1.5, ease: 'power3.out', overwrite: "auto" });
     } else {
-      if (topTweenRef.current) gsap.to(topTweenRef.current, { timeScale: 1, duration: 1.2, ease: 'power2.inOut' });
-      if (botTweenRef.current) gsap.to(botTweenRef.current, { timeScale: 1, duration: 1.2, ease: 'power2.inOut' });
+      if (topTweenRef.current) gsap.to(topTweenRef.current, { timeScale: 1, duration: 1.2, ease: 'power2.inOut', overwrite: "auto" });
+      if (botTweenRef.current) gsap.to(botTweenRef.current, { timeScale: 1, duration: 1.2, ease: 'power2.inOut', overwrite: "auto" });
     }
   }, [isHovered]);
 
