@@ -4,22 +4,12 @@ import { useAntiGravity } from '../hooks/useAntiGravity';
 import './Tools.css';
 
 const toolsList = [
-  { name: "Python", url: "https://docs.python.org/3/" },
-  { name: "OpenCV", url: "https://docs.opencv.org/" },
-  { name: "MediaPipe", url: "https://ai.google.dev/edge/mediapipe/solutions/guide" },
-  { name: "scikit-learn", url: "https://scikit-learn.org/stable/" },
-  { name: "Pandas", url: "https://pandas.pydata.org/docs/" },
-  { name: "NumPy", url: "https://numpy.org/doc/" },
-  { name: "LangChain", url: "https://docs.langchain.com/" },
-  { name: "FastAPI", url: "https://fastapi.tiangolo.com/" },
-  { name: "Docker", url: "https://docs.docker.com/" },
-  { name: "Tesseract OCR", url: "https://tesseract-ocr.github.io/" },
-  { name: "Google Gemini API", url: "https://ai.google.dev/gemini-api/docs" },
-  { name: "Jupyter Notebook", url: "https://jupyter.org/documentation" },
-  { name: "Git", url: "https://git-scm.com/doc" },
-  { name: "GitHub", url: "https://docs.github.com/" },
-  { name: "PyTorch", url: "https://pytorch.org/docs/" },
-  { name: "Matplotlib", url: "https://matplotlib.org/stable/contents.html" },
+  { name: "Git & GitHub", url: "https://github.com/" },
+  { name: "Jupyter Ecosystem", url: "https://jupyter.org/" },
+  { name: "VS Code", url: "https://code.visualstudio.com/" },
+  { name: "PyCharm", url: "https://www.jetbrains.com/pycharm/" },
+  { name: "Anaconda", url: "https://www.anaconda.com/" },
+  { name: "React & GSAP", url: "https://react.dev/" },
 ];
 
 const Tools = () => {
@@ -94,7 +84,7 @@ const Tools = () => {
       onMouseLeave={() => setIsHovered(false)}
     >
       {/* Background Floating Symbol Layer */}
-      <div 
+      <div
         className="pointer-events-none overflow-hidden"
         style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', zIndex: 0 }}
       >
