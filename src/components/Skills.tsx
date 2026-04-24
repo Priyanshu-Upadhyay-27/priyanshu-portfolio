@@ -5,7 +5,7 @@ const skillClusters = [
   {
     domain: "Machine Learning & Data",
     image: "/skills/ml.jpeg",
-    skills: ["Python (OOP) & SQL", "Scikit-Learn & XGBoost", "Pandas, NumPy & Matplotlib", "Feature Engineering", "Evaluation Metrics & Algorithms"]
+    skills: ["Python(OOPs)", "Scikit-Learn & XGBoost", "Pandas, NumPy & Matplotlib", "Feature Engineering", "Evaluation Metrics"]
   },
   {
     domain: "MLOps & Deployment",
@@ -15,12 +15,12 @@ const skillClusters = [
   {
     domain: "Generative AI",
     image: "/skills/llm_rag.png",
-    skills: ["LangChain & RAG Architectures", "Hugging Face Models", "Vector Databases (VectorDB)", "LLM API Integration", "Prompt Engineering"]
+    skills: ["LangChain & RAG Architectures", "Ollama", "Vector Databases", "LLM API Integration", "Prompt Engineering"]
   },
   {
     domain: "Deep Learning & Vision",
     image: "/skills/cv.png",
-    skills: ["OpenCV & Image Processing", "YOLO Object Detection", "MediaPipe", "CNNs & Perceptrons"]
+    skills: ["OpenCV", "Image Processing", "YOLO Object Detection", "MediaPipe", "CNNs & Perceptrons"]
   }
 ];
 
