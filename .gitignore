@@ -54,3 +54,4 @@ Thumbs.db
 public/rough_project_images/
 
 deno.lock
+src/components/icons/*
