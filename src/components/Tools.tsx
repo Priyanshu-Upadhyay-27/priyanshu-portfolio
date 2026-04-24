@@ -46,6 +46,7 @@ const Tools = () => {
         repeat: -1,
         duration: 15, // Fast linear moving speed
         ease: 'none',
+        force3D: true,
       });
     }
 
@@ -56,6 +57,7 @@ const Tools = () => {
         repeat: -1,
         duration: 15, // Must match top for same speed
         ease: 'none',
+        force3D: true,
       });
     }
 
@@ -98,7 +100,7 @@ const Tools = () => {
 
       {/* Top Ribbon — Moves Left */}
       <div className="marquee-track w-full overflow-hidden whitespace-nowrap mb-4 relative z-10">
-        <div className="marquee-scroll" ref={topMarqueeRef}>
+        <div className="marquee-scroll will-change-transform" ref={topMarqueeRef} style={{ backfaceVisibility: 'hidden', WebkitFontSmoothing: 'antialiased' }}>
           {doubled.map((tool, i) => (
             <a
               key={`top-${i}`}
@@ -116,7 +118,7 @@ const Tools = () => {
 
       {/* Bottom Ribbon — Moves Right */}
       <div className="marquee-track w-full overflow-hidden whitespace-nowrap relative z-10">
-        <div className="marquee-scroll" ref={botMarqueeRef}>
+        <div className="marquee-scroll will-change-transform" ref={botMarqueeRef} style={{ backfaceVisibility: 'hidden', WebkitFontSmoothing: 'antialiased' }}>
           {doubled.map((tool, i) => (
             <a
               key={`bot-${i}`}
