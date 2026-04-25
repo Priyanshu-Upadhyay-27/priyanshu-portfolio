@@ -156,11 +156,11 @@ const Contact = () => {
   }, []);
 
   return (
-    <section id="contact" className="bg-charcoal py-32 px-8 lg:px-16 overflow-hidden relative">
+    <section id="contact" className="relative w-full overflow-hidden bg-[#0a0a0a] border-none outline-none py-32 px-8 lg:px-16">
       {/* Step 2: Inject Canvas Background */}
       <canvas 
         ref={canvasRef}
-        className="absolute inset-0 w-full h-full z-0 pointer-events-auto"
+        className="absolute inset-0 w-full h-full pointer-events-auto z-0 bg-transparent outline-none border-none"
       />
 
       {/* Geometric Background Element (original) */}
@@ -172,7 +172,7 @@ const Contact = () => {
       <div className="max-w-6xl mx-auto flex flex-col lg:flex-row gap-16 lg:gap-24 relative z-10">
         
         {/* Left Side: Contact Info & Future Space */}
-        <div className="w-full lg:w-1/2 flex flex-col">
+        <div className="w-full lg:w-1/2 flex flex-col relative z-10">
           <h2 className="font-display text-4xl md:text-5xl font-light text-soft-white mb-12 border-b border-white/10 pb-6 inline-block w-fit">
             Index 06 <span className="text-teal ml-4">//</span> Connect
           </h2>
@@ -220,10 +220,10 @@ const Contact = () => {
         </div>
 
         {/* Right Side: Minimal Form */}
-        <div className="w-full lg:w-1/2 flex items-center">
+        <div className="w-full lg:w-1/2 flex items-center relative z-10 bg-[#0a0a0a]/40 backdrop-blur-sm border border-white/5 p-6 rounded-lg">
           <form 
             onSubmit={handleSubmit} 
-            className="w-full flex flex-col gap-8 cyberpunk-form-container p-10 relative z-20"
+            className="w-full flex flex-col gap-8 cyberpunk-form-container p-4 lg:p-10 relative z-20"
           >
             <div className="flex flex-col gap-2">
               <label htmlFor="name" className="text-xs uppercase font-mono tracking-widest text-soft-white/40">Name</label>
