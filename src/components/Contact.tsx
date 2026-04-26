@@ -76,10 +76,10 @@ const Contact = () => {
       mouse.x = e.clientX - rect.left;
       mouse.y = e.clientY - rect.top;
     };
-    
+
     const parentSection = canvas.parentElement;
     parentSection?.addEventListener('mousemove', handleMouseMove);
-    
+
     const handleMouseLeave = () => {
       mouse.x = -1000;
       mouse.y = -1000;
@@ -93,7 +93,7 @@ const Contact = () => {
 
       // Draw and update dots
       ctx.fillStyle = 'rgba(20, 184, 166, 0.4)'; // Faint teal dots
-      
+
       for (let i = 0; i < dots.length; i++) {
         const dot = dots[i];
         dot.x += dot.vx;
@@ -158,29 +158,29 @@ const Contact = () => {
   return (
     <section id="contact" className="relative w-full overflow-hidden bg-[#0a0a0a] border-none outline-none py-32 px-8 lg:px-16">
       {/* Step 2: Inject Canvas Background */}
-      <canvas 
+      <canvas
         ref={canvasRef}
         className="absolute inset-0 w-full h-full pointer-events-auto z-0 bg-transparent outline-none border-none"
       />
 
       {/* Geometric Background Element (original) */}
-      <div 
+      <div
         className="absolute top-1/4 right-1/4 w-96 h-96 bg-teal/5 rounded-full blur-3xl -z-10 pointer-events-none"
       />
 
       {/* Step 1: Ensure main content container has relative and z-10 */}
       <div className="max-w-6xl mx-auto flex flex-col lg:flex-row gap-16 lg:gap-24 relative z-10">
-        
+
         {/* Left Side: Contact Info & Future Space */}
         <div className="w-full lg:w-1/2 flex flex-col relative z-10">
           <h2 className="font-display text-4xl md:text-5xl font-light text-soft-white mb-12 border-b border-white/10 pb-6 inline-block w-fit">
             Index 06 <span className="text-teal ml-4">//</span> Connect
           </h2>
-          
+
           <p className="text-soft-white/70 font-sans text-lg md:text-xl font-light leading-relaxed mb-12 max-w-lg">
             Whether you have a specific system in mind or are exploring applied AI potentials, my inbox is open.
           </p>
-          
+
           <div className="flex flex-col gap-6 mb-16">
             <a href="mailto:priyanshuupadhyay2005@gmail.com" className="flex items-center gap-4 text-soft-white hover:text-teal transition-colors w-fit group">
               <span className="w-10 h-10 border border-white/10 flex items-center justify-center group-hover:border-teal/50 transition-colors">
@@ -196,7 +196,7 @@ const Contact = () => {
                 <Linkedin size={16} />
               </a>
             </div>
-            
+
             <div className="mt-8 flex gap-6">
               <a href="#" className="flex items-center gap-2 text-sm uppercase tracking-widest text-teal font-semibold hover:text-white transition-colors">
                 <FileText size={16} /> View Resume
@@ -221,38 +221,38 @@ const Contact = () => {
 
         {/* Right Side: Minimal Form */}
         <div className="w-full lg:w-1/2 flex items-center relative z-10 bg-[#0a0a0a]/40 backdrop-blur-sm border border-white/5 p-6 rounded-lg">
-          <form 
-            onSubmit={handleSubmit} 
+          <form
+            onSubmit={handleSubmit}
             className="w-full flex flex-col gap-8 cyberpunk-form-container p-4 lg:p-10 relative z-20"
           >
             <div className="flex flex-col gap-2">
               <label htmlFor="name" className="text-xs uppercase font-mono tracking-widest text-soft-white/40">Name</label>
-              <input 
-                type="text" 
-                id="name" 
+              <input
+                type="text"
+                id="name"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 className="glass-input text-soft-white"
                 required
               />
             </div>
-            
+
             <div className="flex flex-col gap-2">
               <label htmlFor="email" className="text-xs uppercase font-mono tracking-widest text-soft-white/40">Email</label>
-              <input 
-                type="email" 
+              <input
+                type="email"
                 id="email"
                 value={email}
-                onChange={(e) => setEmail(e.target.value)} 
+                onChange={(e) => setEmail(e.target.value)}
                 className="glass-input text-soft-white"
                 required
               />
             </div>
-            
+
             <div className="flex flex-col gap-2">
               <label htmlFor="message" className="text-xs uppercase font-mono tracking-widest text-soft-white/40">Message</label>
-              <textarea 
-                id="message" 
+              <textarea
+                id="message"
                 rows={4}
                 value={message}
                 onChange={(e) => setMessage(e.target.value)}
@@ -261,14 +261,14 @@ const Contact = () => {
               />
             </div>
 
-            <button 
-              type="submit" 
+            <button
+              type="submit"
               disabled={isLoading}
               className="mt-6 terminal-button bg-teal text-charcoal hover:bg-white"
             >
               {isLoading ? '> TRANSMITTING...' : '> TRANSMIT'}
             </button>
-            
+
             {isSuccess && (
               <p className="text-[#00d4ff] font-mono text-sm tracking-widest uppercase mt-4 animate-pulse">
                 // Transmission Successful

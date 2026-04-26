@@ -1,0 +1,7 @@
+[build]
+  command = "npm run build"
+  publish = "dist"
+
+[dev]
+  port = 9999
+  targetPort = 5173
