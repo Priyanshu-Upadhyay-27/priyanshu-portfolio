@@ -13,6 +13,12 @@ const Contact = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [isError, setIsError] = useState(false);
+  const [honey, setHoney] = useState("");
+  const [loadTime, setLoadTime] = useState(0);
+
+  useEffect(() => {
+    setLoadTime(Date.now());
+  }, []);
 
   // GSAP Refs
   const sectionRef = useRef<HTMLElement>(null);
@@ -24,29 +30,44 @@ const Contact = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    // 1. Invisible Honeypot & Timestamp Check (Trap the bot, fake a success)
+    if (honey !== "" || (Date.now() - loadTime < 3000)) {
+      console.log("Bot trapped by security check.");
+      setIsSuccess(true);
+      return;
+    }
+
+    // 2. Prevent Double Submissions
+    if (isLoading) return;
+
+    // 3. Start Loading State
     setIsLoading(true);
-    setIsSuccess(false);
     setIsError(false);
+    setIsSuccess(false);
 
     try {
+      // 4. The Network Request
       const response = await fetch('/.netlify/functions/contact', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ name, email, message })
+        body: JSON.stringify({ name, email, message }),
       });
 
       if (response.ok) {
         setIsSuccess(true);
+        // Clear the form inputs
         setName('');
         setEmail('');
         setMessage('');
+        setHoney('');
       } else {
         setIsError(true);
       }
     } catch (error) {
-      console.error(error);
+      console.error("Network Error:", error);
       setIsError(true);
     } finally {
       setIsLoading(false);
@@ -273,6 +294,20 @@ const Contact = () => {
             onSubmit={handleSubmit}
             className="w-full flex flex-col gap-8 cyberpunk-form-container p-4 lg:p-10 relative z-20"
           >
+            {/* Invisible Honeypot Field */}
+            <div aria-hidden="true" className="opacity-0 absolute -left-[9999px] top-0 -z-50 pointer-events-none">
+              <label htmlFor="bot-check">Website</label>
+              <input
+                type="text"
+                id="bot-check"
+                name="bot-check"
+                tabIndex={-1}
+                autoComplete="new-password"
+                value={honey}
+                onChange={(e) => setHoney(e.target.value)}
+              />
+            </div>
+
             <div className="flex flex-col gap-2">
               <label htmlFor="name" className="text-xs uppercase font-mono tracking-widest text-soft-white/40">Name</label>
               <input
