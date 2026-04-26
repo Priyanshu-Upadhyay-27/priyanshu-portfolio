@@ -1,6 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Mail, Github, Linkedin, Download, FileText } from 'lucide-react';
+import { Mail, Github, Linkedin, Download, FileText, MapPin } from 'lucide-react';
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import './Contact.css';
+
+gsap.registerPlugin(ScrollTrigger);
 
 const Contact = () => {
   const [name, setName] = useState('');
@@ -9,6 +13,11 @@ const Contact = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [isError, setIsError] = useState(false);
+
+  // GSAP Refs
+  const sectionRef = useRef<HTMLElement>(null);
+  const leftColumnRef = useRef<HTMLDivElement>(null);
+  const formRef = useRef<HTMLDivElement>(null);
 
   // Canvas Ref for Vector Space Background
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -43,6 +52,29 @@ const Contact = () => {
       setIsLoading(false);
     }
   };
+
+  // Scroll-Triggered HUD Entry Animation
+  useEffect(() => {
+    if (!sectionRef.current || !leftColumnRef.current || !formRef.current) return;
+
+    // Initial states
+    gsap.set(leftColumnRef.current.children, { opacity: 0, y: 40 });
+    gsap.set(formRef.current, { opacity: 0, x: 50, y: 20 });
+
+    const tl = gsap.timeline({
+      scrollTrigger: {
+        trigger: sectionRef.current,
+        start: "top 80%",
+      }
+    });
+
+    tl.to(leftColumnRef.current.children, { y: 0, opacity: 1, duration: 0.8, stagger: 0.15, ease: "power3.out" })
+      .to(formRef.current, { x: 0, y: 0, opacity: 1, duration: 1, ease: "power3.out" }, "-=0.6");
+
+    return () => {
+      tl.kill();
+    };
+  }, []);
 
   // Canvas Background Physics
   useEffect(() => {
@@ -156,7 +188,7 @@ const Contact = () => {
   }, []);
 
   return (
-    <section id="contact" className="relative w-full overflow-hidden bg-[#0a0a0a] border-none outline-none py-32 px-8 lg:px-16">
+    <section ref={sectionRef} id="contact" className="relative w-full overflow-hidden bg-[#0a0a0a] border-none outline-none py-32 px-8 lg:px-16">
       {/* Step 2: Inject Canvas Background */}
       <canvas
         ref={canvasRef}
@@ -172,55 +204,73 @@ const Contact = () => {
       <div className="max-w-6xl mx-auto flex flex-col lg:flex-row gap-16 lg:gap-24 relative z-10">
 
         {/* Left Side: Contact Info & Future Space */}
-        <div className="w-full lg:w-1/2 flex flex-col relative z-10">
-          <h2 className="font-display text-4xl md:text-5xl font-light text-soft-white mb-12 border-b border-white/10 pb-6 inline-block w-fit">
-            Index 06 <span className="text-teal ml-4">//</span> Connect
-          </h2>
+        <div ref={leftColumnRef} className="w-full lg:w-1/2 flex flex-col relative z-10">
+          <div className="flex flex-col gap-2">
+            <h2 className="text-6xl md:text-7xl lg:text-9xl font-bold text-[#f4f4f5] uppercase tracking-tighter leading-[0.8]">
+              Let's<br />Talk.
+            </h2>
+            <p className="text-zinc-400 text-lg max-w-md font-light mt-8 leading-relaxed font-sans">
+              Whether you have a specific system in mind or are exploring applied AI potentials, my inbox is open.
+            </p>
+          </div>
 
-          <p className="text-soft-white/70 font-sans text-lg md:text-xl font-light leading-relaxed mb-12 max-w-lg">
-            Whether you have a specific system in mind or are exploring applied AI potentials, my inbox is open.
-          </p>
-
-          <div className="flex flex-col gap-6 mb-16">
-            <a href="mailto:priyanshuupadhyay2005@gmail.com" className="flex items-center gap-4 text-soft-white hover:text-teal transition-colors w-fit group">
-              <span className="w-10 h-10 border border-white/10 flex items-center justify-center group-hover:border-teal/50 transition-colors">
-                <Mail size={16} />
+          <div className="flex flex-col gap-6 w-full max-w-md mt-12">
+            {/* Email Link */}
+            <a href="mailto:priyanshuupadhyay2005@gmail.com" className="flex items-center gap-4 group w-fit">
+              <div className="flex justify-center items-center w-12 h-12 border border-white/20 group-hover:border-teal-500 group-hover:bg-teal-500/5 transition-all text-zinc-300 group-hover:text-teal-500">
+                <Mail size={20} />
+              </div>
+              <span className="text-zinc-300 group-hover:text-teal-500 font-sans text-sm md:text-base transition-all">
+                priyanshuupadhyay2005@gmail.com
               </span>
-              <span className="font-mono text-sm tracking-widest lowercase">priyanshuupadhyay2005@gmail.com</span>
             </a>
-            <div className="flex gap-4">
-              <a href="https://github.com/Priyanshu-Upadhyay-27" target="_blank" rel="noopener noreferrer" className="w-10 h-10 border border-white/10 flex items-center justify-center text-soft-white hover:text-teal hover:border-teal/50 transition-colors">
-                <Github size={16} />
-              </a>
-              <a href="https://www.linkedin.com/in/priyanshu-upadhyay-cse" target="_blank" rel="noopener noreferrer" className="w-10 h-10 border border-white/10 flex items-center justify-center text-soft-white hover:text-teal hover:border-teal/50 transition-colors">
-                <Linkedin size={16} />
-              </a>
-            </div>
 
-            <div className="mt-8 flex gap-6">
-              <a href="#" className="flex items-center gap-2 text-sm uppercase tracking-widest text-teal font-semibold hover:text-white transition-colors">
-                <FileText size={16} /> View Resume
+            {/* Github Link */}
+            <a href="https://github.com/Priyanshu-Upadhyay-27" target="_blank" rel="noreferrer" className="flex items-center gap-4 group w-fit">
+              <div className="flex justify-center items-center w-12 h-12 border border-white/20 group-hover:border-teal-500 group-hover:bg-teal-500/5 transition-all text-zinc-300 group-hover:text-teal-500">
+                <Github size={20} />
+              </div>
+              <span className="text-zinc-300 group-hover:text-teal-500 font-sans text-sm md:text-base transition-all">
+                Github
+              </span>
+            </a>
+
+            {/* LinkedIn Link */}
+            <a href="https://linkedin.com/in/priyanshu-upadhyay-cse" target="_blank" rel="noreferrer" className="flex items-center gap-4 group w-fit">
+              <div className="flex justify-center items-center w-12 h-12 border border-white/20 group-hover:border-teal-500 group-hover:bg-teal-500/5 transition-all text-zinc-300 group-hover:text-teal-500">
+                <Linkedin size={20} />
+              </div>
+              <span className="text-zinc-300 group-hover:text-teal-500 font-sans text-sm md:text-base transition-all">
+                Linked In
+              </span>
+            </a>
+
+            {/* Location */}
+            <div className="flex items-center gap-4 w-fit">
+              <div className="flex justify-center items-center w-12 h-12 border border-white/20 text-zinc-300">
+                <MapPin size={20} />
+              </div>
+              <span className="text-zinc-300 font-sans text-sm md:text-base">
+                Delhi NCR, India
+              </span>
+            </div>
+          </div>
+
+          <div className="mt-16 flex flex-col gap-10 max-w-md">
+            <div className="flex items-center gap-8 font-sans text-xs tracking-widest uppercase">
+              <a href="/resume.pdf" target="_blank" rel="noopener noreferrer" className="text-teal-500 hover:text-teal-400 transition-colors flex items-center gap-2">
+                VIEW RESUME ↗
               </a>
-              <a href="#" className="flex items-center gap-2 text-sm uppercase tracking-widest text-soft-white/50 hover:text-white transition-colors">
-                <Download size={16} /> Download
+              <a href="/resume.pdf" download="Priyanshu_Upadhyay_Resume.pdf" className="text-zinc-500 hover:text-zinc-300 transition-colors flex items-center gap-2">
+                DOWNLOAD ↓
               </a>
             </div>
           </div>
 
-          {/* Future RAG Space */}
-          <div className="mt-auto p-6 border border-dashed border-white/10 bg-white/5 max-w-sm">
-            <p className="font-mono text-xs text-soft-white/40 uppercase tracking-widest mb-2 flex items-center gap-2">
-              <span className="w-1.5 h-1.5 bg-teal rounded-full inline-block animate-pulse" />
-              Agent Offline
-            </p>
-            <p className="text-sm font-light text-soft-white/60">
-              [Reserved for future conversational RAG assistant. Want to know more about me? Ask my agent soon.]
-            </p>
-          </div>
         </div>
 
         {/* Right Side: Minimal Form */}
-        <div className="w-full lg:w-1/2 flex items-center relative z-10 bg-[#0a0a0a]/40 backdrop-blur-sm border border-white/5 p-6 rounded-lg">
+        <div ref={formRef} className="w-full lg:w-1/2 flex items-center relative z-10 bg-[#0a0a0a]/40 backdrop-blur-sm border border-white/5 p-6 rounded-lg">
           <form
             onSubmit={handleSubmit}
             className="w-full flex flex-col gap-8 cyberpunk-form-container p-4 lg:p-10 relative z-20"
@@ -232,7 +282,7 @@ const Contact = () => {
                 id="name"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                className="glass-input text-soft-white"
+                className="glass-input text-soft-white focus:outline-none focus:border-teal-500 focus:ring-1 focus:ring-teal-500/50 transition-all duration-300"
                 required
               />
             </div>
@@ -244,7 +294,7 @@ const Contact = () => {
                 id="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="glass-input text-soft-white"
+                className="glass-input text-soft-white focus:outline-none focus:border-teal-500 focus:ring-1 focus:ring-teal-500/50 transition-all duration-300"
                 required
               />
             </div>
@@ -256,7 +306,7 @@ const Contact = () => {
                 rows={4}
                 value={message}
                 onChange={(e) => setMessage(e.target.value)}
-                className="glass-input text-soft-white resize-none mt-2"
+                className="glass-input text-soft-white resize-none mt-2 focus:outline-none focus:border-teal-500 focus:ring-1 focus:ring-teal-500/50 transition-all duration-300"
                 required
               />
             </div>
@@ -266,12 +316,12 @@ const Contact = () => {
               disabled={isLoading}
               className="mt-6 terminal-button bg-teal text-charcoal hover:bg-white"
             >
-              {isLoading ? '> TRANSMITTING...' : '> TRANSMIT'}
+              {isLoading ? '> CONNECTING...' : '> ESTABLISH_CONNECTION'}
             </button>
 
             {isSuccess && (
-              <p className="text-[#00d4ff] font-mono text-sm tracking-widest uppercase mt-4 animate-pulse">
-                // Transmission Successful
+              <p className="text-teal-500 font-mono text-sm tracking-widest uppercase mt-4 animate-pulse">
+                [✓] CONNECTION ESTABLISHED. Thank you for reaching out, I will be in touch shortly.
               </p>
             )}
             {isError && (
