@@ -26,21 +26,36 @@ const skillClusters = [
 
 const FlipCard = ({ cluster, index }: { cluster: typeof skillClusters[0], index: number }) => {
   const [isFlipped, setIsFlipped] = useState(false);
+  const [isHovered, setIsHovered] = useState(false);
+  const cardRef = useRef<HTMLDivElement>(null);
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+
+    e.currentTarget.style.setProperty('--mouse-x', `${x}px`);
+    e.currentTarget.style.setProperty('--mouse-y', `${y}px`);
+  };
+
   const handleMouseEnter = () => {
+    setIsHovered(true);
     if (timerRef.current) clearTimeout(timerRef.current);
     setIsFlipped(true);
   };
 
   const handleMouseLeave = () => {
+    setIsHovered(false);
     timerRef.current = setTimeout(() => setIsFlipped(false), 1500);
   };
 
   return (
     <div
-      className="relative w-full min-h-[350px] lg:min-h-[400px] cursor-pointer"
+      ref={cardRef}
+      className="relative w-full min-h-[350px] lg:min-h-[400px] cursor-pointer group"
       style={{ perspective: '1000px' }}
+      onMouseMove={handleMouseMove}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
       onClick={() => setIsFlipped(!isFlipped)}
@@ -56,6 +71,15 @@ const FlipCard = ({ cluster, index }: { cluster: typeof skillClusters[0], index:
           className="absolute inset-0 bg-[#161616] border border-white/5 p-8 flex flex-col justify-between overflow-hidden"
           style={{ backfaceVisibility: 'hidden' }}
         >
+          {/* Dynamic Glow */}
+          <div
+            className="pointer-events-none absolute inset-0 z-0 transition-opacity duration-300"
+            style={{
+              opacity: isHovered ? 1 : 0,
+              background: `radial-gradient(400px circle at var(--mouse-x) var(--mouse-y), rgba(20, 184, 166, 0.15), transparent 80%)`,
+            }}
+          />
+
           {/* Subtle image texture */}
           <img
             src={cluster.image}
@@ -73,13 +97,22 @@ const FlipCard = ({ cluster, index }: { cluster: typeof skillClusters[0], index:
 
         {/* BACK */}
         <div
-          className="absolute inset-0 bg-[#0d0d0d] border border-white/20 shadow-[0_0_15px_rgba(255,255,255,0.08)] flex flex-col justify-center p-8"
+          className="absolute inset-0 bg-[#0d0d0d] border border-white/20 shadow-[0_0_15px_rgba(255,255,255,0.08)] flex flex-col justify-center p-8 overflow-hidden"
           style={{ backfaceVisibility: 'hidden', transform: 'rotateY(180deg)' }}
         >
-          <h4 className="text-teal font-sans font-black uppercase tracking-[0.15em] text-sm mb-4 border-b border-teal/20 pb-2">
+          {/* Dynamic Glow for BACK */}
+          <div
+            className="pointer-events-none absolute inset-0 z-0 transition-opacity duration-300"
+            style={{
+              opacity: isHovered ? 1 : 0,
+              background: `radial-gradient(400px circle at calc(100% - var(--mouse-x)) var(--mouse-y), rgba(20, 184, 166, 0.15), transparent 80%)`,
+            }}
+          />
+
+          <h4 className="text-teal font-sans font-black uppercase tracking-[0.15em] text-sm mb-4 border-b border-teal/20 pb-2 relative z-10">
             {cluster.domain} Toolkit
           </h4>
-          <ul className="space-y-3">
+          <ul className="space-y-3 relative z-10">
             {cluster.skills.map((skill, i) => (
               <li
                 key={i}

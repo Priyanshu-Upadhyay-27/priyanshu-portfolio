@@ -210,61 +210,59 @@ const Contact = () => {
               Let's<br />Talk.
             </h2>
             <p className="text-zinc-400 text-lg max-w-md font-light mt-8 leading-relaxed font-sans">
-              Whether you have a specific system in mind or are exploring applied AI potentials, my inbox is open.
+              I'm always open to discussing new opportunities, machine learning architectures, or scalable data systems. My inbox is open.
             </p>
           </div>
 
           <div className="flex flex-col gap-6 w-full max-w-md mt-12">
             {/* Email Link */}
             <a href="mailto:priyanshuupadhyay2005@gmail.com" className="flex items-center gap-4 group w-fit">
-              <div className="flex justify-center items-center w-12 h-12 border border-white/20 group-hover:border-teal-500 group-hover:bg-teal-500/5 transition-all text-zinc-300 group-hover:text-teal-500">
-                <Mail size={20} />
+              <div className="w-12 h-12 flex items-center justify-center border border-white/10 group-hover:border-teal-500 group-hover:bg-teal-500/10 transition-all text-zinc-300 group-hover:text-teal-400">
+                <Mail size={24} />
               </div>
-              <span className="text-zinc-300 group-hover:text-teal-500 font-sans text-sm md:text-base transition-all">
+              <span className="text-zinc-300 group-hover:text-teal-400 font-sans text-base md:text-lg transition-all tracking-wide">
                 priyanshuupadhyay2005@gmail.com
               </span>
             </a>
 
             {/* Github Link */}
             <a href="https://github.com/Priyanshu-Upadhyay-27" target="_blank" rel="noreferrer" className="flex items-center gap-4 group w-fit">
-              <div className="flex justify-center items-center w-12 h-12 border border-white/20 group-hover:border-teal-500 group-hover:bg-teal-500/5 transition-all text-zinc-300 group-hover:text-teal-500">
-                <Github size={20} />
+              <div className="w-12 h-12 flex items-center justify-center border border-white/10 group-hover:border-teal-500 group-hover:bg-teal-500/10 transition-all text-zinc-300 group-hover:text-teal-400">
+                <Github size={24} />
               </div>
-              <span className="text-zinc-300 group-hover:text-teal-500 font-sans text-sm md:text-base transition-all">
+              <span className="text-zinc-300 group-hover:text-teal-400 font-sans text-base md:text-lg transition-all tracking-wide">
                 Github
               </span>
             </a>
 
             {/* LinkedIn Link */}
             <a href="https://linkedin.com/in/priyanshu-upadhyay-cse" target="_blank" rel="noreferrer" className="flex items-center gap-4 group w-fit">
-              <div className="flex justify-center items-center w-12 h-12 border border-white/20 group-hover:border-teal-500 group-hover:bg-teal-500/5 transition-all text-zinc-300 group-hover:text-teal-500">
-                <Linkedin size={20} />
+              <div className="w-12 h-12 flex items-center justify-center border border-white/10 group-hover:border-teal-500 group-hover:bg-teal-500/10 transition-all text-zinc-300 group-hover:text-teal-400">
+                <Linkedin size={24} />
               </div>
-              <span className="text-zinc-300 group-hover:text-teal-500 font-sans text-sm md:text-base transition-all">
-                Linked In
+              <span className="text-zinc-300 group-hover:text-teal-400 font-sans text-base md:text-lg transition-all tracking-wide">
+                LinkedIn
               </span>
             </a>
 
             {/* Location */}
-            <div className="flex items-center gap-4 w-fit">
-              <div className="flex justify-center items-center w-12 h-12 border border-white/20 text-zinc-300">
-                <MapPin size={20} />
+            <div className="flex items-center gap-4 w-fit group">
+              <div className="w-12 h-12 flex items-center justify-center border border-white/10 text-zinc-300 group-hover:border-teal-500 group-hover:bg-teal-500/10 group-hover:text-teal-400 transition-all">
+                <MapPin size={24} />
               </div>
-              <span className="text-zinc-300 font-sans text-sm md:text-base">
+              <span className="text-zinc-300 font-sans text-base md:text-lg group-hover:text-teal-400 transition-all tracking-wide">
                 Delhi NCR, India
               </span>
             </div>
           </div>
 
-          <div className="mt-16 flex flex-col gap-10 max-w-md">
-            <div className="flex items-center gap-8 font-sans text-xs tracking-widest uppercase">
-              <a href="/resume.pdf" target="_blank" rel="noopener noreferrer" className="text-teal-500 hover:text-teal-400 transition-colors flex items-center gap-2">
-                VIEW RESUME ↗
-              </a>
-              <a href="/resume.pdf" download="Priyanshu_Upadhyay_Resume.pdf" className="text-zinc-500 hover:text-zinc-300 transition-colors flex items-center gap-2">
-                DOWNLOAD ↓
-              </a>
-            </div>
+          <div className="flex items-center gap-6 mt-16 pt-4 border-t border-white/10 w-full max-w-sm">
+            <a href="/resume.pdf" target="_blank" rel="noopener noreferrer" className="text-sm font-medium text-zinc-300 hover:text-teal-500 transition-colors flex items-center gap-2">
+              VIEW RESUME ↗
+            </a>
+            <a href="/resume.pdf" download className="text-sm font-medium text-zinc-500 hover:text-zinc-300 transition-colors flex items-center gap-2">
+              DOWNLOAD ↓
+            </a>
           </div>
 
         </div>
@@ -316,7 +314,7 @@ const Contact = () => {
               disabled={isLoading}
               className="mt-6 terminal-button bg-teal text-charcoal hover:bg-white"
             >
-              {isLoading ? '> CONNECTING...' : '> ESTABLISH_CONNECTION'}
+              {isLoading ? 'SENDING...' : 'SEND MESSAGE ↗'}
             </button>
 
             {isSuccess && (
