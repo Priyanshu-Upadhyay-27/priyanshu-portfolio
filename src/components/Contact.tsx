@@ -114,7 +114,7 @@ const Contact = () => {
     window.addEventListener('resize', handleResize);
 
     const dots: { x: number, y: number, vx: number, vy: number }[] = [];
-    for (let i = 0; i < 100; i++) {
+    for (let i = 0; i < 200; i++) {
       dots.push({
         x: Math.random() * width,
         y: Math.random() * height,
@@ -142,7 +142,9 @@ const Contact = () => {
     let animationFrameId: number;
 
     const draw = () => {
-      ctx.clearRect(0, 0, width, height);
+      // Create a fading trail effect
+      ctx.fillStyle = 'rgba(10, 10, 10, 0.5)'; // Middle value between completely fade (0) and instant clear/bright (1)
+      ctx.fillRect(0, 0, width, height);
 
       // Draw and update dots
       ctx.fillStyle = 'rgba(20, 184, 166, 0.4)'; // Faint teal dots
@@ -171,7 +173,7 @@ const Contact = () => {
           ctx.moveTo(dot.x, dot.y);
           ctx.lineTo(mouse.x, mouse.y);
           const opacity = 1 - (distToMouse / 150);
-          ctx.strokeStyle = `rgba(20, 184, 166, ${opacity * 0.5})`;
+          ctx.strokeStyle = `rgba(20, 184, 166, ${opacity * 0.8})`;
           ctx.lineWidth = 1;
           ctx.stroke();
         }
@@ -188,13 +190,14 @@ const Contact = () => {
             ctx.moveTo(dot.x, dot.y);
             ctx.lineTo(otherDot.x, otherDot.y);
             const opacity = 1 - (distToDot / 80);
-            ctx.strokeStyle = `rgba(20, 184, 166, ${opacity * 0.2})`;
+            ctx.strokeStyle = `rgba(20, 184, 166, ${opacity * 0.5})`;
             ctx.lineWidth = 0.5;
             ctx.stroke();
           }
         }
       }
 
+      ctx.shadowBlur = 0;
       animationFrameId = requestAnimationFrame(draw);
     };
 
@@ -210,11 +213,14 @@ const Contact = () => {
 
   return (
     <section ref={sectionRef} id="contact" className="relative w-full overflow-hidden bg-[#0a0a0a] border-none outline-none py-32 px-8 lg:px-16">
-      {/* Step 2: Inject Canvas Background */}
+      {/* Canvas Background */}
       <canvas
         ref={canvasRef}
-        className="absolute inset-0 w-full h-full pointer-events-auto z-0 bg-transparent outline-none border-none"
+        className="absolute inset-0 w-full h-full pointer-events-none z-0 bg-transparent outline-none border-none"
       />
+
+      {/* Gradient fade: smoothly masks the particle top edge into the section above */}
+      <div className="absolute top-0 left-0 w-full h-32 bg-gradient-to-b from-[#0a0a0a] to-transparent z-0 pointer-events-none"></div>
 
       {/* Geometric Background Element (original) */}
       <div
@@ -289,7 +295,7 @@ const Contact = () => {
         </div>
 
         {/* Right Side: Minimal Form */}
-        <div ref={formRef} className="w-full lg:w-1/2 flex items-center relative z-10 bg-[#0a0a0a]/40 backdrop-blur-sm border border-white/5 p-6 rounded-lg">
+        <div ref={formRef} className="w-full lg:w-1/2 flex items-center relative z-10 bg-transparent p-6">
           <form
             onSubmit={handleSubmit}
             className="w-full flex flex-col gap-8 cyberpunk-form-container p-4 lg:p-10 relative z-20"
