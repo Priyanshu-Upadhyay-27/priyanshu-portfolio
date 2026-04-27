@@ -208,7 +208,7 @@ const Certifications = () => {
   const [hoveredIndex, setHoveredIndex] = useState<number>(0);
 
   return (
-    <section id="certifications" className="w-full bg-[#0a0a0a] py-32 border-t border-white/5 relative">
+    <section id="certifications" className="relative w-full bg-[#0a0a0a] py-32">
       <div className="max-w-7xl mx-auto px-8 lg:px-16">
         
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-20 gap-8">
