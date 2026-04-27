@@ -214,7 +214,7 @@ const Certifications = () => {
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-20 gap-8">
           <div>
             <h2 className="font-display text-4xl md:text-5xl font-light text-soft-white mb-4">
-              Index 05 <span className="text-[#00d4ff] ml-4">//</span> Credentials
+              Credentials
             </h2>
             <p className="text-white/40 font-mono text-sm md:text-base max-w-lg">
               Official validations of cloud engineering capabilities and machine learning competencies.

@@ -134,7 +134,7 @@ const Skills = () => {
     <section id="skills" className="bg-charcoal py-32 px-8 lg:px-16 border-b border-white/5">
       <div className="max-w-7xl mx-auto">
         <h2 className="font-display text-4xl md:text-5xl font-light text-soft-white mb-20 border-b border-white/10 pb-6 inline-block">
-          Index 03 <span className="text-teal ml-4">//</span> Skills and Tools
+          Skills and Tools
         </h2>
 
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 w-full max-w-7xl mx-auto">

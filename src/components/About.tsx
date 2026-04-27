@@ -114,7 +114,6 @@ const About: React.FC = () => {
       <div className="about-container">
         {/* ── LEFT TEXT STACK ── */}
         <div className="about-left" ref={textStackRef}>
-          <p className="about-label reveal-up">— ABOUT ME</p>
           
           <h2 className="about-header reveal-up">
             Hi, I'm <span className="about-name-accent">Priyanshu</span> —
