@@ -32,17 +32,17 @@ const Home = () => {
 };
 
 function App() {
-  const [showHero, setShowHero] = useState(false);
+  const [showPreloader, setShowPreloader] = useState(true);
 
   const handlePreloaderComplete = useCallback(() => {
-    setShowHero(true);
+    setShowPreloader(false);
   }, []);
 
   return (
     <Router>
       <ScrollToTop />
-      {/* Preloader overlays all content; Hero is mounted underneath for seamless reveal */}
-      {!showHero && <Preloader onComplete={handlePreloaderComplete} />}
+      {/* Preloader overlays all content; Hero is mounted underneath for seamless zoom-through reveal */}
+      {showPreloader && <Preloader onComplete={handlePreloaderComplete} />}
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/archive" element={<Archive />} />
