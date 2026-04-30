@@ -1,221 +1,141 @@
 import React, { useState, useEffect } from 'react';
 
-const Preloader: React.FC<{ onComplete: () => void }> = ({ onComplete }) => {
-  // Phase 0 = hidden, 1 = ripple, 2 = lock & glow, 3 = camera zoom, 4 = fade-out
+export default function Preloader() {
+  // phase 0: hidden, phase 1: ripple wave, phase 2: center lock, phase 3: camera dive
   const [phase, setPhase] = useState(0);
+  const [showPreloader, setShowPreloader] = useState(true);
 
-  // ── Phase sequencer ──
   useEffect(() => {
-    // Phase 0 → 1: blocks begin the fluid data ripple
-    const t1 = setTimeout(() => setPhase(1), 100);
+    // DEV BYPASS: Session storage disabled for testing. 
+    // Uncomment for production.
+    // if (sessionStorage.getItem('portfolioLoaded')) {
+    //   setShowPreloader(false);
+    //   return;
+    // }
 
-    // Phase 1 → 2: ripple stops, outer blocks drop, center ignites
-    const t2 = setTimeout(() => setPhase(2), 2500);
-
-    // Phase 2 → 3: violent camera zoom into center block
-    const t3 = setTimeout(() => setPhase(3), 3300);
-
-    // Phase 3 → 4: begin fade-out for unmount
-    const t4 = setTimeout(() => setPhase(4), 4200);
+    document.body.style.overflow = 'hidden';
+    
+    // Sequence the animation strictly
+    const p1 = setTimeout(() => setPhase(1), 100);    // Start wave
+    const p2 = setTimeout(() => setPhase(2), 2500);   // Lock center
+    const p3 = setTimeout(() => setPhase(3), 3200);   // Zoom camera
+    const end = setTimeout(() => {
+      setShowPreloader(false);
+      // sessionStorage.setItem('portfolioLoaded', 'true');
+      document.body.style.overflow = 'auto';
+    }, 4000);
 
     return () => {
-      clearTimeout(t1);
-      clearTimeout(t2);
-      clearTimeout(t3);
-      clearTimeout(t4);
+      clearTimeout(p1); clearTimeout(p2); clearTimeout(p3); clearTimeout(end);
     };
   }, []);
 
-  // ── Lock body scroll & handle unmount ──
-  useEffect(() => {
-    if (phase < 4) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = '';
-      const t = setTimeout(() => onComplete(), 400);
-      return () => clearTimeout(t);
-    }
-  }, [phase, onComplete]);
+  if (!showPreloader) return null;
 
   return (
-    <div
-      className={`fixed inset-0 z-[9999] bg-[#030303] flex items-center justify-center overflow-hidden transition-opacity duration-700 ${
-        phase === 4 ? 'opacity-0 pointer-events-none' : 'opacity-100'
-      }`}
-    >
-      {/* ── Inject ripple keyframes ── */}
+    <div className={`fixed inset-0 z-[999999] bg-[#030303] flex items-center justify-center overflow-hidden transition-opacity duration-700 ease-out ${phase >= 3 ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}>
+      
+      
       <style>{`
-        @keyframes dataRipple {
-          0%, 100% { transform: translateZ(10px); }
-          50% { transform: translateZ(60px); }
+        @keyframes isometricRipple {
+          0%, 100% { transform: translateZ(0px); }
+          50% { transform: translateZ(50px); }
+        }
+        .animate-ripple {
+          animation: isometricRipple 2s ease-in-out infinite;
         }
       `}</style>
 
-      {/* ── Ambient scan lines (subtle CRT / tech overlay) ── */}
-      <div
-        className="absolute inset-0 z-[1] pointer-events-none opacity-[0.03]"
-        style={{
-          backgroundImage:
-            'repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(255,255,255,0.05) 2px, rgba(255,255,255,0.05) 4px)',
-        }}
-      />
-
-      {/* ── Radial vignette ── */}
-      <div
-        className="absolute inset-0 z-[1] pointer-events-none"
-        style={{
-          background:
-            'radial-gradient(ellipse at center, transparent 30%, rgba(0,0,0,0.7) 100%)',
-        }}
-      />
-
-      {/* ── 3D Stage ── */}
-      <div
-        className="relative w-[400px] h-[400px]"
-        style={{ perspective: '1200px' }}
-      >
-        <div
+      
+      <div className="relative w-[320px] h-[320px]" style={{ perspective: '1500px' }}>
+        <div 
           className="absolute inset-0 transition-transform duration-[1200ms] ease-[cubic-bezier(0.85,0,0.15,1)]"
-          style={{
-            transformStyle: 'preserve-3d',
-            transform:
-              phase >= 3
-                ? 'scale(35) translateZ(250px)'
-                : 'rotateX(60deg) rotateZ(-45deg) scale(1)',
+          style={{ 
+            transformStyle: 'preserve-3d', 
+            // The exact isometric angle, diving into the screen on phase 3
+            transform: phase >= 3 ? 'scale(40) translateZ(300px)' : 'rotateX(60deg) rotateZ(-45deg) scale(1)' 
           }}
         >
-          {/* ── Volumetric 3D Cube Grid (5×5 isometric) ── */}
+          
           {Array.from({ length: 25 }).map((_, i) => {
             const row = Math.floor(i / 5);
             const col = i % 5;
-            const isCenter = row === 2 && col === 2;
+            const isCenter = row === 2 && col === 2; 
+            
+            // Math for the negative delay wave
+            const dist = Math.sqrt(Math.pow(row - 2, 2) + Math.pow(col - 2, 2));
+            const waveDelay = `-${dist * 0.2}s`; 
 
-            // Radial distance from center for outward wave propagation
-            const distanceFromCenter = Math.sqrt(
-              Math.pow(row - 2, 2) + Math.pow(col - 2, 2)
-            );
-            const waveDelay = `${distanceFromCenter * 150}ms`;
-
-            // Phase-driven animation / transform
-            let animationStyle = '';
-            let transformStyle = '';
-
-            if (phase === 1) {
-              // Phase 1: Continuous fluid sine-wave ripple
-              animationStyle = 'dataRipple 2s ease-in-out infinite';
-            } else if (phase >= 2) {
-              // Phase 2 & 3: Lock into final position — center tall, others flat
-              transformStyle = `translateZ(${isCenter ? '80px' : '0px'})`;
-            } else {
-              transformStyle = 'translateZ(0px)';
-            }
-
-            // Fixed physical depth of the 3D cube walls
-            const blockDepth = 40;
-
+            // Phase logic
+            const isRippling = phase === 1;
+            const isLocked = phase >= 2;
+            
             return (
-              <div
+              <div 
                 key={i}
-                className="absolute w-16 h-16 transition-all duration-[800ms] ease-[cubic-bezier(0.25,1,0.5,1)]"
+                className="absolute w-[64px] h-[64px]"
                 style={{
                   left: `${col * 64}px`,
                   top: `${row * 64}px`,
                   transformStyle: 'preserve-3d',
-                  animation: animationStyle,
-                  animationDelay: phase === 1 ? waveDelay : '0ms',
-                  transform: transformStyle,
-                  opacity: phase >= 2 && !isCenter ? 0.1 : 1,
                 }}
               >
-                {/* ── Top face (frosted glass) ── */}
-                <div
-                  className="absolute inset-0 backdrop-blur-md"
+                
+                <div 
+                  className={`relative w-full h-full transition-transform duration-700 ease-[cubic-bezier(0.85,0,0.15,1)] ${isRippling ? 'animate-ripple' : ''}`}
                   style={{
-                    transform: `translateZ(${blockDepth}px)`,
-                    backgroundColor: isCenter
-                      ? 'rgba(45,212,191,0.2)'
-                      : 'rgba(255,255,255,0.05)',
-                    border: `1px solid ${
-                      isCenter
-                        ? 'rgba(45,212,191,0.8)'
-                        : 'rgba(255,255,255,0.2)'
-                    }`,
-                    boxShadow:
-                      isCenter && phase >= 2
-                        ? '0 0 40px 10px rgba(45,212,191,0.5)'
-                        : 'none',
+                    transformStyle: 'preserve-3d',
+                    animationDelay: waveDelay,
+                    transform: isLocked ? `translateZ(${isCenter ? '80px' : '0px'})` : undefined,
+                    opacity: isLocked && !isCenter ? 0.05 : 1,
                   }}
-                />
+                >
+                  
+                  <div 
+                    className="absolute inset-0 backdrop-blur-md transition-colors duration-500"
+                    style={{
+                      transform: 'translateZ(30px)', // The thickness of the blocks
+                      backgroundColor: isCenter ? 'rgba(45,212,191,0.2)' : 'rgba(255,255,255,0.03)',
+                      border: `1px solid ${isCenter ? 'rgba(45,212,191,0.8)' : 'rgba(255,255,255,0.1)'}`,
+                      boxShadow: isCenter && isLocked ? '0 0 50px 10px rgba(45,212,191,0.6)' : 'none',
+                    }}
+                  />
+                  
+                  
+                  <div 
+                    className="absolute w-[64px] h-[30px] origin-top transition-colors duration-500"
+                    style={{
+                      top: '100%',
+                      transform: 'rotateX(-90deg)',
+                      backgroundColor: isCenter ? 'rgba(15,118,110,0.9)' : 'rgba(15,15,15,0.95)',
+                      borderBottom: `1px solid ${isCenter ? 'rgba(45,212,191,0.4)' : 'rgba(255,255,255,0.05)'}`,
+                    }}
+                  />
 
-                {/* ── Front wall (bottom edge extrusion) ── */}
-                <div
-                  className="absolute origin-top"
-                  style={{
-                    width: '64px',
-                    height: `${blockDepth}px`,
-                    top: '64px',
-                    transform: 'rotateX(-90deg)',
-                    backgroundColor: isCenter
-                      ? 'rgba(15,118,110,0.8)'
-                      : 'rgba(10,10,10,0.8)',
-                    borderBottom: `1px solid ${
-                      isCenter
-                        ? 'rgba(45,212,191,0.3)'
-                        : 'rgba(255,255,255,0.05)'
-                    }`,
-                    borderRight: `1px solid ${
-                      isCenter
-                        ? 'rgba(45,212,191,0.3)'
-                        : 'rgba(255,255,255,0.05)'
-                    }`,
-                  }}
-                />
-
-                {/* ── Right wall (side edge extrusion) ── */}
-                <div
-                  className="absolute origin-left"
-                  style={{
-                    width: `${blockDepth}px`,
-                    height: '64px',
-                    left: '64px',
-                    transform: 'rotateY(90deg)',
-                    backgroundColor: isCenter
-                      ? 'rgba(13,148,136,0.6)'
-                      : 'rgba(5,5,5,0.9)',
-                    borderBottom: `1px solid ${
-                      isCenter
-                        ? 'rgba(45,212,191,0.3)'
-                        : 'rgba(255,255,255,0.05)'
-                    }`,
-                    borderRight: `1px solid ${
-                      isCenter
-                        ? 'rgba(45,212,191,0.3)'
-                        : 'rgba(255,255,255,0.05)'
-                    }`,
-                  }}
-                />
+                  
+                  <div 
+                    className="absolute w-[30px] h-[64px] origin-left transition-colors duration-500"
+                    style={{
+                      left: '100%',
+                      transform: 'rotateY(90deg)',
+                      backgroundColor: isCenter ? 'rgba(13,148,136,0.7)' : 'rgba(8,8,8,0.98)',
+                      borderRight: `1px solid ${isCenter ? 'rgba(45,212,191,0.4)' : 'rgba(255,255,255,0.05)'}`,
+                    }}
+                  />
+                </div>
               </div>
             );
           })}
         </div>
       </div>
 
-      {/* ── Status label ── */}
-      <div
-        className={`absolute bottom-12 text-center transition-opacity duration-500 ${
-          phase >= 3 ? 'opacity-0' : 'opacity-100'
-        }`}
-      >
-        <p className="text-white/30 text-[10px] tracking-[0.4em] uppercase font-mono">
-          {phase < 1
-            ? 'Initializing Latent Space'
-            : phase < 2
-            ? 'Processing Data Ripple'
-            : 'Locking Target Vector'}
+      
+      <div className={`absolute bottom-12 transition-opacity duration-300 ${phase >= 2 ? 'opacity-0' : 'opacity-100'}`}>
+        <p className="font-mono text-[10px] text-teal-500/50 tracking-[0.4em] uppercase">
+          Processing Data Ripple
         </p>
       </div>
+
     </div>
   );
-};
-
-export default Preloader;
+}

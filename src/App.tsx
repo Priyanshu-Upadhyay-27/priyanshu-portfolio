@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import ScrollToTop from './components/ScrollToTop';
 import Preloader from './components/Preloader';
@@ -32,17 +32,10 @@ const Home = () => {
 };
 
 function App() {
-  const [showPreloader, setShowPreloader] = useState(true);
-
-  const handlePreloaderComplete = useCallback(() => {
-    setShowPreloader(false);
-  }, []);
-
   return (
     <Router>
+      <Preloader />
       <ScrollToTop />
-      {/* Preloader overlays all content; Hero is mounted underneath for seamless zoom-through reveal */}
-      {showPreloader && <Preloader onComplete={handlePreloaderComplete} />}
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/archive" element={<Archive />} />
