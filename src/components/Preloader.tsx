@@ -1,51 +1,56 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect } from 'react';
 
 const Preloader: React.FC<{ onComplete: () => void }> = ({ onComplete }) => {
-  // Phase 0 = initializing, 1 = rising, 2 = zooming, 3 = complete
+  // Phase 0 = hidden, 1 = ripple, 2 = lock & glow, 3 = camera zoom, 4 = fade-out
   const [phase, setPhase] = useState(0);
-
-  // Pre-compute random heights so they don't change on re-render
-  const blockHeights = useMemo(
-    () => Array.from({ length: 25 }, () => Math.random() * 40 + 10),
-    []
-  );
 
   // ── Phase sequencer ──
   useEffect(() => {
-    // Phase 0 → 1: blocks begin rising
+    // Phase 0 → 1: blocks begin the fluid data ripple
     const t1 = setTimeout(() => setPhase(1), 100);
 
-    // Phase 1 → 2: camera zoom begins
-    const t2 = setTimeout(() => setPhase(2), 1600); // 100 + 1500
+    // Phase 1 → 2: ripple stops, outer blocks drop, center ignites
+    const t2 = setTimeout(() => setPhase(2), 2500);
 
-    // Phase 2 → 3: animation complete, reveal site
-    const t3 = setTimeout(() => setPhase(3), 2400); // 1600 + 800
+    // Phase 2 → 3: violent camera zoom into center block
+    const t3 = setTimeout(() => setPhase(3), 3300);
+
+    // Phase 3 → 4: begin fade-out for unmount
+    const t4 = setTimeout(() => setPhase(4), 4200);
 
     return () => {
       clearTimeout(t1);
       clearTimeout(t2);
       clearTimeout(t3);
+      clearTimeout(t4);
     };
   }, []);
 
-  // ── Lock body scroll until complete ──
+  // ── Lock body scroll & handle unmount ──
   useEffect(() => {
-    if (phase < 3) {
+    if (phase < 4) {
       document.body.style.overflow = 'hidden';
     } else {
       document.body.style.overflow = '';
-      // Give the fade-out transition time to finish, then unmount
-      const t = setTimeout(() => onComplete(), 700);
+      const t = setTimeout(() => onComplete(), 400);
       return () => clearTimeout(t);
     }
   }, [phase, onComplete]);
 
   return (
     <div
-      className={`fixed inset-0 z-[9999] bg-[#0a0a0a] flex items-center justify-center overflow-hidden transition-opacity duration-700 ${
-        phase === 3 ? 'opacity-0 pointer-events-none' : 'opacity-100'
+      className={`fixed inset-0 z-[9999] bg-[#030303] flex items-center justify-center overflow-hidden transition-opacity duration-700 ${
+        phase === 4 ? 'opacity-0 pointer-events-none' : 'opacity-100'
       }`}
     >
+      {/* ── Inject ripple keyframes ── */}
+      <style>{`
+        @keyframes dataRipple {
+          0%, 100% { transform: translateZ(10px); }
+          50% { transform: translateZ(60px); }
+        }
+      `}</style>
+
       {/* ── Ambient scan lines (subtle CRT / tech overlay) ── */}
       <div
         className="absolute inset-0 z-[1] pointer-events-none opacity-[0.03]"
@@ -60,69 +65,134 @@ const Preloader: React.FC<{ onComplete: () => void }> = ({ onComplete }) => {
         className="absolute inset-0 z-[1] pointer-events-none"
         style={{
           background:
-            'radial-gradient(ellipse at center, transparent 30%, rgba(0,0,0,0.6) 100%)',
+            'radial-gradient(ellipse at center, transparent 30%, rgba(0,0,0,0.7) 100%)',
         }}
       />
 
       {/* ── 3D Stage ── */}
       <div
-        className="relative w-[300px] h-[300px]"
-        style={{ perspective: '1000px' }}
+        className="relative w-[400px] h-[400px]"
+        style={{ perspective: '1200px' }}
       >
         <div
-          className="absolute inset-0 transition-transform ease-[cubic-bezier(0.85,0,0.15,1)]"
+          className="absolute inset-0 transition-transform duration-[1200ms] ease-[cubic-bezier(0.85,0,0.15,1)]"
           style={{
             transformStyle: 'preserve-3d',
             transform:
-              phase >= 2
-                ? 'scale(25) translateZ(200px)'
+              phase >= 3
+                ? 'scale(35) translateZ(250px)'
                 : 'rotateX(60deg) rotateZ(-45deg) scale(1)',
-            transitionDuration: '800ms',
           }}
         >
-          {/* ── Data Blocks (5×5 grid) ── */}
+          {/* ── Volumetric 3D Cube Grid (5×5 isometric) ── */}
           {Array.from({ length: 25 }).map((_, i) => {
             const row = Math.floor(i / 5);
             const col = i % 5;
-            const isCenter = i === 12;
+            const isCenter = row === 2 && col === 2;
 
-            const translateZ =
-              phase >= 1
-                ? isCenter
-                  ? '60px'
-                  : `${blockHeights[i]}px`
-                : '0px';
+            // Radial distance from center for outward wave propagation
+            const distanceFromCenter = Math.sqrt(
+              Math.pow(row - 2, 2) + Math.pow(col - 2, 2)
+            );
+            const waveDelay = `${distanceFromCenter * 150}ms`;
 
-            const delay = `${(row + col) * 50}ms`;
+            // Phase-driven animation / transform
+            let animationStyle = '';
+            let transformStyle = '';
+
+            if (phase === 1) {
+              // Phase 1: Continuous fluid sine-wave ripple
+              animationStyle = 'dataRipple 2s ease-in-out infinite';
+            } else if (phase >= 2) {
+              // Phase 2 & 3: Lock into final position — center tall, others flat
+              transformStyle = `translateZ(${isCenter ? '80px' : '0px'})`;
+            } else {
+              transformStyle = 'translateZ(0px)';
+            }
+
+            // Fixed physical depth of the 3D cube walls
+            const blockDepth = 40;
 
             return (
               <div
                 key={i}
-                className="absolute w-12 h-12 border border-teal-500/30 transition-transform duration-1000 ease-out"
+                className="absolute w-16 h-16 transition-all duration-[800ms] ease-[cubic-bezier(0.25,1,0.5,1)]"
                 style={{
-                  left: `${col * 48}px`,
-                  top: `${row * 48}px`,
+                  left: `${col * 64}px`,
+                  top: `${row * 64}px`,
                   transformStyle: 'preserve-3d',
-                  transform: `translateZ(${translateZ})`,
-                  transitionDelay: delay,
-                  backgroundColor: isCenter
-                    ? 'rgba(45, 212, 191, 0.2)'
-                    : 'rgba(255, 255, 255, 0.02)',
-                  boxShadow:
-                    isCenter && phase >= 1
-                      ? '0 0 20px rgba(45, 212, 191, 0.5)'
-                      : 'none',
+                  animation: animationStyle,
+                  animationDelay: phase === 1 ? waveDelay : '0ms',
+                  transform: transformStyle,
+                  opacity: phase >= 2 && !isCenter ? 0.1 : 1,
                 }}
               >
-                {/* 3D side — bottom face */}
+                {/* ── Top face (frosted glass) ── */}
                 <div
-                  className="absolute inset-0 bg-gradient-to-b from-transparent to-black/50 origin-bottom"
-                  style={{ transform: 'rotateX(-90deg) translateZ(48px)' }}
+                  className="absolute inset-0 backdrop-blur-md"
+                  style={{
+                    transform: `translateZ(${blockDepth}px)`,
+                    backgroundColor: isCenter
+                      ? 'rgba(45,212,191,0.2)'
+                      : 'rgba(255,255,255,0.05)',
+                    border: `1px solid ${
+                      isCenter
+                        ? 'rgba(45,212,191,0.8)'
+                        : 'rgba(255,255,255,0.2)'
+                    }`,
+                    boxShadow:
+                      isCenter && phase >= 2
+                        ? '0 0 40px 10px rgba(45,212,191,0.5)'
+                        : 'none',
+                  }}
                 />
-                {/* 3D side — right face */}
+
+                {/* ── Front wall (bottom edge extrusion) ── */}
                 <div
-                  className="absolute inset-0 bg-gradient-to-l from-transparent to-black/50 origin-right"
-                  style={{ transform: 'rotateY(90deg) translateZ(48px)' }}
+                  className="absolute origin-top"
+                  style={{
+                    width: '64px',
+                    height: `${blockDepth}px`,
+                    top: '64px',
+                    transform: 'rotateX(-90deg)',
+                    backgroundColor: isCenter
+                      ? 'rgba(15,118,110,0.8)'
+                      : 'rgba(10,10,10,0.8)',
+                    borderBottom: `1px solid ${
+                      isCenter
+                        ? 'rgba(45,212,191,0.3)'
+                        : 'rgba(255,255,255,0.05)'
+                    }`,
+                    borderRight: `1px solid ${
+                      isCenter
+                        ? 'rgba(45,212,191,0.3)'
+                        : 'rgba(255,255,255,0.05)'
+                    }`,
+                  }}
+                />
+
+                {/* ── Right wall (side edge extrusion) ── */}
+                <div
+                  className="absolute origin-left"
+                  style={{
+                    width: `${blockDepth}px`,
+                    height: '64px',
+                    left: '64px',
+                    transform: 'rotateY(90deg)',
+                    backgroundColor: isCenter
+                      ? 'rgba(13,148,136,0.6)'
+                      : 'rgba(5,5,5,0.9)',
+                    borderBottom: `1px solid ${
+                      isCenter
+                        ? 'rgba(45,212,191,0.3)'
+                        : 'rgba(255,255,255,0.05)'
+                    }`,
+                    borderRight: `1px solid ${
+                      isCenter
+                        ? 'rgba(45,212,191,0.3)'
+                        : 'rgba(255,255,255,0.05)'
+                    }`,
+                  }}
                 />
               </div>
             );
@@ -130,15 +200,20 @@ const Preloader: React.FC<{ onComplete: () => void }> = ({ onComplete }) => {
         </div>
       </div>
 
-      {/* ── Processing label ── */}
-      <p
-        className={`absolute bottom-12 font-mono text-xs tracking-[0.25em] uppercase transition-opacity duration-500 ${
-          phase >= 2 ? 'opacity-0' : 'opacity-100'
+      {/* ── Status label ── */}
+      <div
+        className={`absolute bottom-12 text-center transition-opacity duration-500 ${
+          phase >= 3 ? 'opacity-0' : 'opacity-100'
         }`}
-        style={{ color: 'rgba(45,212,191,0.5)' }}
       >
-        {phase < 1 ? 'INITIALIZING_MATRIX...' : 'CONSTRUCTING_DATA_BLOCKS...'}
-      </p>
+        <p className="text-white/30 text-[10px] tracking-[0.4em] uppercase font-mono">
+          {phase < 1
+            ? 'Initializing Latent Space'
+            : phase < 2
+            ? 'Processing Data Ripple'
+            : 'Locking Target Vector'}
+        </p>
+      </div>
     </div>
   );
 };
