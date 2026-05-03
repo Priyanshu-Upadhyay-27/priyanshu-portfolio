@@ -216,9 +216,6 @@ const Certifications = () => {
             <h2 className="font-display text-4xl md:text-5xl font-light text-soft-white mb-4">
               Credentials
             </h2>
-            <p className="text-white/40 font-mono text-sm md:text-base max-w-lg">
-              Official validations of cloud engineering capabilities and machine learning competencies.
-            </p>
           </div>
         </div>
 
