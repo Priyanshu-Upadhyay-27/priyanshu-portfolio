@@ -1,5 +1,6 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useContext } from 'react';
 import gsap from 'gsap';
+import { PreloaderContext } from '../App';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import NeuralHUD from './NeuralHUD';
 import './Hero.css';
@@ -19,6 +20,8 @@ const Hero = () => {
   const topoRef = useRef<SVGSVGElement>(null);
   const portraitRef = useRef<HTMLImageElement>(null);
   const bottomFadeRef = useRef<HTMLDivElement>(null);
+
+  const isPreloaderComplete = useContext(PreloaderContext);
 
   // Kinetic text strings
   const row1 = 'BUILD-TRAIN-DEPLOY ⸻ ';
@@ -423,6 +426,41 @@ const Hero = () => {
       floatingElements.forEach(({ el }) => gsap.killTweensOf(el));
     };
   }, []);
+
+  // ── ENTRANCE ANIMATION (Waits for Preloader) ──
+  useEffect(() => {
+    if (isPreloaderComplete && portraitRef.current) {
+      // Force scroll to absolute top and recalculate all ScrollTrigger positions
+      // BEFORE the entrance animation plays — this prevents the "already scrolled" flash
+      window.scrollTo(0, 0);
+      document.documentElement.scrollTop = 0;
+      ScrollTrigger.refresh();
+
+      const entranceTl = gsap.timeline();
+      entranceTl.fromTo(portraitRef.current, {
+        clipPath: 'inset(100% 0% 0% 0%)',
+        filter: 'brightness(0.2)'
+      }, {
+        clipPath: 'inset(0% 0% 0% 0%)',
+        filter: 'brightness(1)',
+        duration: 1.5,
+        ease: 'power3.inOut'
+      })
+      .fromTo('.neural-hud-container', {
+        y: 60,
+        opacity: 0
+      }, {
+        y: 0,
+        opacity: 1,
+        duration: 1.2,
+        ease: 'back.out(1.5)'
+      }, '-=0.8');
+    } else if (portraitRef.current) {
+      // Hide them initially
+      gsap.set(portraitRef.current, { clipPath: 'inset(100% 0% 0% 0%)', filter: 'brightness(0.2)' });
+      gsap.set('.neural-hud-container', { opacity: 0, y: 60 });
+    }
+  }, [isPreloaderComplete]);
 
   return (
     <div ref={heroRef} id="hero" className="hero">
