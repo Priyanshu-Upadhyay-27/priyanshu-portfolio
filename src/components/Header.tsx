@@ -1,10 +1,17 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext, useRef } from 'react';
+import gsap from 'gsap';
+import { PreloaderContext } from '../App';
 import { useSmartNav } from '../hooks/useSmartNav';
 import './Header.css';
 
 const Header: React.FC = () => {
   const [isNavOpen, setIsNavOpen] = useState(false);
   const [tickerText, setTickerText] = useState('');
+  
+  const isPreloaderComplete = useContext(PreloaderContext);
+  const riyanshuRef = useRef<HTMLSpanElement>(null);
+  const surnameRef = useRef<HTMLSpanElement>(null);
+  const rightNavRef = useRef<HTMLDivElement>(null);
 
   // ── Smart Nav — fully decoupled from Hero's ScrollTrigger ──
   const { isHidden, isPastHero } = useSmartNav('#about');
@@ -63,6 +70,26 @@ const Header: React.FC = () => {
     return () => clearTimeout(timeout);
   }, []);
 
+  // ── Entrance Animation from Preloader ──
+  useEffect(() => {
+    if (isPreloaderComplete) {
+      const tl = gsap.timeline();
+      tl.to([riyanshuRef.current, surnameRef.current], {
+        opacity: 1,
+        x: 0,
+        duration: 0.8,
+        stagger: 0.1,
+        ease: 'power2.out',
+      })
+      .to(rightNavRef.current, {
+        opacity: 1,
+        y: 0,
+        duration: 0.8,
+        ease: 'power2.out',
+      }, '-=0.6');
+    }
+  }, [isPreloaderComplete]);
+
   // Build class list
   const classes = [
     'site-header',
@@ -77,11 +104,14 @@ const Header: React.FC = () => {
       <div className="header-container">
         {/* Logo */}
         <div className="header-logo">
-          <span className="logo-name">Priyanshu</span>
-          <span className="logo-surname">Upadhyay</span>
+          <span className="logo-name">
+            <span className="logo-p">P</span>
+            <span ref={riyanshuRef} style={{ opacity: 0, transform: 'translateX(-10px)', display: 'inline-block' }}>riyanshu</span>
+          </span>
+          <span className="logo-surname" ref={surnameRef} style={{ opacity: 0, transform: 'translateX(-10px)', display: 'inline-block' }}>Upadhyay</span>
         </div>
 
-        <div className="header-right">
+        <div className="header-right" ref={rightNavRef} style={{ opacity: 0, transform: 'translateY(-10px)' }}>
           {/* ── Bifurcating Resume Button ── */}
           <div className="resume-wrapper">
             <div className="resume-btn-front">
