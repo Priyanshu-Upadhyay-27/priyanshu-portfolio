@@ -66,25 +66,32 @@ const Preloader: React.FC<PreloaderProps> = ({ onComplete }) => {
     });
     tl.addLabel('assembled');
 
-    // ── Phase 3: P appears ON TOP of the visible neon grid ──
-    // Fade out sockets in the background
-    tl.to('.sockets-layer', { opacity: 0, duration: 0.5 }, 'assembled');
-
-    // The P fades in directly on top of the fully assembled 3x3 grid
-    tl.to('.preloader-p-text', {
-      opacity: 1,
-      duration: 0.8,
-      ease: 'power2.out'
+    // ── Phase 2.5: Fuse grid into a solid square ──
+    // The inner grid lines vanish by blending the borders and scaling slightly to kill gaps
+    tl.to('.cube .front, .cube .left, .cube .right, .cube .top, .cube .bottom, .cube .back', {
+      borderColor: 'transparent',
+      scale: 1.02,
+      duration: 0.4,
+      ease: 'power2.inOut'
     }, 'assembled');
 
-    // ── Phase 4: Grid dissolves BEHIND the P ──
-    // Only after the P is fully visible, the cubes fade to charcoal
+    // Fade out sockets in the background
+    tl.to('.sockets-layer', { opacity: 0, duration: 0.4 }, 'assembled');
+
+    // ── Phase 3: P appears ON TOP of the solid square ──
+    tl.addLabel('pReveal', '>');
+    tl.to('.preloader-p-text', {
+      opacity: 1,
+      duration: 0.6,
+      ease: 'power2.out'
+    }, 'pReveal');
+
+    // ── Phase 4: Square dissolves BEHIND the P ──
+    // The solid block fades to charcoal background color
     tl.addLabel('dissolve', '>');
     tl.to('.cube .front, .cube .left, .cube .right, .cube .top, .cube .bottom, .cube .back', {
       backgroundColor: '#161616',
-      borderColor: 'transparent',
       boxShadow: 'none',
-      scale: 1.02,
       duration: 0.5,
       ease: 'power2.inOut'
     }, 'dissolve');
