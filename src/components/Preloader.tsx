@@ -66,35 +66,13 @@ const Preloader: React.FC<PreloaderProps> = ({ onComplete }) => {
     });
     tl.addLabel('assembled');
 
-    // ── Phase 2.5: Fuse grid into a solid square ──
-    // The inner grid lines vanish by blending the borders and scaling slightly to kill gaps
-    tl.to('.cube .front, .cube .left, .cube .right, .cube .top, .cube .bottom, .cube .back', {
-      borderColor: 'transparent',
-      scale: 1.02,
-      duration: 0.4,
-      ease: 'power2.inOut'
-    }, 'assembled');
-
-    // Fade out sockets in the background
-    tl.to('.sockets-layer', { opacity: 0, duration: 0.4 }, 'assembled');
-
-    // ── Phase 3: P appears ON TOP of the solid square ──
+    // ── Phase 3: P appears ON TOP of the fully assembled grid ──
     tl.addLabel('pReveal', '>');
     tl.to('.preloader-p-text', {
       opacity: 1,
       duration: 0.6,
       ease: 'power2.out'
     }, 'pReveal');
-
-    // ── Phase 4: Square dissolves BEHIND the P ──
-    // The solid block fades to charcoal background color
-    tl.addLabel('dissolve', '>');
-    tl.to('.cube .front, .cube .left, .cube .right, .cube .top, .cube .bottom, .cube .back', {
-      backgroundColor: '#161616',
-      boxShadow: 'none',
-      duration: 0.5,
-      ease: 'power2.inOut'
-    }, 'dissolve');
 
     // ── Phase 5: FLIP Glide to Header .logo-p ──
     tl.addLabel('glide', '>+0.2');
@@ -137,14 +115,8 @@ const Preloader: React.FC<PreloaderProps> = ({ onComplete }) => {
         scaleRatio = 32 / pRect.height;
       }
 
-      // THE CINEMATIC FLIP GLIDE — animate the P text directly, not the wrapper
-      gsap.to(preloaderP, {
-        x: `+=${deltaX}`,
-        y: `+=${deltaY}`,
-        scale: scaleRatio,
-        transformOrigin: 'center center',
-        duration: 1.2,
-        ease: 'power3.inOut',
+      // THE CINEMATIC FLIP GLIDE AND DISSOLVE
+      const glideTl = gsap.timeline({
         onComplete: () => {
           // ── THE SWAP (strict sequence) ──
           
@@ -155,7 +127,7 @@ const Preloader: React.FC<PreloaderProps> = ({ onComplete }) => {
           // 2. Make the app visible INSTANTLY — preloader (z:999999) still covers it
           if (onComplete) onComplete();
 
-          // 3. Wait one frame for React to flush, then fade out the preloader
+          // 3. Wait one frame for React to flush, then fade out the entire preloader
           requestAnimationFrame(() => {
             window.scrollTo(0, 0); // One more reset after React render
             
@@ -178,6 +150,27 @@ const Preloader: React.FC<PreloaderProps> = ({ onComplete }) => {
           });
         }
       });
+
+      // P text glides to the header
+      glideTl.to(preloaderP, {
+        x: `+=${deltaX}`,
+        y: `+=${deltaY}`,
+        scale: scaleRatio,
+        transformOrigin: 'center center',
+        duration: 1.2,
+        ease: 'power3.inOut',
+      });
+
+      // The 3x3 cube grid remains visible during the glide, and dissolves right as it lands
+      glideTl.to('.cube', {
+        opacity: 0,
+        scale: 0.5,
+        rotationX: 45,
+        rotationY: 45,
+        duration: 0.6,
+        ease: 'power2.in',
+        stagger: 0.05
+      }, "-=0.6"); // Perfectly overlaps the end of the P transition
     }, 'glide');
 
     return () => {
