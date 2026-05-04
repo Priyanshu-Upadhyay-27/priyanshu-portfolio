@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import { ExternalLink, Github } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 const archiveProjects = [
   { year: "2026", title: "End-to-End Churn ML Pipeline", category: "MLOps", tech: ["FastAPI", "Docker", "scikit-learn", "Streamlit"], repo: "https://github.com/Priyanshu-Upadhyay-27/end-to-end-churn-ml", live: "https://priyanshu-retention-intelligence.streamlit.app/" },
@@ -23,12 +24,12 @@ const Archive = () => {
     <section className="bg-[#0a0a0a] min-h-screen py-32 px-8 lg:px-16 text-[#f4f4f5]">
       <div className="max-w-6xl mx-auto">
         <div className="mb-12">
-          <a 
-            href="/#archive-link" 
+          <Link 
+            to="/#archive-link" 
             className="inline-flex items-center gap-2 text-[#f4f4f5]/50 hover:text-[#ccff00] transition-colors font-mono text-sm tracking-widest uppercase"
           >
             <span>← Back to Main Portfolio</span>
-          </a>
+          </Link>
         </div>
         <header className="mb-20">
           <h1 className="text-4xl md:text-5xl font-display font-light tracking-tight mb-4 text-[#f4f4f5]">
