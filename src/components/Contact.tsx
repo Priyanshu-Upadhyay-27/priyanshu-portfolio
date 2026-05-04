@@ -28,7 +28,7 @@ const Contact = () => {
   // Canvas Ref for Vector Space Background
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     // 1. Invisible Honeypot & Timestamp Check (Trap the bot, fake a success)
@@ -47,13 +47,15 @@ const Contact = () => {
     setIsSuccess(false);
 
     try {
-      // 4. The Network Request
-      const response = await fetch('/.netlify/functions/contact', {
+      const form = e.currentTarget;
+      const formData = new FormData(form);
+      const data = new URLSearchParams(formData as any).toString();
+
+      // 4. The Network Request to Netlify Forms
+      const response = await fetch('/', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ name, email, message }),
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: data,
       });
 
       if (response.ok) {
@@ -297,16 +299,19 @@ const Contact = () => {
         {/* Right Side: Minimal Form */}
         <div ref={formRef} className="w-full lg:w-1/2 flex items-center relative z-10 bg-transparent p-6">
           <form
+            name="contact"
             onSubmit={handleSubmit}
             className="w-full flex flex-col gap-8 cyberpunk-form-container p-4 lg:p-10 relative z-20"
           >
+            <input type="hidden" name="form-name" value="contact" />
+
             {/* Invisible Honeypot Field */}
             <div aria-hidden="true" className="opacity-0 absolute -left-[9999px] top-0 -z-50 pointer-events-none">
               <label htmlFor="bot-check">Website</label>
               <input
                 type="text"
                 id="bot-check"
-                name="bot-check"
+                name="bot-field"
                 tabIndex={-1}
                 autoComplete="new-password"
                 value={honey}
@@ -319,6 +324,7 @@ const Contact = () => {
               <input
                 type="text"
                 id="name"
+                name="name"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 className="glass-input text-soft-white focus:outline-none focus:border-teal-500 focus:ring-1 focus:ring-teal-500/50 transition-all duration-300"
@@ -331,6 +337,7 @@ const Contact = () => {
               <input
                 type="email"
                 id="email"
+                name="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 className="glass-input text-soft-white focus:outline-none focus:border-teal-500 focus:ring-1 focus:ring-teal-500/50 transition-all duration-300"
@@ -342,6 +349,7 @@ const Contact = () => {
               <label htmlFor="message" className="text-xs uppercase font-mono tracking-widest text-soft-white/40">Message</label>
               <textarea
                 id="message"
+                name="message"
                 rows={4}
                 value={message}
                 onChange={(e) => setMessage(e.target.value)}
