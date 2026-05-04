@@ -38,13 +38,19 @@ function App() {
   const hasSeenPreloader = sessionStorage.getItem('hasSeenPreloader') === 'true';
   const [preloaderComplete, setPreloaderComplete] = useState(hasSeenPreloader);
 
-  // Disable browser scroll restoration on reload
+  // Disable browser scroll restoration on reload ONLY if showing the preloader
   useEffect(() => {
     if ('scrollRestoration' in window.history) {
-      window.history.scrollRestoration = 'manual';
+      if (!hasSeenPreloader) {
+        window.history.scrollRestoration = 'manual';
+        window.scrollTo(0, 0);
+      } else {
+        window.history.scrollRestoration = 'auto';
+      }
+    } else if (!hasSeenPreloader) {
+      window.scrollTo(0, 0);
     }
-    window.scrollTo(0, 0);
-  }, []);
+  }, [hasSeenPreloader]);
 
   // Refresh ScrollTrigger when preloader unmounts so GSAP recalculates layout
   useEffect(() => {
