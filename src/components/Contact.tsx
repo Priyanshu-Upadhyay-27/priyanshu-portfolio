@@ -52,7 +52,7 @@ const Contact = () => {
       const data = new URLSearchParams(formData as any).toString();
 
       // 4. The Network Request to Netlify Forms
-      const response = await fetch('/', {
+      const response = await fetch('/contact.html', {
         method: 'POST',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
         body: data,
