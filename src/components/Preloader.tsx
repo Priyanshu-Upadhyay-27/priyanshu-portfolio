@@ -64,7 +64,13 @@ const Preloader: React.FC<PreloaderProps> = ({ onComplete }) => {
       rotateX: 360, rotateY: 360, z: 0,
       duration: 1.5, ease: 'power3.inOut'
     });
+    // Sockets fade out as cubes depart
+    tl.to('.socket', { opacity: 0, duration: 0.8, ease: 'power2.inOut' }, '<');
     tl.addLabel('assembled');
+
+    // ── Phase 2.5: Cubes dissolve into a unified logo frame ──
+    tl.to('.cube', { opacity: 0, duration: 0.5, ease: 'power2.inOut' }, 'assembled');
+    tl.to('.logo-frame', { opacity: 1, duration: 0.5, ease: 'power2.out' }, 'assembled+=0.1');
 
     // ── Phase 3: P appears ON TOP of the fully assembled grid ──
     tl.addLabel('pReveal', '>');
@@ -161,16 +167,14 @@ const Preloader: React.FC<PreloaderProps> = ({ onComplete }) => {
         ease: 'power3.inOut',
       });
 
-      // The 3x3 cube grid remains visible during the glide, and dissolves right as it lands
-      glideTl.to('.cube', {
+      // Logo frame: glow pulse → expand → dissolve as P departs
+      glideTl.to('.logo-frame', {
+        scale: 1.5,
         opacity: 0,
-        scale: 0.5,
-        rotationX: 45,
-        rotationY: 45,
-        duration: 0.6,
-        ease: 'power2.in',
-        stagger: 0.05
-      }, "-=0.6"); // Perfectly overlaps the end of the P transition
+        boxShadow: '0 0 60px rgba(255,255,255,0.5), 0 0 120px rgba(0,245,212,0.3)',
+        duration: 0.8,
+        ease: 'power2.in'
+      }, 0.15); // Starts shortly after P begins moving
     }, 'glide');
 
     return () => {
@@ -266,6 +270,23 @@ const Preloader: React.FC<PreloaderProps> = ({ onComplete }) => {
       >
         P
       </div>
+
+      {/* Logo Frame — unified white border that replaces the grid */}
+      <div
+        className="logo-frame"
+        style={{
+          position: 'absolute',
+          top: '50%',
+          left: '50%',
+          width: '240px',
+          height: '240px',
+          transform: 'translate(-50%, -50%)',
+          border: '3px solid rgba(255, 255, 255, 0.9)',
+          opacity: 0,
+          pointerEvents: 'none',
+          zIndex: 10,
+        }}
+      />
 
       <style>{`
         .face {
