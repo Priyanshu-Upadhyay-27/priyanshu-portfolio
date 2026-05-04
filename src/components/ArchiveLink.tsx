@@ -4,8 +4,11 @@ import './ArchiveLink.css';
 
 const archiveImages = [
   '/projects/pro_jy_1.png',
+  '/projects/arch_1.png',
   '/projects/pro_note_1.png',
+  '/projects/arch_2.png',
   '/projects/pro_ch_1.png',
+  '/projects/arch_3.png',
   '/projects/pro_jy_2.png',
   '/projects/pro_ch_2.png',
   '/projects/pro_note_2.png',
