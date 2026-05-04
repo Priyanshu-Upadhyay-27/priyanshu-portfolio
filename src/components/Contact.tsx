@@ -31,9 +31,9 @@ const Contact = () => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    // 1. Invisible Honeypot & Timestamp Check (Trap the bot, fake a success)
-    if (honey !== "" || (Date.now() - loadTime < 3000)) {
-      console.log("Bot trapped by security check.");
+    // 1. Honeypot Check Only
+    if (honey !== "") {
+      console.log("Bot trapped by honeypot.");
       setIsSuccess(true);
       return;
     }
@@ -61,7 +61,6 @@ const Contact = () => {
         message: message,
       });
 
-      // 4. The Network Request to Netlify Forms
       const response = await fetch('/', {
         method: 'POST',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
@@ -70,12 +69,12 @@ const Contact = () => {
 
       if (response.ok) {
         setIsSuccess(true);
-        // Clear the form inputs
         setName('');
         setEmail('');
         setMessage('');
         setHoney('');
       } else {
+        console.error('Form submission failed:', response.status, response.statusText);
         setIsError(true);
       }
     } catch (error) {
