@@ -1,17 +1,27 @@
-/* ── Footer: Glassmorphism & Constellation ── */
+/* ── Footer: Glassmorphism & Neural Network ── */
 
 .footer-root {
   position: relative;
   width: 100%;
+  background-color: #050505;
+  overflow: hidden;
+}
+
+.footer-glass {
+  position: relative;
+  width: 100%;
+  min-height: 25vh;
   padding: 4rem 4rem 3rem 4rem;
-  background-color: rgba(10, 10, 10, 0.6);
+  background-color: rgba(10, 10, 10, 0.4);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   border-top: 1px solid rgba(20, 184, 166, 0.2);
   box-shadow: 
     inset 0 20px 40px -20px rgba(20, 184, 166, 0.05),
     0 -4px 20px rgba(20, 184, 166, 0.03);
-  overflow: hidden;
+  display: flex;
+  align-items: center;
+  z-index: 10;
 }
 
 /* ── Particle Canvas ── */
@@ -21,7 +31,7 @@
   left: 0;
   width: 100%;
   height: 100%;
-  z-index: 1;
+  z-index: 0;
   pointer-events: none;
   will-change: transform;
 }
@@ -79,7 +89,7 @@
   font-family: 'JetBrains Mono', 'Fira Code', monospace;
   font-size: 0.65rem;
   font-weight: 400;
-  color: #14b8a6;
+  color: rgba(255, 255, 255, 0.6);
   letter-spacing: 0.12em;
   text-transform: uppercase;
 }
@@ -92,7 +102,7 @@
   font-family: 'JetBrains Mono', 'Fira Code', monospace;
   font-size: 0.75rem;
   font-weight: 400;
-  color: #14b8a6;
+  color: rgba(255, 255, 255, 0.9);
   letter-spacing: 0.15em;
   text-transform: uppercase;
   cursor: pointer;
@@ -103,7 +113,7 @@
 }
 
 .footer-back-to-top:hover {
-  color: #5eead4;
+  color: #ffffff;
   transform: translateY(-2px);
 }
 
@@ -118,7 +128,7 @@
 
 /* ── Responsive ── */
 @media (max-width: 768px) {
-  .footer-root {
+  .footer-glass {
     padding: 3rem 2rem 2rem 2rem;
   }
 }
