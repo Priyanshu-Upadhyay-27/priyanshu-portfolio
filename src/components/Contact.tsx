@@ -52,7 +52,7 @@ const Contact = () => {
       const data = new URLSearchParams(formData as any).toString();
 
       // 4. The Network Request to Netlify Forms
-      const response = await fetch('/contact.html', {
+      const response = await fetch('/', {
         method: 'POST',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
         body: data,
@@ -301,6 +301,8 @@ const Contact = () => {
           <form
             name="contact"
             onSubmit={handleSubmit}
+            data-netlify="true"
+            netlify-honeypot="bot-field"
             className="w-full flex flex-col gap-8 cyberpunk-form-container p-4 lg:p-10 relative z-20"
           >
             <input type="hidden" name="form-name" value="contact" />
