@@ -47,15 +47,25 @@ const Contact = () => {
     setIsSuccess(false);
 
     try {
-      const form = e.currentTarget;
-      const formData = new FormData(form);
-      const data = new URLSearchParams(formData as any).toString();
+      const encode = (data: Record<string, string>) => {
+        return Object.keys(data)
+          .map((key) => encodeURIComponent(key) + '=' + encodeURIComponent(data[key]))
+          .join('&');
+      };
+
+      const payload = encode({
+        'form-name': 'contact',
+        'bot-field': honey,
+        name: name,
+        email: email,
+        message: message,
+      });
 
       // 4. The Network Request to Netlify Forms
       const response = await fetch('/', {
         method: 'POST',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: data,
+        body: payload,
       });
 
       if (response.ok) {
