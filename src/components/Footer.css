@@ -1,89 +1,87 @@
-/* ── Footer: Premium Dark Cinema ── */
+/* ── Footer: Glassmorphism & Constellation ── */
 
 .footer-root {
   position: relative;
   width: 100%;
-  padding: 0 4rem;
-  min-height: 25vh;
-  display: flex;
-  align-items: center;
-  background-color: #050505;
-  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  padding: 4rem 4rem 3rem 4rem;
+  background-color: rgba(10, 10, 10, 0.6);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-top: 1px solid rgba(20, 184, 166, 0.2);
+  box-shadow: 
+    inset 0 20px 40px -20px rgba(20, 184, 166, 0.05),
+    0 -4px 20px rgba(20, 184, 166, 0.03);
   overflow: hidden;
 }
 
-/* ── SVG Honeycomb Pattern ── */
-.footer-root::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='49' viewBox='0 0 28 49'%3E%3Cg fill-rule='evenodd'%3E%3Cg id='hexagons' fill='none' stroke='%23ffffff' stroke-opacity='0.05' stroke-width='1'%3E%3Cpath d='M13.99 9.25l13 7.5v15l-13 7.5L1 31.75v-15l12.99-7.5zM3 17.9v12.7l10.99 6.34 11-6.35V17.9l-11-6.34L3 17.9zM0 15l12.98-7.5V0h-2v6.35L0 12.69v2.3zm0 18.5L12.98 41v8h-2v-6.85L0 35.81v-2.3zM15 0v7.5L27.99 15H28v-2.31h-.01L17 6.35V0h-2zm0 49v-8l12.99-7.5H28v2.31h-.01L17 42.15V49h-2z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
-  background-size: 40px auto;
-  background-repeat: repeat;
-  mask-image: linear-gradient(to bottom, transparent 0%, black 20%, black 100%);
-  -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 20%, black 100%);
-  pointer-events: none;
-  z-index: 0;
-}
-
-/* ── CSS/GSAP Animated Pulse ── */
-.footer-pulse {
+/* ── Particle Canvas ── */
+.footer-particles {
   position: absolute;
   top: 0;
-  left: -100%;
+  left: 0;
   width: 100%;
   height: 100%;
-  background: radial-gradient(ellipse at center, rgba(0, 255, 255, 0.45) 0%, rgba(204, 255, 0, 0.15) 30%, transparent 60%);
-  mix-blend-mode: color-dodge;
-  mask-image: linear-gradient(to bottom, transparent 0%, black 20%, black 100%);
-  -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 20%, black 100%);
+  z-index: 1;
   pointer-events: none;
-  z-index: 0;
+  will-change: transform;
 }
 
 .footer-content-row {
   width: 100%;
 }
 
-/* ── Typography ── */
-.footer-name {
+/* ── Typography & Colors ── */
+.footer-copyright {
   font-family: 'Playfair Display', Georgia, serif;
   font-weight: 500;
-  color: rgba(244, 244, 245, 0.9);
+  color: #666666;
+  letter-spacing: -0.01em;
+}
+
+.footer-roles {
+  font-family: 'JetBrains Mono', 'Fira Code', monospace;
+  font-size: 0.65rem;
+  font-weight: 400;
+  color: #aaaaaa;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.footer-tagline {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-weight: 400;
+  font-style: italic;
+  font-size: 1.1rem;
+  color: #ffffff;
   letter-spacing: -0.01em;
 }
 
 .footer-techstack {
   font-family: 'JetBrains Mono', 'Fira Code', monospace;
+  font-size: 0.6rem;
   font-weight: 300;
-  color: rgba(244, 244, 245, 0.3);
+  color: #888888;
   letter-spacing: 0.15em;
+  text-transform: uppercase;
 }
 
 /* ── Status Indicators ── */
 .footer-status-item {
   cursor: default;
+  transition: filter 0.3s ease;
 }
 
-.footer-status-dot {
-  border-radius: 50%;
-  background: rgba(204, 255, 0, 0.5);
-  flex-shrink: 0;
-  animation: statusPulse 2.5s ease-in-out infinite;
-  transition: all 0.3s ease;
+.footer-status-item:hover {
+  filter: drop-shadow(0 0 8px rgba(20, 184, 166, 0.4));
 }
 
 .footer-status-label {
   font-family: 'JetBrains Mono', 'Fira Code', monospace;
+  font-size: 0.65rem;
   font-weight: 400;
-  color: rgba(244, 244, 245, 0.6);
+  color: #14b8a6;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-}
-
-@keyframes statusPulse {
-  0%, 100% { opacity: 0.5; transform: scale(1); }
-  50% { opacity: 1; transform: scale(1.5); }
 }
 
 /* ── Back to Top ── */
@@ -92,19 +90,21 @@
   align-items: center;
   gap: 0.5rem;
   font-family: 'JetBrains Mono', 'Fira Code', monospace;
+  font-size: 0.75rem;
   font-weight: 400;
-  color: rgba(244, 244, 245, 0.4);
+  color: #14b8a6;
   letter-spacing: 0.15em;
   text-transform: uppercase;
   cursor: pointer;
   background: none;
   border: none;
-  transition: color 0.3s ease;
+  transition: all 0.3s ease;
   position: relative;
 }
 
 .footer-back-to-top:hover {
-  color: #ccff00;
+  color: #5eead4;
+  transform: translateY(-2px);
 }
 
 .footer-back-to-top .btt-arrow {
@@ -116,8 +116,9 @@
   transform: translateY(-3px);
 }
 
+/* ── Responsive ── */
 @media (max-width: 768px) {
   .footer-root {
-    padding: 2rem;
+    padding: 3rem 2rem 2rem 2rem;
   }
 }
