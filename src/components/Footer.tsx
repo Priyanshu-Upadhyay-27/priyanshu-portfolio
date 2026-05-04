@@ -4,6 +4,7 @@ import './Footer.css';
 
 const Footer: React.FC = () => {
   const bttRef = useRef<HTMLButtonElement>(null);
+  const pulseRef = useRef<HTMLDivElement>(null);
   const magnetBounds = 80; // px radius for magnetic pull
 
   // ── GSAP Magnetic Effect on Back-to-Top ──
@@ -45,6 +46,20 @@ const Footer: React.FC = () => {
     };
   }, []);
 
+  // ── GSAP Autonomous Pulse Animation ──
+  useEffect(() => {
+    if (!pulseRef.current) return;
+    
+    // Sweeping autonomous pulse
+    gsap.to(pulseRef.current, {
+      xPercent: 200, // Sweeps across the width
+      duration: 10,
+      ease: "sine.inOut",
+      repeat: -1,
+      yoyo: true,
+    });
+  }, []);
+
   // ── GSAP Smooth Scroll to Top ──
   const scrollToTop = () => {
     const scrollProxy = { y: window.scrollY };
@@ -58,52 +73,44 @@ const Footer: React.FC = () => {
 
   return (
     <footer className="footer-root">
-      <div className="footer-grid">
-        {/* ── LEFT COLUMN ── */}
-        <div className="footer-col-left">
-          <h3 className="footer-name">© 2026 Priyanshu Upadhyay</h3>
-          <p className="footer-descriptor">
-            AI Practitioner &bull; ML Developer &bull; GenAI Builder
-          </p>
+      
+      {/* ── Autonomous CSS/GSAP Pulse ── */}
+      <div 
+        ref={pulseRef} 
+        className="footer-pulse"
+      />
+
+      {/* ── Compact Horizontal Layout ── */}
+      <div className="footer-content-row flex flex-col md:flex-row justify-between items-center max-w-7xl mx-auto relative z-10 gap-6 md:gap-0">
+        
+        {/* ── LEFT: Copyright ── */}
+        <div className="footer-col-left flex-1 flex justify-start">
+          <h3 className="footer-name m-0 text-sm md:text-base">© 2026 Priyanshu Upadhyay</h3>
         </div>
 
-        {/* ── CENTER COLUMN ── */}
-        <div className="footer-col-center">
-          <p className="footer-cta">
-            Let's build something intelligent together.
-          </p>
-          <p className="footer-techstack">
-            Built with React &bull; TypeScript &bull; Tailwind &bull; GSAP &bull; Three.js
-          </p>
+        {/* ── CENTER: Tech & Status ── */}
+        <div className="footer-col-center flex-1 flex justify-center items-center gap-4">
+          <span className="footer-techstack text-[0.55rem] md:text-xs">
+            REACT &bull; GSAP &bull; THREE.JS
+          </span>
+          <span className="text-white/20">|</span>
+          <div className="footer-status-item m-0 p-0 flex items-center gap-2">
+            <span className="footer-status-dot w-1.5 h-1.5" />
+            <span className="footer-status-label text-[0.55rem] md:text-xs">Open to Internships</span>
+          </div>
         </div>
 
-        {/* ── RIGHT COLUMN ── */}
-        <div className="footer-col-right">
-          <div className="footer-status-item">
-            <span className="footer-status-dot" />
-            <span className="footer-status-label">Open to Internships</span>
-          </div>
-          <div className="footer-status-item">
-            <span className="footer-status-dot" style={{ animationDelay: '0.8s' }} />
-            <span className="footer-status-label">Open to Freelance</span>
-          </div>
-
+        {/* ── RIGHT: Back to Top ── */}
+        <div className="footer-col-right flex-1 flex justify-end">
           <button
             ref={bttRef}
-            className="footer-back-to-top"
+            className="footer-back-to-top m-0 p-0 text-xs"
             onClick={scrollToTop}
             aria-label="Scroll back to top"
           >
             Back to Top <span className="btt-arrow">↑</span>
           </button>
         </div>
-      </div>
-
-      {/* ── Bottom Signature ── */}
-      <div className="footer-divider">
-        <span className="footer-bottom-text">
-          Designed &amp; Engineered by Priyanshu
-        </span>
       </div>
     </footer>
   );

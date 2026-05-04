@@ -3,106 +3,69 @@
 .footer-root {
   position: relative;
   width: 100%;
-  padding: 8rem 2rem 4rem;
+  padding: 0 4rem;
+  min-height: 25vh;
+  display: flex;
+  align-items: center;
   background-color: #050505;
   border-top: 1px solid rgba(255, 255, 255, 0.06);
   overflow: hidden;
 }
 
-/* Subtle noise texture overlay */
+/* ── SVG Honeycomb Pattern ── */
 .footer-root::before {
   content: '';
   position: absolute;
   inset: 0;
-  background: radial-gradient(ellipse at 50% 0%, rgba(204, 255, 0, 0.015) 0%, transparent 60%);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='49' viewBox='0 0 28 49'%3E%3Cg fill-rule='evenodd'%3E%3Cg id='hexagons' fill='none' stroke='%23ffffff' stroke-opacity='0.05' stroke-width='1'%3E%3Cpath d='M13.99 9.25l13 7.5v15l-13 7.5L1 31.75v-15l12.99-7.5zM3 17.9v12.7l10.99 6.34 11-6.35V17.9l-11-6.34L3 17.9zM0 15l12.98-7.5V0h-2v6.35L0 12.69v2.3zm0 18.5L12.98 41v8h-2v-6.85L0 35.81v-2.3zM15 0v7.5L27.99 15H28v-2.31h-.01L17 6.35V0h-2zm0 49v-8l12.99-7.5H28v2.31h-.01L17 42.15V49h-2z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  background-size: 40px auto;
+  background-repeat: repeat;
+  mask-image: linear-gradient(to bottom, transparent 0%, black 20%, black 100%);
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 20%, black 100%);
   pointer-events: none;
+  z-index: 0;
 }
 
-/* ── Grid Layout ── */
-.footer-grid {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 4rem;
-  max-width: 1280px;
-  margin: 0 auto;
-  position: relative;
-  z-index: 1;
+/* ── CSS/GSAP Animated Pulse ── */
+.footer-pulse {
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(ellipse at center, rgba(0, 255, 255, 0.45) 0%, rgba(204, 255, 0, 0.15) 30%, transparent 60%);
+  mix-blend-mode: color-dodge;
+  mask-image: linear-gradient(to bottom, transparent 0%, black 20%, black 100%);
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 20%, black 100%);
+  pointer-events: none;
+  z-index: 0;
 }
 
-@media (min-width: 768px) {
-  .footer-grid {
-    grid-template-columns: 1fr 1.2fr 1fr;
-    gap: 3rem;
-  }
+.footer-content-row {
+  width: 100%;
 }
 
 /* ── Typography ── */
 .footer-name {
   font-family: 'Playfair Display', Georgia, serif;
-  font-size: 1.35rem;
   font-weight: 500;
   color: rgba(244, 244, 245, 0.9);
-  letter-spacing: -0.01em;
-  line-height: 1.3;
-  margin: 0 0 0.75rem 0;
-}
-
-.footer-descriptor {
-  font-family: 'JetBrains Mono', 'Fira Code', monospace;
-  font-size: 0.65rem;
-  font-weight: 400;
-  color: rgba(244, 244, 245, 0.3);
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  line-height: 1.6;
-}
-
-.footer-cta {
-  font-family: 'Playfair Display', Georgia, serif;
-  font-size: 1.4rem;
-  font-weight: 400;
-  font-style: italic;
-  color: rgba(244, 244, 245, 0.75);
-  line-height: 1.5;
-  margin: 0 0 1.25rem 0;
   letter-spacing: -0.01em;
 }
 
 .footer-techstack {
   font-family: 'JetBrains Mono', 'Fira Code', monospace;
-  font-size: 0.6rem;
   font-weight: 300;
-  color: rgba(244, 244, 245, 0.2);
+  color: rgba(244, 244, 245, 0.3);
   letter-spacing: 0.15em;
-  text-transform: uppercase;
 }
 
 /* ── Status Indicators ── */
 .footer-status-item {
-  display: flex;
-  align-items: center;
-  gap: 0.6rem;
-  padding: 0.5rem 0;
   cursor: default;
-  transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-}
-
-.footer-status-item:hover {
-  transform: translateX(4px);
-}
-
-.footer-status-item:hover .footer-status-label {
-  color: #ccff00;
-}
-
-.footer-status-item:hover .footer-status-dot {
-  background: #ccff00;
-  box-shadow: 0 0 8px rgba(204, 255, 0, 0.6), 0 0 20px rgba(204, 255, 0, 0.3);
 }
 
 .footer-status-dot {
-  width: 6px;
-  height: 6px;
   border-radius: 50%;
   background: rgba(204, 255, 0, 0.5);
   flex-shrink: 0;
@@ -112,12 +75,10 @@
 
 .footer-status-label {
   font-family: 'JetBrains Mono', 'Fira Code', monospace;
-  font-size: 0.7rem;
   font-weight: 400;
-  color: rgba(244, 244, 245, 0.45);
+  color: rgba(244, 244, 245, 0.6);
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  transition: color 0.3s ease;
 }
 
 @keyframes statusPulse {
@@ -130,12 +91,9 @@
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
-  margin-top: 1.5rem;
-  padding: 0.6rem 0;
   font-family: 'JetBrains Mono', 'Fira Code', monospace;
-  font-size: 0.7rem;
   font-weight: 400;
-  color: rgba(244, 244, 245, 0.35);
+  color: rgba(244, 244, 245, 0.4);
   letter-spacing: 0.15em;
   text-transform: uppercase;
   cursor: pointer;
@@ -158,57 +116,8 @@
   transform: translateY(-3px);
 }
 
-/* ── Divider ── */
-.footer-divider {
-  width: 100%;
-  max-width: 1280px;
-  margin: 4rem auto 0;
-  padding-top: 2rem;
-  border-top: 1px solid rgba(255, 255, 255, 0.04);
-  display: flex;
-  justify-content: center;
-  position: relative;
-  z-index: 1;
-}
-
-.footer-bottom-text {
-  font-family: 'JetBrains Mono', 'Fira Code', monospace;
-  font-size: 0.55rem;
-  font-weight: 300;
-  color: rgba(244, 244, 245, 0.12);
-  letter-spacing: 0.25em;
-  text-transform: uppercase;
-}
-
-/* ── Column Alignment ── */
-.footer-col-left {
-  text-align: center;
-}
-
-.footer-col-center {
-  text-align: center;
-}
-
-.footer-col-right {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-@media (min-width: 768px) {
-  .footer-col-left {
-    text-align: left;
-  }
-
-  .footer-col-center {
-    text-align: center;
-  }
-
-  .footer-col-right {
-    align-items: flex-end;
-  }
-
-  .footer-status-item {
-    justify-content: flex-end;
+@media (max-width: 768px) {
+  .footer-root {
+    padding: 2rem;
   }
 }
