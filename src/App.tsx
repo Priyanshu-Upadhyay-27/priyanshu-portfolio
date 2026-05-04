@@ -34,7 +34,9 @@ const Home = () => {
 };
 
 function App() {
-  const [preloaderComplete, setPreloaderComplete] = useState(false);
+  // Check sessionStorage on initial load
+  const hasSeenPreloader = sessionStorage.getItem('hasSeenPreloader') === 'true';
+  const [preloaderComplete, setPreloaderComplete] = useState(hasSeenPreloader);
 
   // Disable browser scroll restoration on reload
   useEffect(() => {
@@ -54,11 +56,16 @@ function App() {
     }
   }, [preloaderComplete]);
 
+  const handlePreloaderComplete = () => {
+    sessionStorage.setItem('hasSeenPreloader', 'true');
+    setPreloaderComplete(true);
+  };
+
   return (
     <Router>
       {/* Preloader manages its own unmount via internal isVisible state.
           We keep it mounted so its fade-out animation can complete. */}
-      <Preloader onComplete={() => setPreloaderComplete(true)} />
+      {!hasSeenPreloader && <Preloader onComplete={handlePreloaderComplete} />}
       <ScrollToTop />
       
       {/* App is rendered from the start (so .logo-p is in the DOM for getBoundingClientRect),
