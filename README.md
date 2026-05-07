@@ -68,6 +68,3 @@ The output will be generated in the `dist` directory.
 
 This project is configured for seamless deployment on Netlify. It includes a `netlify.toml` file for build settings and an invisible form in `index.html` to automatically detect and handle contact form submissions via Netlify Forms.
 
-## License
-
-This project is open-source and available under the MIT License.
