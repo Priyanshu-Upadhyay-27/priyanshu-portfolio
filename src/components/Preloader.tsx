@@ -262,8 +262,8 @@ const Preloader: React.FC<PreloaderProps> = ({ onComplete }) => {
           pointerEvents: 'none',
           color: '#FFFFFF',
           fontSize: '8rem',
-          fontFamily: '"Playfair Display", serif',
-          fontWeight: 500,
+          fontFamily: '"Inter", -apple-system, "SF Pro Display", sans-serif',
+          fontWeight: 700,
           margin: 0,
           lineHeight: 1
         }}

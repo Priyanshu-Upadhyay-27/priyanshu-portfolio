@@ -40,7 +40,7 @@
 }
 
 .marquee-item {
-  font-family: var(--font-sans, 'Inter', sans-serif);
+  font-family: 'Inter', -apple-system, 'SF Pro Display', sans-serif;
   font-weight: 900;
   text-transform: uppercase;
   letter-spacing: 0.2em;

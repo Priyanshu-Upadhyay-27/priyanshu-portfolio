@@ -21,7 +21,7 @@
 }
 
 .neural-terminal {
-    font-family: 'JetBrains Mono', 'Fira Code', monospace;
+    font-family: 'Inter', -apple-system, 'SF Pro Display', sans-serif;
     font-size: 0.75rem;
     color: #6e6e80;
     display: flex;

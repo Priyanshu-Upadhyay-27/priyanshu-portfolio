@@ -106,7 +106,7 @@ const HolographicCard = ({ badge }: { badge: typeof featuredBadges[0] }) => {
           </div>
 
           <div className="mt-auto pointer-events-auto">
-            <span className="text-[#00d4ff] font-mono text-xs tracking-widest uppercase mb-2 block">
+            <span className="text-[#00d4ff] font-sans text-xs tracking-widest uppercase mb-2 block">
               {badge.issuer}
             </span>
             <h3 className="text-soft-white font-sans font-bold text-xl md:text-2xl leading-snug mb-4">
@@ -114,12 +114,12 @@ const HolographicCard = ({ badge }: { badge: typeof featuredBadges[0] }) => {
             </h3>
             
             <div className="flex items-center justify-between w-full mt-6">
-               <p className="text-white/40 font-mono text-sm">{badge.date}</p>
+               <p className="text-white/40 font-sans text-sm">{badge.date}</p>
                <a 
                  href={badge.link}
                  target="_blank"
                  rel="noopener noreferrer"
-                 className="text-white/60 font-mono text-sm uppercase tracking-wider hover:text-[#ccff00] transition-colors duration-300 flex items-center gap-2"
+                 className="text-white/60 font-sans text-sm uppercase tracking-wider hover:text-[#ccff00] transition-colors duration-300 flex items-center gap-2"
                >
                  Verify <ExternalLink size={14} />
                </a>
@@ -178,13 +178,13 @@ const MinorCard = ({ cert, index, isActive, onHover }: { cert: typeof standardCe
         style={{ transform: isActive ? `rotateX(${rotation.x}deg) rotateY(${rotation.y}deg)` : 'rotateX(0deg) rotateY(0deg)' }}
       >
         <div className="holo-layer-content flex-1 flex flex-col pointer-events-none">
-          <span className={`font-mono text-xs tracking-widest uppercase mb-3 block transition-colors duration-500 ${isActive ? 'text-[#00d4ff]' : 'text-white/20'}`}>
+          <span className={`font-sans text-xs tracking-widest uppercase mb-3 block transition-colors duration-500 ${isActive ? 'text-[#00d4ff]' : 'text-white/20'}`}>
             {cert.issuer}
           </span>
           <h3 className={`font-sans font-bold text-xl leading-snug mb-2 transition-colors duration-500 ${isActive ? 'text-white' : 'text-white/40'}`}>
             {cert.title}
           </h3>
-          <span className="text-white/40 font-mono text-sm mb-6 block">
+          <span className="text-white/40 font-sans text-sm mb-6 block">
             {cert.date}
           </span>
         </div>
@@ -194,7 +194,7 @@ const MinorCard = ({ cert, index, isActive, onHover }: { cert: typeof standardCe
             href={cert.link}
             target="_blank"
             rel="noopener noreferrer"
-            className={`font-mono text-sm uppercase tracking-wider transition-colors duration-500 flex items-center gap-2 pt-5 border-t border-white/5 w-full ${isActive ? 'text-[#ccff00]' : 'text-white/20'}`}
+            className={`font-sans text-sm uppercase tracking-wider transition-colors duration-500 flex items-center gap-2 pt-5 border-t border-white/5 w-full ${isActive ? 'text-[#ccff00]' : 'text-white/20'}`}
           >
             Verify Credential <ExternalLink size={14} />
           </a>

@@ -331,7 +331,7 @@ const Contact = () => {
             </div>
 
             <div className="flex flex-col gap-2">
-              <label htmlFor="name" className="text-xs uppercase font-mono tracking-widest text-soft-white/40">Name</label>
+              <label htmlFor="name" className="text-xs uppercase font-sans tracking-widest text-soft-white/40">Name</label>
               <input
                 type="text"
                 id="name"
@@ -344,7 +344,7 @@ const Contact = () => {
             </div>
 
             <div className="flex flex-col gap-2">
-              <label htmlFor="email" className="text-xs uppercase font-mono tracking-widest text-soft-white/40">Email</label>
+              <label htmlFor="email" className="text-xs uppercase font-sans tracking-widest text-soft-white/40">Email</label>
               <input
                 type="email"
                 id="email"
@@ -357,7 +357,7 @@ const Contact = () => {
             </div>
 
             <div className="flex flex-col gap-2">
-              <label htmlFor="message" className="text-xs uppercase font-mono tracking-widest text-soft-white/40">Message</label>
+              <label htmlFor="message" className="text-xs uppercase font-sans tracking-widest text-soft-white/40">Message</label>
               <textarea
                 id="message"
                 name="message"
@@ -378,12 +378,12 @@ const Contact = () => {
             </button>
 
             {isSuccess && (
-              <p className="text-teal-500 font-mono text-sm tracking-widest uppercase mt-4 animate-pulse">
+              <p className="text-teal-500 font-sans text-sm tracking-widest uppercase mt-4 animate-pulse">
                 [✓] CONNECTION ESTABLISHED. Thank you for reaching out, I will be in touch shortly.
               </p>
             )}
             {isError && (
-              <p className="text-red-500 font-mono text-sm tracking-widest uppercase mt-4 animate-pulse">
+              <p className="text-red-500 font-sans text-sm tracking-widest uppercase mt-4 animate-pulse">
                 // Transmission Failed. Check Network Context.
               </p>
             )}

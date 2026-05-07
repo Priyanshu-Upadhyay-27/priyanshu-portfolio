@@ -20,8 +20,8 @@ export default {
         'muted-green': '#5A7D7C',
       },
       fontFamily: {
-        sans: ['Inter', 'sans-serif'],
-        display: ['Outfit', 'sans-serif'],
+        sans: ['Inter', '-apple-system', 'SF Pro Display', 'sans-serif'],
+        display: ['Inter', '-apple-system', 'SF Pro Display', 'sans-serif'],
       },
     },
   },

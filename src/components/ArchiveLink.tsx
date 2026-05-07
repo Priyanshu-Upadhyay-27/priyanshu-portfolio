@@ -93,13 +93,13 @@ const ArchiveLink: React.FC = () => {
           onMouseLeave={() => setIsHovered(false)}
           data-cursor-hover="true"
         >
-          <span className="archive-btn-bracket text-white/20 font-mono text-[clamp(2rem,5vw,5rem)] font-light transition-all duration-300">
+          <span className="archive-btn-bracket text-white/20 font-sans text-[clamp(2rem,5vw,5rem)] font-light transition-all duration-300">
             [
           </span>
-          <span className="archive-btn-text text-white font-mono text-[clamp(1.2rem,3vw,3.5rem)] tracking-[0.2em] font-bold transition-all duration-300">
+          <span className="archive-btn-text text-white font-sans text-[clamp(1.2rem,3vw,3.5rem)] tracking-[0.2em] font-bold transition-all duration-300">
             ACCESS_FULL_ARCHIVE
           </span>
-          <span className="archive-btn-bracket text-white/20 font-mono text-[clamp(2rem,5vw,5rem)] font-light transition-all duration-300">
+          <span className="archive-btn-bracket text-white/20 font-sans text-[clamp(2rem,5vw,5rem)] font-light transition-all duration-300">
             ]
           </span>
         </a>

@@ -116,7 +116,7 @@ const FlipCard = ({ cluster, index }: { cluster: typeof skillClusters[0], index:
             {cluster.skills.map((skill, i) => (
               <li
                 key={i}
-                className="text-white/80 font-mono text-sm md:text-base leading-relaxed flex items-center gap-3 hover:text-white hover:translate-x-1 transition-all duration-300 cursor-default"
+                className="text-white/80 font-sans text-sm md:text-base leading-relaxed flex items-center gap-3 hover:text-white hover:translate-x-1 transition-all duration-300 cursor-default"
               >
                 <span className="text-[#ccff00] text-lg">▹</span>
                 {skill}

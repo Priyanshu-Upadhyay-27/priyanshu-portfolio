@@ -31,7 +31,7 @@
 }
 
 .about-label {
-  font-family: 'Courier New', monospace;
+  font-family: 'Inter', -apple-system, 'SF Pro Display', sans-serif;
   font-size: 0.9rem;
   color: #00f5d4; /* Neon Teal */
   letter-spacing: 0.1em;
@@ -39,8 +39,8 @@
 }
 
 .about-header {
-  font-family: 'Montserrat Black', sans-serif;
-  font-weight: 900;
+  font-family: 'Inter', -apple-system, 'SF Pro Display', sans-serif;
+  font-weight: 800;
   font-size: clamp(3rem, 6vw, 8rem);
   line-height: 1.05;
   color: #ffffff;
@@ -54,8 +54,8 @@
 }
 
 .about-typewriter {
-  font-family: 'Inter', sans-serif;
-  font-weight: 800;
+  font-family: 'Inter', -apple-system, 'SF Pro Display', sans-serif;
+  font-weight: 700;
   font-size: clamp(1.5rem, 3vw, 3.5rem);
   color: #ffffff;
   margin: 0;
@@ -73,7 +73,7 @@
 
 .about-bio-editorial {
   max-width: 580px;
-  font-family: 'Inter', sans-serif;
+  font-family: 'Inter', -apple-system, 'SF Pro Display', sans-serif;
   font-size: clamp(1rem, 1.2vw, 1.25rem);
   line-height: 1.8;
   color: rgba(255, 255, 255, 0.7);

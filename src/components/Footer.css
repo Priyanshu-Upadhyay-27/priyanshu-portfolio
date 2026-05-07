@@ -42,14 +42,14 @@
 
 /* ── Typography & Colors ── */
 .footer-copyright {
-  font-family: 'Playfair Display', Georgia, serif;
+  font-family: 'Inter', -apple-system, 'SF Pro Display', sans-serif;
   font-weight: 500;
   color: #666666;
   letter-spacing: -0.01em;
 }
 
 .footer-roles {
-  font-family: 'JetBrains Mono', 'Fira Code', monospace;
+  font-family: 'Inter', -apple-system, 'SF Pro Display', sans-serif;
   font-size: 0.65rem;
   font-weight: 400;
   color: #aaaaaa;
@@ -58,7 +58,7 @@
 }
 
 .footer-tagline {
-  font-family: 'Playfair Display', Georgia, serif;
+  font-family: 'Inter', -apple-system, 'SF Pro Display', sans-serif;
   font-weight: 400;
   font-style: italic;
   font-size: 1.1rem;
@@ -67,7 +67,7 @@
 }
 
 .footer-techstack {
-  font-family: 'JetBrains Mono', 'Fira Code', monospace;
+  font-family: 'Inter', -apple-system, 'SF Pro Display', sans-serif;
   font-size: 0.6rem;
   font-weight: 300;
   color: #888888;
@@ -86,7 +86,7 @@
 }
 
 .footer-status-label {
-  font-family: 'JetBrains Mono', 'Fira Code', monospace;
+  font-family: 'Inter', -apple-system, 'SF Pro Display', sans-serif;
   font-size: 0.65rem;
   font-weight: 400;
   color: rgba(255, 255, 255, 0.6);
@@ -99,7 +99,7 @@
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
-  font-family: 'JetBrains Mono', 'Fira Code', monospace;
+  font-family: 'Inter', -apple-system, 'SF Pro Display', sans-serif;
   font-size: 0.75rem;
   font-weight: 400;
   color: rgba(255, 255, 255, 0.9);

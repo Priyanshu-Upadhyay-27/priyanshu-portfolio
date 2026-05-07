@@ -150,7 +150,7 @@ const ProjectFeature = ({ project }: { project: typeof projects[0] }) => {
 
         <div className="flex flex-wrap gap-2 mb-12">
           {project.stack.map((tech, i) => (
-            <span key={i} className="px-3 py-1 text-xs font-mono text-soft-white/50 bg-white/5 border border-white/10 uppercase tracking-widest">
+            <span key={i} className="px-3 py-1 text-xs font-sans text-soft-white/50 bg-white/5 border border-white/10 uppercase tracking-widest">
               {tech}
             </span>
           ))}
@@ -222,7 +222,7 @@ const ProjectFeature = ({ project }: { project: typeof projects[0] }) => {
               <ChevronRight size={36} />
             </button>
 
-            <div className="absolute bottom-6 left-1/2 -translate-x-1/2 text-white/40 text-sm font-mono tracking-widest">
+            <div className="absolute bottom-6 left-1/2 -translate-x-1/2 text-white/40 text-sm font-sans tracking-widest">
               {lightboxIndex + 1} / {images.length}
             </div>
           </motion.div>
