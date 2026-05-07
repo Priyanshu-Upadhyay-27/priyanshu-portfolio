@@ -38,28 +38,32 @@ const ArchiveLink: React.FC = () => {
 
   // Handle interaction state
   useEffect(() => {
+    // Kill any in-flight image tweens to prevent stacking conflicts on rapid hover
+    gsap.killTweensOf('.archive-stream-img');
+
     if (isHovered) {
       if (tweenRef.current) {
-        gsap.to(tweenRef.current, { timeScale: 0.2, duration: 0.8, ease: 'power2.out' });
+        gsap.to(tweenRef.current, { timeScale: 0.2, duration: 0.8, ease: 'power2.out', overwrite: 'auto' });
       }
-      // Bring thumbnails into crystal clear focus (stream ignores hover and keeps moving)
+      // Bring thumbnails into crystal clear focus — no stagger to prevent partial states
       gsap.to('.archive-stream-img', { 
         opacity: 1, 
         filter: 'blur(0px)', 
-        duration: 0.6, 
-        stagger: 0.05,
-        ease: 'power3.out' 
+        duration: 0.5, 
+        ease: 'power3.out',
+        overwrite: true
       });
     } else {
       if (tweenRef.current) {
-        gsap.to(tweenRef.current, { timeScale: 1, duration: 0.8, ease: 'power2.out' });
+        gsap.to(tweenRef.current, { timeScale: 1, duration: 0.8, ease: 'power2.out', overwrite: 'auto' });
       }
       // Return thumbnails to heavy blur and low opacity
       gsap.to('.archive-stream-img', { 
         opacity: 0.3, 
         filter: 'blur(13.5px)', 
-        duration: 0.6, 
-        ease: 'power2.in' 
+        duration: 0.5, 
+        ease: 'power2.in',
+        overwrite: true
       });
     }
   }, [isHovered]);
