@@ -88,7 +88,7 @@
   height: 42px;
   overflow: hidden;
   cursor: pointer;
-  background: #ccff00;
+  background: #00E0C7;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -108,7 +108,7 @@
 }
 
 .resume-btn-front span {
-  color: #080808;
+  color: #ffffff;
   font-family: 'Inter', -apple-system, 'SF Pro Display', sans-serif;
   font-size: 0.7rem;
   font-weight: 800;
@@ -119,7 +119,7 @@
   opacity: 0;
   background: #080808;
   gap: 1.5rem;
-  border: 1px solid #ccff00;
+  border: 1px solid #009394;
   pointer-events: none;
 }
 
@@ -132,7 +132,7 @@
 }
 
 .resume-icon-link {
-  color: #ccff00;
+  color: #00E0C7;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -151,7 +151,7 @@
 .resume-icon-divider {
   width: 1px;
   height: 50%;
-  background: rgba(204, 255, 0, 0.3);
+  background: rgba(0, 224, 199, 0.3);
 }
 
 /* ── Ticker & Nav Dropdown ── */
@@ -160,8 +160,8 @@
 }
 
 .ticker-btn {
-  background: #ccff00;
-  color: #080808;
+  background: #00E0C7;
+  color: #ffffff;
   border: none;
   font-family: 'Inter', -apple-system, 'SF Pro Display', sans-serif;
   font-size: 0.75rem;
@@ -177,7 +177,7 @@
 }
 
 .terminal-cursor {
-  color: #080808;
+  color: #ffffff;
   font-weight: 900;
   animation: blink 1s step-start infinite;
 }
@@ -189,7 +189,7 @@
   width: 210px;
   background: rgba(0, 0, 0, 0.7);
   backdrop-filter: blur(12px);
-  border: 1px solid #ccff00;
+  border: 1px solid #009394;
   opacity: 0;
   transform: translateY(-10px);
   pointer-events: none;
@@ -221,12 +221,12 @@
 }
 
 .nav-dropdown-list li a:hover {
-  background: rgba(204, 255, 0, 0.15);
-  color: #ccff00;
+  background: rgba(0, 224, 199, 0.15);
+  color: #00E0C7;
 }
 
 .nav-index {
-  color: #ccff00;
+  color: #00E0C7;
   font-family: 'Inter', -apple-system, 'SF Pro Display', sans-serif;
   font-size: 0.65rem;
 }

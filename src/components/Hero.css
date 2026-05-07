@@ -70,7 +70,7 @@
   line-height: 0.95;
   text-transform: uppercase;
   letter-spacing: -0.02em;
-  color: #ccff00;
+  color: #00E0C7;
   opacity: 0.04;
   user-select: none;
   will-change: transform;
@@ -168,29 +168,29 @@
 .hero-yolo__corner--tl {
   top: 0;
   left: 0;
-  border-top: 2px solid #ccff00;
-  border-left: 2px solid #ccff00;
+  border-top: 2px solid #00E0C7;
+  border-left: 2px solid #00E0C7;
 }
 
 .hero-yolo__corner--tr {
   top: 0;
   right: 0;
-  border-top: 2px solid #ccff00;
-  border-right: 2px solid #ccff00;
+  border-top: 2px solid #00E0C7;
+  border-right: 2px solid #00E0C7;
 }
 
 .hero-yolo__corner--bl {
   bottom: 0;
   left: 0;
-  border-bottom: 2px solid #ccff00;
-  border-left: 2px solid #ccff00;
+  border-bottom: 2px solid #00E0C7;
+  border-left: 2px solid #00E0C7;
 }
 
 .hero-yolo__corner--br {
   bottom: 0;
   right: 0;
-  border-bottom: 2px solid #ccff00;
-  border-right: 2px solid #ccff00;
+  border-bottom: 2px solid #00E0C7;
+  border-right: 2px solid #00E0C7;
 }
 
 .hero-yolo__body {
@@ -217,7 +217,7 @@
 }
 
 .hero-yolo__val--neon {
-  color: #ccff00;
+  color: #00E0C7;
 }
 
 /* ════════════════════════════════════════════
@@ -245,11 +245,11 @@
 
 .hero-signature path {
   fill: transparent;
-  stroke: #ccff00;
+  stroke: #00E0C7;
   stroke-width: 4px;
   stroke-linecap: round;
   stroke-linejoin: round;
-  filter: drop-shadow(0 0 6px rgba(204, 255, 0, 0.4));
+  filter: drop-shadow(0 0 6px rgba(0, 224, 199, 0.4));
 }
 
 /* ── Scroll Cue ── */

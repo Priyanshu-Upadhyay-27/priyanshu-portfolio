@@ -76,7 +76,7 @@ const FlipCard = ({ cluster, index }: { cluster: typeof skillClusters[0], index:
             className="pointer-events-none absolute inset-0 z-0 transition-opacity duration-300"
             style={{
               opacity: isHovered ? 1 : 0,
-              background: `radial-gradient(400px circle at var(--mouse-x) var(--mouse-y), rgba(20, 184, 166, 0.15), transparent 80%)`,
+              background: `radial-gradient(400px circle at var(--mouse-x) var(--mouse-y), rgba(0, 147, 148, 0.15), transparent 80%)`,
             }}
           />
 
@@ -105,7 +105,7 @@ const FlipCard = ({ cluster, index }: { cluster: typeof skillClusters[0], index:
             className="pointer-events-none absolute inset-0 z-0 transition-opacity duration-300"
             style={{
               opacity: isHovered ? 1 : 0,
-              background: `radial-gradient(400px circle at calc(100% - var(--mouse-x)) var(--mouse-y), rgba(20, 184, 166, 0.15), transparent 80%)`,
+              background: `radial-gradient(400px circle at calc(100% - var(--mouse-x)) var(--mouse-y), rgba(0, 147, 148, 0.15), transparent 80%)`,
             }}
           />
 
@@ -118,7 +118,7 @@ const FlipCard = ({ cluster, index }: { cluster: typeof skillClusters[0], index:
                 key={i}
                 className="text-white/80 font-sans text-sm md:text-base leading-relaxed flex items-center gap-3 hover:text-white hover:translate-x-1 transition-all duration-300 cursor-default"
               >
-                <span className="text-[#ccff00] text-lg">▹</span>
+                <span className="text-[#00E0C7] text-lg">▹</span>
                 {skill}
               </li>
             ))}

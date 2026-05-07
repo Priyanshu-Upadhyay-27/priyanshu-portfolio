@@ -158,7 +158,7 @@ const Contact = () => {
       ctx.fillRect(0, 0, width, height);
 
       // Draw and update dots
-      ctx.fillStyle = 'rgba(20, 184, 166, 0.4)'; // Faint teal dots
+      ctx.fillStyle = 'rgba(0, 147, 148, 0.4)'; // Faint teal dots
 
       for (let i = 0; i < dots.length; i++) {
         const dot = dots[i];
@@ -184,7 +184,7 @@ const Contact = () => {
           ctx.moveTo(dot.x, dot.y);
           ctx.lineTo(mouse.x, mouse.y);
           const opacity = 1 - (distToMouse / 150);
-          ctx.strokeStyle = `rgba(20, 184, 166, ${opacity * 0.8})`;
+          ctx.strokeStyle = `rgba(0, 147, 148, ${opacity * 0.8})`;
           ctx.lineWidth = 1;
           ctx.stroke();
         }
@@ -201,7 +201,7 @@ const Contact = () => {
             ctx.moveTo(dot.x, dot.y);
             ctx.lineTo(otherDot.x, otherDot.y);
             const opacity = 1 - (distToDot / 80);
-            ctx.strokeStyle = `rgba(20, 184, 166, ${opacity * 0.5})`;
+            ctx.strokeStyle = `rgba(0, 147, 148, ${opacity * 0.5})`;
             ctx.lineWidth = 0.5;
             ctx.stroke();
           }
@@ -255,47 +255,47 @@ const Contact = () => {
           <div className="flex flex-col gap-6 w-full max-w-md mt-12">
             {/* Email Link */}
             <a href="mailto:priyanshuupadhyay2005@gmail.com" className="flex items-center gap-4 group w-fit">
-              <div className="w-12 h-12 flex items-center justify-center border border-white/10 group-hover:border-teal-500 group-hover:bg-teal-500/10 transition-all text-zinc-300 group-hover:text-teal-400">
+              <div className="w-12 h-12 flex items-center justify-center border border-white/10 group-hover:border-[#009394] group-hover:bg-[#009394]/10 transition-all text-zinc-300 group-hover:text-[#00E0C7]">
                 <Mail size={24} />
               </div>
-              <span className="text-zinc-300 group-hover:text-teal-400 font-sans text-base md:text-lg transition-all tracking-wide">
+              <span className="text-zinc-300 group-hover:text-[#00E0C7] font-sans text-base md:text-lg transition-all tracking-wide">
                 priyanshuupadhyay2005@gmail.com
               </span>
             </a>
 
             {/* Github Link */}
             <a href="https://github.com/Priyanshu-Upadhyay-27" target="_blank" rel="noreferrer" className="flex items-center gap-4 group w-fit">
-              <div className="w-12 h-12 flex items-center justify-center border border-white/10 group-hover:border-teal-500 group-hover:bg-teal-500/10 transition-all text-zinc-300 group-hover:text-teal-400">
+              <div className="w-12 h-12 flex items-center justify-center border border-white/10 group-hover:border-[#009394] group-hover:bg-[#009394]/10 transition-all text-zinc-300 group-hover:text-[#00E0C7]">
                 <Github size={24} />
               </div>
-              <span className="text-zinc-300 group-hover:text-teal-400 font-sans text-base md:text-lg transition-all tracking-wide">
+              <span className="text-zinc-300 group-hover:text-[#00E0C7] font-sans text-base md:text-lg transition-all tracking-wide">
                 Github
               </span>
             </a>
 
             {/* LinkedIn Link */}
             <a href="https://linkedin.com/in/priyanshu-upadhyay-cse" target="_blank" rel="noreferrer" className="flex items-center gap-4 group w-fit">
-              <div className="w-12 h-12 flex items-center justify-center border border-white/10 group-hover:border-teal-500 group-hover:bg-teal-500/10 transition-all text-zinc-300 group-hover:text-teal-400">
+              <div className="w-12 h-12 flex items-center justify-center border border-white/10 group-hover:border-[#009394] group-hover:bg-[#009394]/10 transition-all text-zinc-300 group-hover:text-[#00E0C7]">
                 <Linkedin size={24} />
               </div>
-              <span className="text-zinc-300 group-hover:text-teal-400 font-sans text-base md:text-lg transition-all tracking-wide">
+              <span className="text-zinc-300 group-hover:text-[#00E0C7] font-sans text-base md:text-lg transition-all tracking-wide">
                 LinkedIn
               </span>
             </a>
 
             {/* Location */}
             <div className="flex items-center gap-4 w-fit group">
-              <div className="w-12 h-12 flex items-center justify-center border border-white/10 text-zinc-300 group-hover:border-teal-500 group-hover:bg-teal-500/10 group-hover:text-teal-400 transition-all">
+              <div className="w-12 h-12 flex items-center justify-center border border-white/10 text-zinc-300 group-hover:border-[#009394] group-hover:bg-[#009394]/10 group-hover:text-[#00E0C7] transition-all">
                 <MapPin size={24} />
               </div>
-              <span className="text-zinc-300 font-sans text-base md:text-lg group-hover:text-teal-400 transition-all tracking-wide">
+              <span className="text-zinc-300 font-sans text-base md:text-lg group-hover:text-[#00E0C7] transition-all tracking-wide">
                 Delhi NCR, India
               </span>
             </div>
           </div>
 
           <div className="flex items-center gap-6 mt-16 pt-4 border-t border-white/10 w-full max-w-sm">
-            <a href="/resume.pdf" target="_blank" rel="noopener noreferrer" className="text-sm font-medium text-zinc-300 hover:text-teal-500 transition-colors flex items-center gap-2">
+            <a href="/resume.pdf" target="_blank" rel="noopener noreferrer" className="text-sm font-medium text-zinc-300 hover:text-[#009394] transition-colors flex items-center gap-2">
               VIEW RESUME ↗
             </a>
             <a href="/resume.pdf" download className="text-sm font-medium text-zinc-500 hover:text-zinc-300 transition-colors flex items-center gap-2">
@@ -338,7 +338,7 @@ const Contact = () => {
                 name="name"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                className="glass-input text-soft-white focus:outline-none focus:border-teal-500 focus:ring-1 focus:ring-teal-500/50 transition-all duration-300"
+                className="glass-input text-soft-white focus:outline-none focus:border-[#009394] focus:ring-1 focus:ring-[#009394]/50 transition-all duration-300"
                 required
               />
             </div>
@@ -351,7 +351,7 @@ const Contact = () => {
                 name="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="glass-input text-soft-white focus:outline-none focus:border-teal-500 focus:ring-1 focus:ring-teal-500/50 transition-all duration-300"
+                className="glass-input text-soft-white focus:outline-none focus:border-[#009394] focus:ring-1 focus:ring-[#009394]/50 transition-all duration-300"
                 required
               />
             </div>
@@ -364,7 +364,7 @@ const Contact = () => {
                 rows={4}
                 value={message}
                 onChange={(e) => setMessage(e.target.value)}
-                className="glass-input text-soft-white resize-none mt-2 focus:outline-none focus:border-teal-500 focus:ring-1 focus:ring-teal-500/50 transition-all duration-300"
+                className="glass-input text-soft-white resize-none mt-2 focus:outline-none focus:border-[#009394] focus:ring-1 focus:ring-[#009394]/50 transition-all duration-300"
                 required
               />
             </div>
@@ -378,7 +378,7 @@ const Contact = () => {
             </button>
 
             {isSuccess && (
-              <p className="text-teal-500 font-sans text-sm tracking-widest uppercase mt-4 animate-pulse">
+              <p className="text-[#009394] font-sans text-sm tracking-widest uppercase mt-4 animate-pulse">
                 [✓] CONNECTION ESTABLISHED. Thank you for reaching out, I will be in touch shortly.
               </p>
             )}

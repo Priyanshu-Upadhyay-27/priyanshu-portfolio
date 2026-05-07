@@ -24,7 +24,7 @@ const NeuralHUD: React.FC = () => {
         // Physics & Layout constraints
         const LAYERS = [3, 5, 5, 4, 2];
         const COL_FWD = '#4f98a3';
-        const COL_BWD = '#ccff00'; // Changed the backward pass to your neon yellow!
+        const COL_BWD = '#00E0C7';
         const LAYER_HOLD = 55;
         const speedMult = 0.75; // Slower, ambient speed locked in
 
@@ -149,7 +149,7 @@ const NeuralHUD: React.FC = () => {
                     const py = lerp(e.t.y, e.f.y, e.bprog);
                     const g = ctx.createRadialGradient(px, py, 0, px, py, 8);
 
-                    g.addColorStop(0, 'rgba(204, 255, 0, 0.35)'); g.addColorStop(1, 'rgba(204, 255, 0, 0)');
+                    g.addColorStop(0, 'rgba(0, 224, 199, 0.35)'); g.addColorStop(1, 'rgba(0, 224, 199, 0)');
                     ctx.fillStyle = g; ctx.beginPath(); ctx.arc(px, py, 8, 0, PI2); ctx.fill();
                     ctx.beginPath(); ctx.arc(px, py, 3.2, 0, PI2); ctx.fillStyle = COL_BWD; ctx.fill();
                     if (e.bprog >= 1 && e.f.bwd < 0.3) e.f.bwd = 1.0;
@@ -163,14 +163,14 @@ const NeuralHUD: React.FC = () => {
 
                 if (gv > 0.05) {
                     const gl = ctx.createRadialGradient(n.x, n.y, 0, n.x, n.y, 22);
-                    gl.addColorStop(0, isBwd ? `rgba(204, 255, 0, ${gv * 0.3})` : `rgba(79,152,163, ${gv * 0.45})`);
+                    gl.addColorStop(0, isBwd ? `rgba(0, 224, 199, ${gv * 0.3})` : `rgba(79,152,163, ${gv * 0.45})`);
                     gl.addColorStop(1, 'rgba(0,0,0,0)');
                     ctx.fillStyle = gl; ctx.beginPath(); ctx.arc(n.x, n.y, 22, 0, PI2); ctx.fill();
                 }
 
                 ctx.beginPath(); ctx.arc(n.x, n.y, 7, 0, PI2);
                 ctx.fillStyle = gv > 0.05
-                    ? (isBwd ? `rgba(204, 255, 0, ${0.35 + n.bwd * 0.65})` : `rgba(79,152,163,${0.35 + n.fwd * 0.65})`)
+                    ? (isBwd ? `rgba(0, 224, 199, ${0.35 + n.bwd * 0.65})` : `rgba(79,152,163,${0.35 + n.fwd * 0.65})`)
                     : 'rgba(79,152,163,0.18)';
                 ctx.fill();
                 ctx.strokeStyle = gv > 0.05 ? color : 'rgba(79,152,163,0.3)';

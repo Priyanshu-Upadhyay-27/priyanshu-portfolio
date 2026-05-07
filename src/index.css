@@ -21,11 +21,11 @@
   background: #0a0a0a;
 }
 ::-webkit-scrollbar-thumb {
-  background: #5A7D7C;
+  background: #006270;
   border-radius: 4px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #008080;
+  background: #009394;
 }
 
 @layer utilities {

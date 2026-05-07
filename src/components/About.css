@@ -33,7 +33,7 @@
 .about-label {
   font-family: 'Inter', -apple-system, 'SF Pro Display', sans-serif;
   font-size: 0.9rem;
-  color: #00f5d4; /* Neon Teal */
+  color: #00E0C7; /* Neon Teal */
   letter-spacing: 0.1em;
   font-weight: 700;
 }
@@ -49,7 +49,7 @@
 }
 
 .about-name-accent {
-  border-bottom: 6px solid #00f5d4; /* Neon Teal Line */
+  border-bottom: 6px solid #00E0C7; /* Neon Teal Line */
   display: inline-block;
 }
 
@@ -62,11 +62,11 @@
 }
 
 .accent-teal {
-  color: #00f5d4;
+  color: #00E0C7;
 }
 
 .typewriter-cursor {
-  color: #00f5d4;
+  color: #00E0C7;
   font-weight: 900;
   animation: blink-teal 1s step-start infinite;
 }
@@ -111,7 +111,7 @@
   width: 200%;
   height: 200%;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(204, 255, 0, 0.15) 0%, rgba(0, 245, 212, 0.05) 35%, transparent 60%);
+  background: radial-gradient(circle, rgba(0, 224, 199, 0.15) 0%, rgba(0, 147, 148, 0.05) 35%, transparent 60%);
   z-index: -1;
   pointer-events: none;
   animation: pulse-glow 4s ease-in-out infinite alternate;
@@ -129,8 +129,8 @@
   
   /* Dual Glow Shadow: top/left Neon Yellow, bottom/right Neon Teal */
   box-shadow: 
-    -20px -20px 60px rgba(204, 255, 0, 0.1), 
-    20px 20px 60px rgba(0, 245, 212, 0.1),
+    -20px -20px 60px rgba(0, 224, 199, 0.1), 
+    20px 20px 60px rgba(0, 147, 148, 0.1),
     inset 0 0 40px rgba(255, 255, 255, 0.03);
 }
 

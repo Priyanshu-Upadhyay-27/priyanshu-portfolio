@@ -17,7 +17,7 @@
   left: 0;
   width: 100%;
   height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(0, 212, 255, 0.5), transparent);
+  background: linear-gradient(90deg, transparent, rgba(0, 147, 148, 0.5), transparent);
 }
 
 .glass-input {
@@ -30,9 +30,9 @@
 }
 
 .glass-input:focus {
-  border-color: #00d4ff;
-  box-shadow: 0 0 10px rgba(0, 212, 255, 0.3), inset 0 0 5px rgba(0, 212, 255, 0.1);
-  background: rgba(0, 212, 255, 0.02);
+  border-color: #009394;
+  box-shadow: 0 0 10px rgba(0, 147, 148, 0.3), inset 0 0 5px rgba(0, 147, 148, 0.1);
+  background: rgba(0, 147, 148, 0.02);
 }
 
 .terminal-button {
@@ -51,7 +51,7 @@
 }
 
 .terminal-button:hover:not(:disabled) {
-  box-shadow: 0 0 15px rgba(0, 255, 221, 0.5);
+  box-shadow: 0 0 15px rgba(0, 224, 199, 0.5);
 }
 
 .terminal-button:disabled {

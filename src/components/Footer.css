@@ -15,10 +15,10 @@
   background-color: rgba(10, 10, 10, 0.4);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  border-top: 1px solid rgba(20, 184, 166, 0.2);
+  border-top: 1px solid rgba(0, 147, 148, 0.2);
   box-shadow: 
-    inset 0 20px 40px -20px rgba(20, 184, 166, 0.05),
-    0 -4px 20px rgba(20, 184, 166, 0.03);
+    inset 0 20px 40px -20px rgba(0, 147, 148, 0.05),
+    0 -4px 20px rgba(0, 147, 148, 0.03);
   display: flex;
   align-items: center;
   z-index: 10;
@@ -82,7 +82,7 @@
 }
 
 .footer-status-item:hover {
-  filter: drop-shadow(0 0 8px rgba(20, 184, 166, 0.4));
+  filter: drop-shadow(0 0 8px rgba(0, 147, 148, 0.4));
 }
 
 .footer-status-label {

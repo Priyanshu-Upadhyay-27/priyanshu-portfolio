@@ -14,7 +14,7 @@ const toolsList = [
 
 const Tools = () => {
   const doubled = [...toolsList, ...toolsList];
-  const ghostColors = ['204, 255, 0', '0, 240, 255', '0, 255, 102'];
+  const ghostColors = ['0, 224, 199', '0, 147, 148', '0, 98, 112'];
 
   const [isHovered, setIsHovered] = useState(false);
   const topMarqueeRef = useRef<HTMLDivElement>(null);

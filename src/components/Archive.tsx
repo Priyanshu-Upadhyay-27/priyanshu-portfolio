@@ -26,7 +26,7 @@ const Archive = () => {
         <div className="mb-12">
           <Link 
             to="/#archive-link" 
-            className="inline-flex items-center gap-2 text-[#f4f4f5]/50 hover:text-[#ccff00] transition-colors font-sans text-sm tracking-widest uppercase"
+            className="inline-flex items-center gap-2 text-[#f4f4f5]/50 hover:text-[#00E0C7] transition-colors font-sans text-sm tracking-widest uppercase"
           >
             <span>← Back to Main Portfolio</span>
           </Link>
@@ -55,7 +55,7 @@ const Archive = () => {
               {archiveProjects.map((project, index) => (
                 <tr key={index} className="border-b border-white/5 hover:bg-white/5 transition-colors group">
                   <td className="py-6 pr-4 text-[#f4f4f5]/50 font-sans text-sm">{project.year}</td>
-                  <td className="py-6 pr-4 font-semibold text-[#f4f4f5] group-hover:text-[#ccff00] transition-colors">
+                  <td className="py-6 pr-4 font-semibold text-[#f4f4f5] group-hover:text-[#00E0C7] transition-colors">
                     {project.title}
                   </td>
                   <td className="py-6 pr-4 text-[#f4f4f5]/60 text-sm hidden md:table-cell">{project.category}</td>

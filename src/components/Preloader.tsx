@@ -171,7 +171,7 @@ const Preloader: React.FC<PreloaderProps> = ({ onComplete }) => {
       glideTl.to('.logo-frame', {
         scale: 1.5,
         opacity: 0,
-        boxShadow: '0 0 60px rgba(255,255,255,0.5), 0 0 120px rgba(0,245,212,0.3)',
+        boxShadow: '0 0 60px rgba(255,255,255,0.5), 0 0 120px rgba(0,224,199,0.3)',
         duration: 0.8,
         ease: 'power2.in'
       }, 0.15); // Starts shortly after P begins moving
@@ -207,9 +207,9 @@ const Preloader: React.FC<PreloaderProps> = ({ onComplete }) => {
               width: '80px',
               height: '80px',
               backgroundColor: '#0a1a1a',
-              boxShadow: 'inset 0 4px 12px rgba(0,0,0,0.9), inset 0 0 20px rgba(0,128,128,0.3), 0 0 4px rgba(0,255,255,0.2)',
+              boxShadow: 'inset 0 4px 12px rgba(0,0,0,0.9), inset 0 0 20px rgba(0,147,148,0.3), 0 0 4px rgba(0,224,199,0.2)',
               borderRadius: '4px',
-              border: '1px solid rgba(0,128,128,0.15)'
+              border: '1px solid rgba(0,147,148,0.15)'
             }}
           />
         ))}
@@ -241,11 +241,11 @@ const Preloader: React.FC<PreloaderProps> = ({ onComplete }) => {
               }}
             >
               <div className="face front" style={faceStyle(0, 0, 40, 0, 0, '#161616')} />
-              <div className="face back" style={faceStyle(0, 0, -40, 180, 0, '#00f5d4')} />
-              <div className="face right" style={faceStyle(40, 0, 0, 0, 90, '#00f5d4')} />
-              <div className="face left" style={faceStyle(-40, 0, 0, 0, -90, '#00f5d4')} />
-              <div className="face top" style={faceStyle(0, -40, 0, 90, 0, '#00f5d4')} />
-              <div className="face bottom" style={faceStyle(0, 40, 0, -90, 0, '#00f5d4')} />
+              <div className="face back" style={faceStyle(0, 0, -40, 180, 0, '#00E0C7')} />
+              <div className="face right" style={faceStyle(40, 0, 0, 0, 90, '#00E0C7')} />
+              <div className="face left" style={faceStyle(-40, 0, 0, 0, -90, '#00E0C7')} />
+              <div className="face top" style={faceStyle(0, -40, 0, 90, 0, '#00E0C7')} />
+              <div className="face bottom" style={faceStyle(0, 40, 0, -90, 0, '#00E0C7')} />
             </div>
           ))}
         </div>
@@ -295,7 +295,7 @@ const Preloader: React.FC<PreloaderProps> = ({ onComplete }) => {
           height: 100%;
           box-sizing: border-box;
           backface-visibility: hidden;
-          border: 1px solid #008080;
+          border: 1px solid #009394;
         }
         .face.front {
           border: 1px solid #333;

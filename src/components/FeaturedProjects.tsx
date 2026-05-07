@@ -203,7 +203,7 @@ const ProjectFeature = ({ project }: { project: typeof projects[0] }) => {
             </button>
 
             <button
-              className="absolute left-6 top-1/2 -translate-y-1/2 text-white/50 hover:text-[#ccff00] transition-colors cursor-pointer"
+              className="absolute left-6 top-1/2 -translate-y-1/2 text-white/50 hover:text-[#00E0C7] transition-colors cursor-pointer"
               onClick={(e) => {
                 e.stopPropagation();
                 setLightboxIndex((prev) => (prev === 0 ? images.length - 1 : prev! - 1));
@@ -213,7 +213,7 @@ const ProjectFeature = ({ project }: { project: typeof projects[0] }) => {
             </button>
 
             <button
-              className="absolute right-6 top-1/2 -translate-y-1/2 text-white/50 hover:text-[#ccff00] transition-colors cursor-pointer"
+              className="absolute right-6 top-1/2 -translate-y-1/2 text-white/50 hover:text-[#00E0C7] transition-colors cursor-pointer"
               onClick={(e) => {
                 e.stopPropagation();
                 setLightboxIndex((prev) => (prev === images.length - 1 ? 0 : prev! + 1));

@@ -39,7 +39,7 @@
   background: radial-gradient(
     circle at var(--glare-x, 50%) var(--glare-y, 50%),
     rgba(255, 255, 255, 0.25) 0%,
-    rgba(0, 212, 255, 0.1) 20%,
+    rgba(0, 147, 148, 0.1) 20%,
     rgba(255, 255, 255, 0) 60%
   );
   opacity: 0;
@@ -59,6 +59,6 @@
 }
 
 .terminal-row:hover {
-  border-left-color: #00d4ff; /* Neon Cyan */
-  background: rgba(0, 212, 255, 0.03); /* Faint cyan bg */
+  border-left-color: #009394; /* Neon Cyan */
+  background: rgba(0, 147, 148, 0.03); /* Faint cyan bg */
 }

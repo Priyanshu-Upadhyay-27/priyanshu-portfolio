@@ -102,11 +102,11 @@ const HolographicCard = ({ badge }: { badge: typeof featuredBadges[0] }) => {
           
           {/* AWS Badge Display */}
           <div className="w-full aspect-[3/2] flex items-center justify-center bg-black/40 border border-white/5 rounded-lg mb-8 relative p-6">
-             <img src={`/badges/${badge.imagePlaceholder}.png`} alt={badge.title} className="holo-badge-img absolute inset-0 w-full h-full object-contain p-6 drop-shadow-[0_0_25px_rgba(0,212,255,0.15)]" />
+             <img src={`/badges/${badge.imagePlaceholder}.png`} alt={badge.title} className="holo-badge-img absolute inset-0 w-full h-full object-contain p-6 drop-shadow-[0_0_25px_rgba(0,147,148,0.15)]" />
           </div>
 
           <div className="mt-auto pointer-events-auto">
-            <span className="text-[#00d4ff] font-sans text-xs tracking-widest uppercase mb-2 block">
+            <span className="text-[#009394] font-sans text-xs tracking-widest uppercase mb-2 block">
               {badge.issuer}
             </span>
             <h3 className="text-soft-white font-sans font-bold text-xl md:text-2xl leading-snug mb-4">
@@ -119,7 +119,7 @@ const HolographicCard = ({ badge }: { badge: typeof featuredBadges[0] }) => {
                  href={badge.link}
                  target="_blank"
                  rel="noopener noreferrer"
-                 className="text-white/60 font-sans text-sm uppercase tracking-wider hover:text-[#ccff00] transition-colors duration-300 flex items-center gap-2"
+                 className="text-white/60 font-sans text-sm uppercase tracking-wider hover:text-[#00E0C7] transition-colors duration-300 flex items-center gap-2"
                >
                  Verify <ExternalLink size={14} />
                </a>
@@ -172,13 +172,13 @@ const MinorCard = ({ cert, index, isActive, onHover }: { cert: typeof standardCe
         ref={cardRef}
         className={`holo-card bg-[#111111]/80 backdrop-blur-md border p-8 rounded-xl relative overflow-hidden transition-all duration-500 ease-out flex flex-col min-h-[240px] ${isResetting ? 'resetting' : ''}
           ${isActive 
-            ? 'border-[#00d4ff]/50 bg-white/[0.03] -translate-y-1 shadow-[inset_0_0_20px_rgba(0,212,255,0.05),0_0_20px_rgba(0,212,255,0.1)]' 
+            ? 'border-[#009394]/50 bg-white/[0.03] -translate-y-1 shadow-[inset_0_0_20px_rgba(0,147,148,0.05),0_0_20px_rgba(0,147,148,0.1)]' 
             : 'border-white/[0.02] opacity-70'
           }`}
         style={{ transform: isActive ? `rotateX(${rotation.x}deg) rotateY(${rotation.y}deg)` : 'rotateX(0deg) rotateY(0deg)' }}
       >
         <div className="holo-layer-content flex-1 flex flex-col pointer-events-none">
-          <span className={`font-sans text-xs tracking-widest uppercase mb-3 block transition-colors duration-500 ${isActive ? 'text-[#00d4ff]' : 'text-white/20'}`}>
+          <span className={`font-sans text-xs tracking-widest uppercase mb-3 block transition-colors duration-500 ${isActive ? 'text-[#009394]' : 'text-white/20'}`}>
             {cert.issuer}
           </span>
           <h3 className={`font-sans font-bold text-xl leading-snug mb-2 transition-colors duration-500 ${isActive ? 'text-white' : 'text-white/40'}`}>
@@ -194,7 +194,7 @@ const MinorCard = ({ cert, index, isActive, onHover }: { cert: typeof standardCe
             href={cert.link}
             target="_blank"
             rel="noopener noreferrer"
-            className={`font-sans text-sm uppercase tracking-wider transition-colors duration-500 flex items-center gap-2 pt-5 border-t border-white/5 w-full ${isActive ? 'text-[#ccff00]' : 'text-white/20'}`}
+            className={`font-sans text-sm uppercase tracking-wider transition-colors duration-500 flex items-center gap-2 pt-5 border-t border-white/5 w-full ${isActive ? 'text-[#00E0C7]' : 'text-white/20'}`}
           >
             Verify Credential <ExternalLink size={14} />
           </a>

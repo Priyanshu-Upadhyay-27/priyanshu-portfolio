@@ -85,7 +85,7 @@ const Footer: React.FC = () => {
         ctx.arc(dot.x, dot.y, 1.5 + (pulseEffect * 1.5), 0, Math.PI * 2);
         
         const dotAlpha = 0.4 + (pulseEffect * 0.6);
-        ctx.fillStyle = `rgba(20, 184, 166, ${dotAlpha})`;
+        ctx.fillStyle = `rgba(0, 147, 148, ${dotAlpha})`;
         ctx.fill();
 
         // Check distance to other dots to form a web
@@ -108,7 +108,7 @@ const Footer: React.FC = () => {
             const linePulseEffect = Math.max(0, 1 - lineDistToPulse / 200);
             
             const lineAlpha = (baseOpacity * 0.5) + (linePulseEffect * 0.5);
-            ctx.strokeStyle = `rgba(20, 184, 166, ${lineAlpha})`;
+            ctx.strokeStyle = `rgba(0, 147, 148, ${lineAlpha})`;
             ctx.lineWidth = 0.5 + (linePulseEffect * 1);
             ctx.stroke();
           }

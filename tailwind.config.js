@@ -16,8 +16,8 @@ export default {
         'charcoal': '#121212',
         'near-black': '#0a0a0a',
         'soft-white': '#f5f5f5',
-        'teal': '#008080',
-        'muted-green': '#5A7D7C',
+        'teal': '#009394',
+        'muted-green': '#006270',
       },
       fontFamily: {
         sans: ['Inter', '-apple-system', 'SF Pro Display', 'sans-serif'],

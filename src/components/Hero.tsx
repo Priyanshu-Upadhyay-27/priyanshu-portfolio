@@ -204,7 +204,7 @@ const Hero = () => {
             pathLengths.push(length);
             path.style.strokeDasharray = `${length}`;
             path.style.strokeDashoffset = `${length}`;
-            // fill: none + stroke: #ccff00 + stroke-width are set in Hero.css
+            // fill: none + stroke: #00E0C7 + stroke-width are set in Hero.css
           });
 
           // ── Calculate proportional durations ──
@@ -244,7 +244,7 @@ const Hero = () => {
           tl.to(
             paths,
             {
-              fill: '#ccff00',
+              fill: '#00E0C7',
               ease: 'power1.inOut',
               duration: 0.12,
               stagger: 0.04,
