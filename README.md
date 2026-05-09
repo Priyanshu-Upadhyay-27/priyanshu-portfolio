@@ -156,59 +156,6 @@ src/
 
 ---
 
-## ✦ Getting Started
-
-### Prerequisites
-
-- **Node.js** ≥ 18.x
-- **npm** ≥ 9.x (or any package manager of your choice)
-
-### Installation
-
-```bash
-# Clone the repository
-git clone https://github.com/Priyanshu-Upadhyay-27/priyanshu-portfolio.git
-
-# Navigate to the project
-cd priyanshu-portfolio
-
-# Install dependencies
-npm install
-```
-
-### Development
-
-```bash
-# Start the dev server
-npm run dev
-```
-
-The app will be available at `http://localhost:5173`.
-
-### Build for Production
-
-```bash
-# Create optimized production bundle
-npm run build
-
-# Preview the production build locally
-npm run preview
-```
-
-The output is generated in the `dist/` directory.
-
-### Other Commands
-
-```bash
-# Run ESLint
-npm run lint
-
-# Type-check without emitting
-npm run typecheck
-```
-
----
-
 ## ✦ Deployment
 
 This project is deployed on **Netlify** with the following configuration:
