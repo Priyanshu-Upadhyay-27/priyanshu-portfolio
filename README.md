@@ -80,6 +80,73 @@ A real-time canvas-rendered neural network visualization in the hero section:
 
 ---
 
+## ✦ Animation Choreography
+
+The site's entrance is a precisely sequenced cinematic pipeline — each phase waits for the previous one to complete before firing. Here's the full orchestration:
+
+```mermaid
+sequenceDiagram
+    participant P as Preloader
+    participant A as App Shell
+    participant H as Hero
+    participant HE as Header
+
+    Note over P: Phase 1 — Extrude
+    P->>P: 9 cubes extrude from debossed sockets (z: 0 → 100)
+    
+    Note over P: Phase 2 — Tumble & Assemble
+    P->>P: Cubes tumble (360° X+Y) into 3×3 grid
+    P->>P: Sockets fade out simultaneously
+    
+    Note over P: Phase 2.5 — Dissolve
+    P->>P: Cubes fade → unified logo frame appears
+    
+    Note over P: Phase 3 — P Reveal
+    P->>P: "P" brand-mark fades in at center
+
+    Note over P,HE: Phase 4 — FLIP Glide
+    P->>HE: "P" glides to header .logo-p (FLIP math)
+    P->>P: Logo frame expands + dissolves with glow
+    
+    Note over P,A: The Swap (critical frame sequence)
+    P->>A: window.scrollTo(0, 0)
+    P->>A: onComplete() → App becomes visible (opacity: 1)
+    A->>A: requestAnimationFrame → one frame for React flush
+    P->>P: Preloader fades out (still z: 999999, covering app)
+    A->>A: document.body.overflow = "unset"
+    P->>P: setIsVisible(false) → unmount from DOM
+
+    Note over H,HE: Hero Entrance (post-preloader)
+    A->>H: ScrollTrigger.refresh()
+    H->>H: Portrait clip-path reveal (inset 100% → 0%)
+    H->>H: Neural HUD slides up with back.out ease
+    HE->>HE: "riyanshu" + "Upadhyay" slide in from left
+    HE->>HE: Right nav fades down into position
+```
+
+### Frame-by-Frame Breakdown
+
+| Phase | Duration | What Happens | Why It Matters |
+|---|---|---|---|
+| **Extrude** | 1.0s | Cubes rise from sockets with staggered 50ms delay | Creates depth — feels like assembling from nothing |
+| **Tumble** | 1.5s | Full 360° rotation on both axes while flying to grid positions | The "wow" moment — kinetic energy meets precision |
+| **Dissolve** | 0.5s | Cubes → logo frame crossfade | Transforms chaos into brand identity |
+| **P Reveal** | 0.6s | Brand-mark appears over the frame | Focal point before the glide |
+| **FLIP Glide** | 1.2s | "P" travels to exact header position via `getBoundingClientRect` delta | Seamless spatial continuity — preloader *becomes* the UI |
+| **The Swap** | ~0.4s | App visible → preloader fades → scroll unlocked | 3-frame sequence prevents flash of unstyled content |
+| **Hero Entrance** | 1.5s | Portrait wipe + HUD spring-in | Rewards the wait with a cinematic reveal |
+
+### Why This Sequence Matters
+
+The handoff between preloader and app is the hardest part to get right. The challenges solved:
+
+- **Layout thrash prevention** — `window.scrollTo(0, 0)` is called 3 times at different points (before app visibility, after React flush, and after preloader unmount) because browsers and GSAP pin-spacers fight over scroll position
+- **FLIP positioning accuracy** — The app must be in the DOM (but invisible) during the preloader so `getBoundingClientRect()` returns correct coordinates for the header's `.logo-p`
+- **ScrollTrigger deferred refresh** — If `ScrollTrigger.refresh()` fires while the preloader is still mounted, it calculates wrong pin heights. The refresh is deferred via a `useEffect` that watches `preloaderComplete`
+- **Session-aware skip** — On return visits, `sessionStorage` bypasses the entire sequence, and `scrollRestoration` is set to `'auto'` so the browser handles it natively
+
+---
+
 ## ✦ Architecture
 
 ```
