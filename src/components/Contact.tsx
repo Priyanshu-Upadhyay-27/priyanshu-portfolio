@@ -47,24 +47,15 @@ const Contact = () => {
     setIsSuccess(false);
 
     try {
-      const encode = (data: Record<string, string>) => {
-        return Object.keys(data)
-          .map((key) => encodeURIComponent(key) + '=' + encodeURIComponent(data[key]))
-          .join('&');
-      };
-
-      const payload = encode({
-        'form-name': 'contact',
-        'bot-field': honey,
-        name: name,
-        email: email,
-        message: message,
-      });
-
-      const response = await fetch('/', {
+      const response = await fetch('/api/contact', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: payload,
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name,
+          email,
+          message,
+          'bot-field': honey,
+        }),
       });
 
       if (response.ok) {
@@ -308,13 +299,9 @@ const Contact = () => {
         {/* Right Side: Minimal Form */}
         <div ref={formRef} className="w-full lg:w-1/2 flex items-center relative z-10 bg-transparent p-6">
           <form
-            name="contact"
             onSubmit={handleSubmit}
-            data-netlify="true"
-            netlify-honeypot="bot-field"
             className="w-full flex flex-col gap-8 cyberpunk-form-container p-4 lg:p-10 relative z-20"
           >
-            <input type="hidden" name="form-name" value="contact" />
 
             {/* Invisible Honeypot Field */}
             <div aria-hidden="true" className="opacity-0 absolute -left-[9999px] top-0 -z-50 pointer-events-none">
