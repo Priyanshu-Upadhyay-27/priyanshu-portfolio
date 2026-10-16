@@ -1,192 +1,172 @@
+/* ── EDITORIAL CONTENT-DRIVEN ABOUT SECTION ── */
 .about-section {
   position: relative;
   width: 100%;
-  min-height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
   background-color: transparent;
-  padding: 5vw 8%;
-  padding-top: 35vh;
+  /* Top padding increased to header height + ~64px (roughly 140-160px on desktop) */
+  padding-top: clamp(8.75rem, 15vh, 10rem);
+  padding-bottom: clamp(5rem, 8vh, 6.5rem); /* Bottom padding preserved */
+  padding-left: clamp(1.5rem, 6vw, 6rem);
+  padding-right: clamp(1.5rem, 6vw, 6rem);
+  /* scroll-margin-top equal to header height + ~24px (roughly 104-110px) */
+  scroll-margin-top: clamp(6.5rem, 10vh, 7rem);
   overflow: hidden;
-  z-index: 10;
+  z-index: 10; /* Sits below fixed header (z-index: 1000) */
 }
 
 .about-container {
   width: 100%;
-  max-width: 1600px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 4rem;
-}
-
-/* ── LEFT TEXT STACK ── */
-.about-left {
-  width: 60%;
-  text-align: left;
+  max-width: 1200px;
+  margin: 0 auto;
   display: flex;
   flex-direction: column;
-  gap: 2rem;
 }
 
-.about-label {
-  font-family: 'Inter', -apple-system, 'SF Pro Display', sans-serif;
-  font-size: 0.9rem;
-  color: #00E0C7; /* Neon Teal */
-  letter-spacing: 0.1em;
-  font-weight: 700;
+/* ── Full-Width Single-Line Heading Anchor with Accent Bar ── */
+.about-header-group {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 100%;
+  margin-bottom: 32px; /* Roughly 32px spacing to the first paragraph */
 }
 
 .about-header {
   font-family: 'Inter', -apple-system, 'SF Pro Display', sans-serif;
   font-weight: 800;
-  font-size: clamp(3rem, 6vw, 8rem);
+  font-size: clamp(2.2rem, 4.3vw, 4.5rem);
   line-height: 1.05;
-  color: #ffffff;
-  margin: 0;
+  letter-spacing: -0.03em;
+  color: #E2E4E4;
   text-transform: uppercase;
-}
-
-.about-name-accent {
-  border-bottom: 6px solid #00E0C7; /* Neon Teal Line */
-  display: inline-block;
-}
-
-.about-typewriter {
-  font-family: 'Inter', -apple-system, 'SF Pro Display', sans-serif;
-  font-weight: 700;
-  font-size: clamp(1.5rem, 3vw, 3.5rem);
-  color: #ffffff;
-  margin: 0;
-}
-
-.accent-teal {
-  color: #00E0C7;
-}
-
-.typewriter-cursor {
-  color: #00E0C7;
-  font-weight: 900;
-  animation: blink-teal 1s step-start infinite;
-}
-
-.about-bio-editorial {
-  max-width: 580px;
-  font-family: 'Inter', -apple-system, 'SF Pro Display', sans-serif;
-  font-size: clamp(1rem, 1.2vw, 1.25rem);
-  line-height: 1.8;
-  color: rgba(255, 255, 255, 0.7);
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-}
-
-.about-bio-editorial strong {
-  color: #ffffff;
-  font-weight: 700;
-}
-
-/* ── RIGHT PORTAL ── */
-.about-right {
-  width: 40%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.portal-wrapper {
-  position: relative;
+  white-space: nowrap;
   width: 100%;
-  max-width: 450px;
-  aspect-ratio: 1 / 1;
+  margin: 0 0 20px 0; /* About 20px gap between heading and bar */
+  user-select: none;
 }
 
-.portal-wrapper::before {
-  content: '';
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 200%;
-  height: 200%;
-  border-radius: 50%;
-  background: radial-gradient(circle, rgba(0, 224, 199, 0.15) 0%, rgba(0, 147, 148, 0.05) 35%, transparent 60%);
-  z-index: -1;
-  pointer-events: none;
-  animation: pulse-glow 4s ease-in-out infinite alternate;
-}
-
-.portal-circle {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  border-radius: 50%;
-  overflow: hidden;
-  border: 1.5px solid rgba(255, 255, 255, 0.1);
-  
-  /* Dual Glow Shadow: top/left Neon Yellow, bottom/right Neon Teal */
-  box-shadow: 
-    -20px -20px 60px rgba(0, 224, 199, 0.1), 
-    20px 20px 60px rgba(0, 147, 148, 0.1),
-    inset 0 0 40px rgba(255, 255, 255, 0.03);
-}
-
-.portal-overflow {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  overflow: visible;
-  clip-path: inset(-100% -100% 80% -100%);
-  pointer-events: none;
-}
-
-.portal-image-base,
-.portal-image-head {
-  position: absolute;
-  bottom: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  transform-origin: bottom center;
-  display: block;
-  width: 115%;
-  height: auto;
-  max-height: 140%;
-  object-fit: contain;
-  object-position: bottom center;
+.about-heading-bar {
+  width: 88px;
+  height: 4px;
+  background-color: #00e5cc;
+  border-radius: 2px;
+  transform-origin: left center;
+  transform: scaleX(0); /* Draws in on scroll entry */
   will-change: transform;
 }
 
-@keyframes blink-teal {
-  50% { opacity: 0; }
+/* ── Two-Column Content Grid ── */
+.about-content-grid {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  gap: clamp(2rem, 3.5vw, 4rem);
 }
 
-@keyframes pulse-glow {
-  0% { 
-    transform: translate(-50%, -50%) scale(0.95); 
-    opacity: 0.6; 
-  }
-  100% { 
-    transform: translate(-50%, -50%) scale(1.05); 
-    opacity: 1; 
-  }
+.about-editorial-stack {
+  width: 55%;
+  flex: 0 0 55%;
+  max-width: 660px;
+  text-align: left;
 }
 
-/* ── Responsive ── */
-@media (max-width: 1024px) {
-  .about-container {
+.about-visual-column {
+  width: 45%;
+  flex: 0 0 45%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  margin-right: clamp(-3rem, -3vw, -1rem); /* Bleed slightly right for balance */
+}
+
+/* ── Body Copy with Generous Spacing & Comfortable Measure ── */
+.about-body {
+  display: flex;
+  flex-direction: column;
+}
+
+.about-paragraph {
+  font-family: 'Inter', -apple-system, 'SF Pro Display', sans-serif;
+  font-size: clamp(1.05rem, 1.35vw, 1.25rem);
+  line-height: 1.8;
+  font-weight: 350;
+  color: rgba(226, 228, 228, 0.78);
+  margin: 0 0 1.75rem 0;
+  max-width: 740px;
+  letter-spacing: -0.005em;
+}
+
+/* Remove leftover empty gap on the last paragraph */
+.about-paragraph:last-child {
+  margin-bottom: 0;
+}
+
+/* ── Responsive Refinements ── */
+@media (max-width: 900px) {
+  .about-section {
+    /* Roughly 110px on mobile */
+    padding-top: clamp(6.75rem, 12vh, 7.5rem);
+    padding-bottom: clamp(4.5rem, 8vh, 6rem);
+    scroll-margin-top: clamp(5.5rem, 10vh, 6rem);
+    min-height: auto;
+  }
+
+  .about-content-grid {
     flex-direction: column;
-    text-align: left;
-    gap: 3rem;
+    align-items: flex-start;
+    gap: 2.5rem;
   }
-  .about-left, .about-right {
+
+  .about-editorial-stack {
     width: 100%;
+    flex: 0 0 100%;
+    max-width: 100%;
   }
-  .portal-wrapper {
-    max-width: 320px;
+
+  .about-visual-column {
+    width: 100%;
+    flex: 0 0 100%;
+    height: 280px;
+    margin-right: 0;
   }
 }
+
+@media (max-width: 768px) {
+  .about-header-group {
+    margin-bottom: 24px;
+  }
+
+  .about-header {
+    font-size: clamp(1.85rem, 7.5vw, 2.75rem);
+    white-space: nowrap;
+    margin-bottom: 14px;
+  }
+
+  .about-heading-bar {
+    width: 68px;
+    height: 3.5px;
+  }
+
+  .about-paragraph {
+    margin-bottom: 1.5rem;
+  }
+
+  .about-paragraph:last-child {
+    margin-bottom: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .about-heading-bar {
+    transform: scaleX(1) !important;
+  }
+}
+
+
+

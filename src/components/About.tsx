@@ -1,107 +1,36 @@
 import React, { useEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { useAntiGravity } from '../hooks/useAntiGravity';
+import GradientDescentVisual from './GradientDescentVisual';
 import './About.css';
 
 gsap.registerPlugin(ScrollTrigger);
 
 const About: React.FC = () => {
   const sectionRef = useRef<HTMLDivElement>(null);
-  const portalImageBaseRef = useRef<HTMLImageElement>(null);
-  const portalImageHeadRef = useRef<HTMLImageElement>(null);
-  const portalWrapperRef = useRef<HTMLDivElement>(null);
-  const textStackRef = useRef<HTMLDivElement>(null);
+  const contentRef = useRef<HTMLDivElement>(null);
+  const barRef = useRef<HTMLDivElement>(null);
+  const [triggerScrollDrop, setTriggerScrollDrop] = useState(0);
 
-  // Apply AntiGravity to the whole portal wrapper
-  useAntiGravity([portalWrapperRef], { rangeX: 12, rangeY: 15, rangeRot: 2 });
-
-
-  // ── Typewriter Logic ──
-  const roles = [
-    "ML Systems Builder",
-    "Python Developer",
-    "GenAI Practitioner",
-    "MLOps Programmer"
-  ];
-  const [roleIndex, setRoleIndex] = useState(0);
-  const [displayText, setDisplayText] = useState('');
-  const [isDeleting, setIsDeleting] = useState(false);
-
-  useEffect(() => {
-    const currentRole = roles[roleIndex];
-    let typingSpeed = isDeleting ? 40 : 80;
-
-    if (!isDeleting && displayText === currentRole) {
-      typingSpeed = 2000; // Wait at end of string
-      setTimeout(() => setIsDeleting(true), typingSpeed);
-      return;
-    } else if (isDeleting && displayText === '') {
-      setIsDeleting(false);
-      setRoleIndex((prev) => (prev + 1) % roles.length);
-      return;
-    }
-
-    const timeout = setTimeout(() => {
-      setDisplayText(prev =>
-        isDeleting
-          ? currentRole.substring(0, prev.length - 1)
-          : currentRole.substring(0, prev.length + 1)
-      );
-    }, typingSpeed);
-
-    return () => clearTimeout(timeout);
-  }, [displayText, isDeleting, roleIndex]);
-
-  // ── GSAP Animations ──
+  // Scroll-Triggered Text Reveal Animation
   useEffect(() => {
     const ctx = gsap.context(() => {
-      // 1. Text Animations (Timeline for staggering)
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: sectionRef.current,
-          start: 'top 80%', // Only fires when section reaches 80% of viewport
+          start: 'top 75%',
         },
       });
 
-      // A. Slide up the heading & badge
       tl.fromTo(
-        gsap.utils.toArray('.reveal-up'),
-        { y: 50, opacity: 0 },
+        gsap.utils.toArray('.about-reveal'),
+        { y: 35, opacity: 0 },
         {
           y: 0,
           opacity: 1,
-          duration: 1,
-          stagger: 0.15,
+          duration: 0.9,
+          stagger: 0.12,
           ease: 'power3.out',
-        }
-      );
-
-      // B. Sweep in the paragraph (overlapping)
-      tl.fromTo(
-        '.reveal-mask',
-        { clipPath: 'inset(0% 100% 0% 0%)' },
-        {
-          clipPath: 'inset(0% 0% 0% 0%)',
-          duration: 1.2,
-          ease: 'power3.inOut',
-        },
-        "-=0.6" // overlaps with the heading slide animation
-      );
-
-      // 2. Portrait Parallax (Scroll Driven)
-      gsap.fromTo([portalImageBaseRef.current, portalImageHeadRef.current],
-        { scale: 1 },
-        {
-          scale: 1.15,
-          transformOrigin: 'bottom center',
-          ease: 'none',
-          scrollTrigger: {
-            trigger: sectionRef.current,
-            start: 'top bottom',
-            end: 'bottom top',
-            scrub: true,
-          },
         }
       );
     }, sectionRef);
@@ -109,52 +38,91 @@ const About: React.FC = () => {
     return () => ctx.revert();
   }, []);
 
+  // Section Scroll Entry Observer: triggers 600ms heading bar draw and ball drop ONLY the first time ever
+  const hasTriggeredFirstDropRef = useRef(false);
+
+  useEffect(() => {
+    const section = sectionRef.current;
+    if (!section) return;
+
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (prefersReducedMotion) {
+      if (barRef.current) barRef.current.style.transform = 'scaleX(1)';
+      return;
+    }
+
+    // Guard against React strict-mode double invocation or subsequent re-entries
+    if (hasTriggeredFirstDropRef.current) {
+      if (barRef.current) barRef.current.style.transform = 'scaleX(1)';
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (entry.isIntersecting && entry.intersectionRatio >= 0.35) {
+            if (!hasTriggeredFirstDropRef.current) {
+              hasTriggeredFirstDropRef.current = true;
+              observer.disconnect(); // Disconnect immediately: never runs again
+
+              // 1. Animate accent bar drawing in from left to right over 600ms (stays drawn permanently)
+              if (barRef.current) {
+                gsap.fromTo(
+                  barRef.current,
+                  { scaleX: 0 },
+                  {
+                    scaleX: 1,
+                    duration: 0.6,
+                    ease: 'power2.out',
+                    transformOrigin: 'left center',
+                  }
+                );
+              }
+
+              // 2. Trigger automatic ball drop in GradientDescentVisual once
+              setTriggerScrollDrop(1);
+            }
+            break;
+          }
+        }
+      },
+      { threshold: [0, 0.4] }
+    );
+
+    observer.observe(section);
+
+    return () => {
+      observer.disconnect();
+    };
+  }, []);
+
   return (
     <section ref={sectionRef} id="about" className="about-section">
       <div className="about-container">
-        {/* ── LEFT TEXT STACK ── */}
-        <div className="about-left" ref={textStackRef}>
-
-          <h2 className="about-header reveal-up">
-            Hi, I'm <span className="about-name-accent">Priyanshu</span> —
+        {/* Full-width single-line heading with accent bar */}
+        <div className="about-header-group about-reveal">
+          <h2 className="about-header">
+            HI, I'M PRIYANSHU
           </h2>
-
-          <h3 className="about-typewriter reveal-up">
-            a <span className="accent-teal">{displayText}</span>
-            <span className="typewriter-cursor">|</span>
-          </h3>
-
-          <div className="about-bio-editorial reveal-mask">
-            <p>
-              A 3rd-year CS undergrad at KIET focused on designing and building practical <strong>Machine Learning and GenAI systems</strong>. I don't just train models—I focus on the entire ML lifecycle, from writing robust data processing pipelines to deploying models as accessible REST APIs.
-            </p>
-            <p>
-              Currently diving deep into the architecture of open-source ML libraries, mastering decoupled architectures using <strong>Docker</strong> and <strong>FastAPI</strong>, and building scalable systems that solve real-world problems. <strong>AWS Cloud Practitioner</strong> certified.
-            </p>
-          </div>
+          <div ref={barRef} className="about-heading-bar" aria-hidden="true" />
         </div>
 
-        {/* ── RIGHT PORTAL ── */}
-        <div className="about-right">
-          <div className="portal-wrapper" ref={portalWrapperRef}>
-            {/* Layer 1: Base inside hidden overflow */}
-            <div className="portal-circle">
-              <img
-                ref={portalImageBaseRef}
-                src="/head_out_portrait.png"
-                alt="Priyanshu Upadhyay Portrait Base"
-                className="portal-image-base"
-              />
+        {/* Two-column content grid */}
+        <div className="about-content-grid">
+          <div className="about-editorial-stack" ref={contentRef}>
+            <div className="about-body">
+              <p className="about-paragraph about-reveal">
+                I'm a final-year Computer Science student at KIET, focused on building practical AI and machine learning systems. I like understanding how things work under the hood, experimenting with models, and turning ideas into systems that actually work beyond a notebook.
+              </p>
+
+              <p className="about-paragraph about-reveal">
+                My current focus is Generative AI, machine learning, and the engineering around deploying and improving AI systems. I'm especially interested in the space between a model and a real product — where data, evaluation, software, and infrastructure all come together.
+              </p>
             </div>
-            {/* Layer 2: Head breaking out (visible overflow, clipped) */}
-            <div className="portal-overflow">
-              <img
-                ref={portalImageHeadRef}
-                src="/head_out_portrait.png"
-                alt="Priyanshu Upadhyay Portrait Head"
-                className="portal-image-head"
-              />
-            </div>
+          </div>
+
+          <div className="about-visual-column about-reveal">
+            <GradientDescentVisual triggerScrollDrop={triggerScrollDrop} />
           </div>
         </div>
       </div>
