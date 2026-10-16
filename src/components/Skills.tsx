@@ -5,12 +5,12 @@ const skillClusters = [
   {
     domain: "Machine Learning & Data",
     image: "/skills/ml.jpeg",
-    skills: ["Python(OOPs)", "Scikit-Learn & XGBoost", "Pandas, NumPy & Matplotlib", "Feature Engineering", "Evaluation Metrics"]
+    skills: ["Python (OOPs)", "Scikit-learn & XGBoost", "Pandas, NumPy & Matplotlib", "Feature Engineering", "Evaluation Metrics"]
   },
   {
     domain: "MLOps & Deployment",
     image: "/skills/deploy.png",
-    skills: ["FastAPI & REST APIs", "Docker Containerization", "AWS Cloud Infrastructure", "End-to-End Pipelines", "Streamlit UI & Model Drift"]
+    skills: ["MLflow", "Docker & Docker Compose", "AWS Cloud Infrastructure", "End-to-End Pipelines", "Streamlit UI & Model Drift"]
   },
   {
     domain: "Generative AI",
