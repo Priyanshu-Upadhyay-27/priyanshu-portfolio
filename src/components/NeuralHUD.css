@@ -35,12 +35,11 @@
 }
 
 .highlight {
-    color: #00E0C7;
-    /* Your neon yellow */
+    color: var(--teal-highlight, #00BFA6);
 }
 
 .blinking-cursor {
-    color: #00E0C7;
+    color: var(--teal-highlight, #00BFA6);
     animation: blink 1s step-start infinite;
 }
 

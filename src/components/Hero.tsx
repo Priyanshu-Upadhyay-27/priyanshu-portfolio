@@ -2,7 +2,6 @@ import { useEffect, useRef, useContext } from 'react';
 import gsap from 'gsap';
 import { PreloaderContext } from '../App';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import NeuralHUD from './NeuralHUD';
 import './Hero.css';
 
 gsap.registerPlugin(ScrollTrigger);
@@ -20,6 +19,8 @@ const Hero = () => {
   const topoRef = useRef<SVGSVGElement>(null);
   const portraitRef = useRef<HTMLImageElement>(null);
   const bottomFadeRef = useRef<HTMLDivElement>(null);
+  const heroTitleRef = useRef<HTMLDivElement>(null);
+  const supportingLineRef = useRef<HTMLDivElement>(null);
 
   const isPreloaderComplete = useContext(PreloaderContext);
 
@@ -38,6 +39,8 @@ const Hero = () => {
     const overlay = overlayRef.current;
     const portrait = portraitRef.current;
     const bottomFade = bottomFadeRef.current;
+    const heroTitle = heroTitleRef.current;
+    const supportingLine = supportingLineRef.current;
     if (!hero || !bgLayer || !row1El || !row2El || !wrapper || !overlay || !portrait || !bottomFade) return;
 
     // ════════════════════════════════════════════
@@ -155,12 +158,25 @@ const Hero = () => {
       0
     );
 
-    // Neural HUD fades out
-    tl.to(
-      '.neural-hud-container',
-      { opacity: 0, ease: 'none', duration: 0.25 },
-      0
-    );
+    // Supporting line fades out first (0 → 0.10)
+    if (supportingLine) {
+      tl.fromTo(
+        supportingLine,
+        { opacity: 1, y: 0 },
+        { opacity: 0, y: -15, ease: 'power1.in', duration: 0.10 },
+        0
+      );
+    }
+
+    // Giant AI ENGINEER title fades out smoothly (0.02 → 0.22)
+    if (heroTitle) {
+      tl.fromTo(
+        heroTitle,
+        { opacity: 1, y: 0 },
+        { opacity: 0, y: -30, ease: 'power1.in', duration: 0.20 },
+        0.02
+      );
+    }
 
     // Bottom gradient fade — starts invisible, fades in after card begins shrinking
     tl.fromTo(
@@ -204,7 +220,7 @@ const Hero = () => {
             pathLengths.push(length);
             path.style.strokeDasharray = `${length}`;
             path.style.strokeDashoffset = `${length}`;
-            // fill: none + stroke: #00E0C7 + stroke-width are set in Hero.css
+            // fill: none + stroke: #00BFA6 + stroke-width are set in Hero.css
           });
 
           // ── Calculate proportional durations ──
@@ -244,7 +260,7 @@ const Hero = () => {
           tl.to(
             paths,
             {
-              fill: '#00E0C7',
+              fill: '#00BFA6',
               ease: 'power1.inOut',
               duration: 0.12,
               stagger: 0.04,
@@ -422,7 +438,7 @@ const Hero = () => {
       floatTimelines.forEach((ftl) => ftl.kill());
       ScrollTrigger.getAll().forEach((t) => t.kill(true));
       if (topoDrifts.length) topoDrifts.forEach((t) => t.kill());
-      gsap.killTweensOf([row1El, row2El, bgLayer, wrapper, overlay]);
+      gsap.killTweensOf([row1El, row2El, bgLayer, wrapper, overlay, heroTitle, supportingLine]);
       floatingElements.forEach(({ el }) => gsap.killTweensOf(el));
     };
   }, []);
@@ -445,20 +461,38 @@ const Hero = () => {
         filter: 'brightness(1)',
         duration: 1.5,
         ease: 'power3.inOut'
-      })
-      .fromTo('.neural-hud-container', {
-        y: 60,
-        opacity: 0
-      }, {
-        y: 0,
-        opacity: 1,
-        duration: 1.2,
-        ease: 'back.out(1.5)'
-      }, '-=0.8');
+      });
+
+      // Giant title fades in behind portrait
+      if (heroTitleRef.current) {
+        entranceTl.fromTo(heroTitleRef.current, {
+          opacity: 0,
+          y: 20
+        }, {
+          opacity: 1,
+          y: 0,
+          duration: 1.2,
+          ease: 'power2.out'
+        }, '-=0.9');
+      }
+
+      // Supporting line slides up into place
+      if (supportingLineRef.current) {
+        entranceTl.fromTo(supportingLineRef.current, {
+          y: 20,
+          opacity: 0
+        }, {
+          y: 0,
+          opacity: 1,
+          duration: 1.0,
+          ease: 'back.out(1.5)'
+        }, '-=0.8');
+      }
     } else if (portraitRef.current) {
       // Hide them initially
       gsap.set(portraitRef.current, { clipPath: 'inset(100% 0% 0% 0%)', filter: 'brightness(0.2)' });
-      gsap.set('.neural-hud-container', { opacity: 0, y: 60 });
+      if (heroTitleRef.current) gsap.set(heroTitleRef.current, { opacity: 0, y: 20 });
+      if (supportingLineRef.current) gsap.set(supportingLineRef.current, { opacity: 0, y: 20 });
     }
   }, [isPreloaderComplete]);
 
@@ -523,6 +557,37 @@ const Hero = () => {
           clip-path animated by GSAP
       ════════════════════════════════════════ */}
       <div ref={imageWrapperRef} className="hero-L2">
+        {/* ════════════════════════════════════════
+            GIANT "AI ENGINEER" BACKGROUND TYPOGRAPHY
+            Sits behind portrait via lower z-index.
+            Fades out independently before clip-path card animation.
+        ════════════════════════════════════════ */}
+        <div
+          ref={heroTitleRef}
+          className="hero-giant-title"
+          aria-hidden="true"
+        >
+          <div className="hero-giant-title__track">
+            <span className="hero-giant-title__text">
+              AI ENGI<span className="hero-title-neer-cluster">
+                <span ref={supportingLineRef} className="hero-supporting-line">
+                  <span className="hero-supporting-line__inner">
+                    <span className="hero-supporting-word">GENAI</span>
+                    <span className="hero-supporting-dot">·</span>
+                    <span className="hero-supporting-word">MACHINE LEARNING</span>
+                    <span className="hero-supporting-dot">·</span>
+                    <span className="hero-supporting-word">ML SYSTEMS</span>
+                  </span>
+                </span>
+                NEER
+              </span>
+            </span>
+          </div>
+        </div>
+
+        {/* Accessible semantic heading — visually hidden */}
+        <h1 className="sr-only">Priyanshu Upadhyay — AI Engineer</h1>
+
         <img
           ref={portraitRef}
           src="/portrait_nobg3.png"
@@ -537,13 +602,6 @@ const Hero = () => {
           LAYER 3 — FOREGROUND UI
       ════════════════════════════════════════ */}
       <div className="hero-L3">
-
-
-
-        {/* ════════════════════════════════════════
-            Neural HUD Graphic (Bottom Left)
-        ════════════════════════════════════════ */}
-        <NeuralHUD />
 
         {/* Signature Container */}
         <div

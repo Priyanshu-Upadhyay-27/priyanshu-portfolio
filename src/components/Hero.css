@@ -70,7 +70,7 @@
   line-height: 0.95;
   text-transform: uppercase;
   letter-spacing: -0.02em;
-  color: #00E0C7;
+  color: var(--teal-highlight, #00BFA6);
   opacity: 0.04;
   user-select: none;
   will-change: transform;
@@ -95,6 +95,113 @@
   will-change: clip-path;
 }
 
+/* Dark overlay — starts fully transparent, GSAP fades to 50% */
+.hero-L2__overlay {
+  position: absolute;
+  inset: 0;
+  background-color: #000000;
+  opacity: 0;
+  pointer-events: none;
+  will-change: opacity;
+  z-index: 3;
+}
+
+/* ════════════════════════════════════════════
+   GIANT "AI ENGINEER" BACKGROUND TYPOGRAPHY
+   Lives inside L2, behind the portrait.
+   Anton font, oversized, horizontally & vertically extended.
+   ════════════════════════════════════════════ */
+.hero-giant-title {
+  position: absolute;
+  top: 39%;
+  left: 0;
+  width: 100vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1;
+  pointer-events: none;
+  user-select: none;
+  will-change: transform, opacity;
+}
+
+.hero-giant-title__track {
+  position: relative;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.hero-giant-title__text {
+  display: inline-block;
+  font-family: 'Anton', sans-serif;
+  font-weight: 400;
+  /* Width spans ~100-112% of viewport width */
+  font-size: clamp(5.8rem, 19vw, 24rem);
+  line-height: 0.82;
+  text-transform: uppercase;
+  letter-spacing: -0.015em;
+  color: #E2E4E4;
+  white-space: nowrap;
+  text-align: center;
+  /* Vertical scaling: 1.28x natural height */
+  transform: scaleY(1.30);
+  transform-origin: center center;
+  will-change: transform;
+}
+
+/* ════════════════════════════════════════════
+   NEER CLUSTER & SUPPORTING LINE
+   Anchored directly to the visible "NEER" letters.
+   Starts precisely at 'N' and ends precisely at 'R'.
+   ════════════════════════════════════════════ */
+.hero-title-neer-cluster {
+  position: relative;
+  display: inline-block;
+  vertical-align: baseline;
+}
+
+.hero-supporting-line {
+  position: absolute;
+  left: 0;
+  right: 0;
+  width: 100%;
+  padding: 0px 30px;
+  bottom: calc(100% + 0.14em - 20px);
+  z-index: 1;
+  pointer-events: none;
+  will-change: transform, opacity;
+}
+
+.hero-supporting-line__inner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  transform: scaleY(0.76923);
+  /* Counteract parent's scaleY(1.30) */
+  transform-origin: bottom center;
+  font-family: 'Inter', -apple-system, 'SF Pro Display', sans-serif;
+  font-weight: 600;
+  font-size: clamp(0.80rem, 1.02vw, 1.2rem);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  white-space: nowrap;
+  line-height: 1;
+}
+
+.hero-supporting-word {
+  color: #C9CFCD;
+  letter-spacing: inherit;
+}
+
+.hero-supporting-dot {
+  color: var(--teal-highlight, #00BFA6);
+  padding: 0 0.15em;
+  user-select: none;
+}
+
+/* Ensure portrait sits above the giant text and supporting line */
 .hero-L2__portrait {
   position: absolute;
   bottom: 0;
@@ -106,16 +213,20 @@
   object-fit: cover;
   object-position: center 15%;
   filter: drop-shadow(0 0 100px rgba(0, 0, 0, 0.85));
+  z-index: 2;
 }
 
-/* Dark overlay — starts fully transparent, GSAP fades to 50% */
-.hero-L2__overlay {
+/* Visually hidden — accessible heading */
+.sr-only {
   position: absolute;
-  inset: 0;
-  background-color: #000000;
-  opacity: 0;
-  pointer-events: none;
-  will-change: opacity;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
 }
 
 /* ════════════════════════════════════════════
@@ -146,81 +257,6 @@
 }
 
 /* ════════════════════════════════════════════
-   YOLO BOUNDING BOX — Bottom Left
-   ════════════════════════════════════════════ */
-.hero-yolo {
-  position: absolute;
-  bottom: 2.5rem;
-  left: 2.5rem;
-  min-width: 260px;
-  padding: 1.1rem 1.3rem;
-  pointer-events: auto;
-  will-change: transform, opacity;
-  translate: var(--px, 0) var(--py, 0);
-}
-
-.hero-yolo__corner {
-  position: absolute;
-  width: 16px;
-  height: 16px;
-}
-
-.hero-yolo__corner--tl {
-  top: 0;
-  left: 0;
-  border-top: 2px solid #00E0C7;
-  border-left: 2px solid #00E0C7;
-}
-
-.hero-yolo__corner--tr {
-  top: 0;
-  right: 0;
-  border-top: 2px solid #00E0C7;
-  border-right: 2px solid #00E0C7;
-}
-
-.hero-yolo__corner--bl {
-  bottom: 0;
-  left: 0;
-  border-bottom: 2px solid #00E0C7;
-  border-left: 2px solid #00E0C7;
-}
-
-.hero-yolo__corner--br {
-  bottom: 0;
-  right: 0;
-  border-bottom: 2px solid #00E0C7;
-  border-right: 2px solid #00E0C7;
-}
-
-.hero-yolo__body {
-  display: flex;
-  flex-direction: column;
-  gap: 0.4rem;
-}
-
-.hero-yolo__row {
-  font-family: 'Inter', -apple-system, 'SF Pro Display', sans-serif;
-  font-size: 0.72rem;
-  line-height: 1.3;
-  color: rgba(255, 255, 255, 0.55);
-  letter-spacing: 0.04em;
-}
-
-.hero-yolo__key {
-  color: rgba(255, 255, 255, 0.35);
-}
-
-.hero-yolo__val {
-  color: #ffffff;
-  font-weight: 700;
-}
-
-.hero-yolo__val--neon {
-  color: #00E0C7;
-}
-
-/* ════════════════════════════════════════════
    SIGNATURE CONTAINER — Centered
    ════════════════════════════════════════════ */
 .hero-signature {
@@ -245,11 +281,11 @@
 
 .hero-signature path {
   fill: transparent;
-  stroke: #00E0C7;
+  stroke: var(--teal-highlight, #00BFA6);
   stroke-width: 4px;
   stroke-linecap: round;
   stroke-linejoin: round;
-  filter: drop-shadow(0 0 6px rgba(0, 224, 199, 0.4));
+  filter: drop-shadow(0 0 6px rgba(0, 191, 166, 0.4));
 }
 
 /* ── Scroll Cue ── */
@@ -284,6 +320,26 @@
 /* ════════════════════════════════════════════
    RESPONSIVE
    ════════════════════════════════════════════ */
+
+/* ── Tablets ── */
+@media (max-width: 1024px) {
+  .hero-giant-title {
+    top: 41%;
+  }
+
+  .hero-giant-title__text {
+    font-size: clamp(5rem, 18.5vw, 11rem);
+    transform: scaleY(1.28);
+  }
+
+  .hero-supporting-line__inner {
+    transform: scaleY(0.78125);
+    font-size: clamp(0.6rem, 1.1vw, 0.82rem);
+    letter-spacing: 0.06em;
+  }
+}
+
+/* ── Mobile ── */
 @media (max-width: 768px) {
   .hero-L1__text {
     font-size: clamp(2.5rem, 14vw, 5rem);
@@ -291,6 +347,26 @@
 
   .hero-L2__portrait {
     height: 62vh;
+  }
+
+  .hero-giant-title {
+    top: 45%;
+  }
+
+  .hero-giant-title__text {
+    font-size: clamp(3rem, 17vw, 6.5rem);
+    transform: scaleY(1.25);
+    letter-spacing: -0.015em;
+  }
+
+  .hero-supporting-line {
+    bottom: calc(100% + 0.12em + 5px);
+  }
+
+  .hero-supporting-line__inner {
+    transform: scaleY(0.80);
+    font-size: clamp(0.40rem, 1.4vw, 0.55rem);
+    letter-spacing: 0.05em;
   }
 
   .hero-nav {
@@ -306,22 +382,6 @@
     font-size: 0.55rem;
   }
 
-  .hero-yolo {
-    bottom: 1.25rem;
-    left: 1.25rem;
-    min-width: auto;
-    padding: 0.9rem 1rem;
-  }
-
-  .hero-yolo__row {
-    font-size: 0.6rem;
-  }
-
-  .hero-yolo__corner {
-    width: 12px;
-    height: 12px;
-  }
-
   .hero-signature {
     width: 80vw;
     height: 22vh;
@@ -329,5 +389,37 @@
 
   .hero-scroll-cue {
     bottom: 1.25rem;
+  }
+}
+
+/* ── Small phones ── */
+@media (max-width: 480px) {
+  .hero-giant-title__text {
+    font-size: clamp(2.5rem, 17vw, 4.5rem);
+    transform: scaleY(1.2);
+  }
+
+  .hero-supporting-line {
+    bottom: calc(100% + 0.10em + 4px);
+  }
+
+  .hero-supporting-line__inner {
+    transform: scaleY(0.8333);
+    font-size: clamp(0.36rem, 1.35vw, 0.48rem);
+    letter-spacing: 0.03em;
+  }
+}
+
+/* ════════════════════════════════════════════
+   REDUCED MOTION PREFERENCES
+   ════════════════════════════════════════════ */
+@media (prefers-reduced-motion: reduce) {
+
+  .hero-giant-title,
+  .hero-supporting-line,
+  .hero-L1__text,
+  .hero-topo__path {
+    animation: none !important;
+    transition: none !important;
   }
 }
