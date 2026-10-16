@@ -4,15 +4,14 @@ import './GradientDescentVisual.css';
 
 // ── Surface Mathematical Formulation ──
 // Smooth loss-landscape with 1 deep global minimum and 2-3 local minima valleys
-// Height variation increased by 50% for pronounced 3D landscape ridges and valleys
-const G1 = { u: 0.65, v: -0.45, A: 2.80, s2: 0.85 }; // Global minimum (deepest valley)
-const G2 = { u: -0.85, v: 0.75, A: 1.85, s2: 0.65 };  // Local minimum 1
-const G3 = { u: -0.95, v: -0.85, A: 1.40, s2: 0.55 }; // Local minimum 2
-const G4 = { u: 0.85, v: 0.85, A: 1.05, s2: 0.50 };   // Saddle / secondary basin
+const G1 = { u: 0.65, v: -0.45, A: 1.85, s2: 0.85 }; // Global minimum (deepest valley)
+const G2 = { u: -0.85, v: 0.75, A: 1.25, s2: 0.65 };  // Local minimum 1
+const G3 = { u: -0.95, v: -0.85, A: 0.95, s2: 0.55 }; // Local minimum 2
+const G4 = { u: 0.85, v: 0.85, A: 0.70, s2: 0.50 };   // Saddle / secondary basin
 
-const BOWL = 0.18;   // 1.5x of 0.12
-const R_AMP = 0.09;  // 1.5x of 0.06
-const R_FREQ = 2.2;  // Frequency preserved for smooth, non-jagged contours
+const BOWL = 0.12;
+const R_AMP = 0.06;
+const R_FREQ = 2.2;
 
 function surfaceHeight(u: number, v: number): number {
   let h = BOWL * (u * u + v * v);
@@ -42,30 +41,6 @@ function surfaceGradient(u: number, v: number): { du: number; dv: number } {
   return { du, dv };
 }
 
-// Generate random spawn point on upper slopes far from all minima for visible fall
-function getRandomSpawnPoint(): { u: number; v: number } {
-  const minima = [G1, G2, G3, G4];
-  for (let attempt = 0; attempt < 50; attempt++) {
-    const angle = Math.random() * Math.PI * 2;
-    const r = 1.35 + Math.random() * 0.85; // 1.35 to 2.2 radius
-    const u = Math.cos(angle) * r;
-    const v = Math.sin(angle) * r;
-
-    let tooClose = false;
-    for (let i = 0; i < minima.length; i++) {
-      if (Math.hypot(u - minima[i].u, v - minima[i].v) < 0.85) {
-        tooClose = true;
-        break;
-      }
-    }
-
-    if (!tooClose && Math.abs(u) <= 2.2 && Math.abs(v) <= 2.2) {
-      return { u, v };
-    }
-  }
-  return { u: -1.65, v: 1.55 }; // High northwest slope fallback
-}
-
 // Generate soft circular glow texture for optimizer dot
 function createGlowTexture(): THREE.Texture {
   const canvas = document.createElement('canvas');
@@ -85,44 +60,29 @@ function createGlowTexture(): THREE.Texture {
   return texture;
 }
 
-const TRAIL_LENGTH = 34;
+const TRAIL_LENGTH = 38;
 
-interface GradientDescentVisualProps {
-  triggerScrollDrop?: number;
-}
-
-const GradientDescentVisual: React.FC<GradientDescentVisualProps> = ({ triggerScrollDrop = 0 }) => {
+const GradientDescentVisual: React.FC = () => {
   const containerRef = useRef<HTMLDivElement>(null);
-  const startDropRef = useRef<((targetU: number, targetV: number) => void) | null>(null);
-  const hasTriggeredInitialDropRef = useRef(false);
-
-  // Trigger scroll drop from prop if passed (strictly once ever!)
-  useEffect(() => {
-    if (triggerScrollDrop > 0 && !hasTriggeredInitialDropRef.current && startDropRef.current) {
-      hasTriggeredInitialDropRef.current = true;
-      const pt = getRandomSpawnPoint();
-      startDropRef.current(pt.u, pt.v);
-    }
-  }, [triggerScrollDrop]);
 
   useEffect(() => {
     const container = containerRef.current;
     if (!container) return;
 
-    // Check media queries & device capabilities
+    // Check media queries
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     const isMobile = window.innerWidth < 768;
     const isTouch = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
 
     // 1. Scene, Camera, Renderer
     const width = container.clientWidth || 450;
-    const height = container.clientHeight || 400;
+    const height = container.clientHeight || 450;
 
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(40, width / height, 0.1, 100);
-    // Lower camera angle significantly: ~38-42 degrees above surface for rich 3D landscape relief
-    camera.position.set(0, 3.8, 5.4);
-    camera.lookAt(0, -0.4, 0);
+    // Raised camera angle to clearly show valleys and descent path
+    camera.position.set(0, 6.2, 4.8);
+    camera.lookAt(0, -0.45, 0);
 
     const renderer = new THREE.WebGLRenderer({
       alpha: true,
@@ -130,16 +90,16 @@ const GradientDescentVisual: React.FC<GradientDescentVisualProps> = ({ triggerSc
       powerPreference: 'high-performance'
     });
     renderer.setSize(width, height);
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2)); // Capped at 2 for performance
     renderer.domElement.className = 'gradient-descent-canvas';
     container.appendChild(renderer.domElement);
 
-    // Group to hold the landscape surface and optimizer dot
+    // Group to hold the tilting surface and optimizer (scaled up 1.2x)
     const surfaceGroup = new THREE.Group();
-    surfaceGroup.scale.set(1.15, 1.15, 1.15);
+    surfaceGroup.scale.set(1.2, 1.2, 1.2);
     scene.add(surfaceGroup);
 
-    // 2. Wireframe Surface Mesh
+    // 2. Wireframe Surface Mesh (40% lower density: 32 vs 54 segments)
     const planeExtent = 5.2;
     const segments = isMobile ? 20 : 32;
     const geometry = new THREE.PlaneGeometry(planeExtent, planeExtent, segments, segments);
@@ -149,74 +109,28 @@ const GradientDescentVisual: React.FC<GradientDescentVisualProps> = ({ triggerSc
     for (let i = 0; i < posAttr.count; i++) {
       const x = posAttr.getX(i);
       const z = posAttr.getZ(i);
-      const y = surfaceHeight(x, z);
+      // Map world coords (x, z) to function domain (u, v)
+      const u = x;
+      const v = z;
+      const y = surfaceHeight(u, v);
       posAttr.setY(i, y);
     }
     geometry.computeVertexNormals();
 
-    // Wireframe ShaderMaterial with dynamic subtle cursor glow highlight
-    const wireframeMaterial = new THREE.ShaderMaterial({
+    const wireframeMaterial = new THREE.MeshBasicMaterial({
+      color: 0x00e5cc,
       wireframe: true,
       transparent: true,
-      depthWrite: false,
-      uniforms: {
-        uBaseColor: { value: new THREE.Color(0x00e5cc) },
-        uGlowColor: { value: new THREE.Color(0x40ffff) },
-        uBaseOpacity: { value: 0.20 },
-        uCursorPos: { value: new THREE.Vector3(999, 999, 999) },
-        uCursorRadius: { value: 1.15 }, // ~120px radius in screen space
-        uHoverIntensity: { value: 0.0 }
-      },
-      vertexShader: `
-        varying vec3 vWorldPos;
-        void main() {
-          vec4 worldPos = modelMatrix * vec4(position, 1.0);
-          vWorldPos = worldPos.xyz;
-          gl_Position = projectionMatrix * viewMatrix * worldPos;
-        }
-      `,
-      fragmentShader: `
-        uniform vec3 uBaseColor;
-        uniform vec3 uGlowColor;
-        uniform float uBaseOpacity;
-        uniform vec3 uCursorPos;
-        uniform float uCursorRadius;
-        uniform float uHoverIntensity;
-        varying vec3 vWorldPos;
-
-        void main() {
-          float dist = distance(vWorldPos, uCursorPos);
-          float glow = smoothstep(uCursorRadius, 0.0, dist) * uHoverIntensity;
-          vec3 col = mix(uBaseColor, uGlowColor, glow * 0.70);
-          float alpha = uBaseOpacity + glow * 0.40;
-          gl_FragColor = vec4(col, min(alpha, 0.85));
-        }
-      `
+      opacity: 0.20, // Lowered line opacity to roughly 20%
+      depthWrite: false
     });
-
     const surfaceMesh = new THREE.Mesh(geometry, wireframeMaterial);
     surfaceGroup.add(surfaceMesh);
 
-    // 3. Glowing Optimizer Dot (defaults to resting at deepest global minimum valley)
-    let u = G1.u;
-    let v = G1.v;
-    let vu = 0;
-    let vv = 0;
-    let settleFrames = 0;
-    let phase: 'resting' | 'fading_out' | 'fading_in' | 'descending' | 'settling_trail' = 'resting';
-    let phaseTimer = 0;
-    let dotOpacity = 1.0;
-    let pulseTime = 0;
-
-    let pendingU = 0;
-    let pendingV = 0;
-
+    // 3. Glowing Optimizer Dot (kept at full brightness)
     const dotGroup = new THREE.Group();
-    const initialY = surfaceHeight(u, v) + 0.045;
-    dotGroup.position.set(u, initialY, v);
-
     const dotGeo = new THREE.SphereGeometry(0.075, 16, 16);
-    const dotMat = new THREE.MeshBasicMaterial({ color: 0xffffff, transparent: true, opacity: 1.0 });
+    const dotMat = new THREE.MeshBasicMaterial({ color: 0xffffff, transparent: true });
     const dotCore = new THREE.Mesh(dotGeo, dotMat);
     dotGroup.add(dotCore);
 
@@ -224,7 +138,7 @@ const GradientDescentVisual: React.FC<GradientDescentVisualProps> = ({ triggerSc
     const spriteMat = new THREE.SpriteMaterial({
       map: glowTexture,
       transparent: true,
-      opacity: 0.9,
+      opacity: 1.0,
       blending: THREE.AdditiveBlending
     });
     const glowSprite = new THREE.Sprite(spriteMat);
@@ -245,42 +159,45 @@ const GradientDescentVisual: React.FC<GradientDescentVisualProps> = ({ triggerSc
       transparent: true,
       blending: THREE.AdditiveBlending,
       linewidth: 2,
-      depthWrite: false,
-      opacity: 0
+      depthWrite: false
     });
     const trailLine = new THREE.Line(trailGeo, trailMat);
     surfaceGroup.add(trailLine);
 
+    // 5. Optimizer Simulation State
+    let u = -1.6;
+    let v = 1.4;
+    let vu = 0;
+    let vv = 0;
+    let settleFrames = 0;
+    let phase: 'descending' | 'paused' | 'fading' = 'descending';
+    let phaseTimer = 0;
+    let dotOpacity = 1;
+
     const trailHistory: THREE.Vector3[] = [];
 
-    // Base pitch & rotation configuration
-    const BASE_PITCH_X = 0.16; // ~9.2 degrees
-    const MAX_TILT = 0.174;     // ~10 degrees max tilt per axis
-    const IDLE_ROT_SPEED = 0.016; // radians per second (~390s per full rotation)
-
-    let idleRotationY = 0;
-    let targetTiltX = 0;
-    let targetTiltZ = 0;
-    let currentTiltX = 0;
-    let currentTiltZ = 0;
-
-    let isHovered = false;
-    const targetGlowPos = new THREE.Vector3(999, 999, 999);
-    const currentGlowPos = new THREE.Vector3(999, 999, 999);
-    let currentHoverIntensity = 0;
-
-    // Trigger drop routine: fades current ball out quickly (~200ms), moves to target point, fades in (~200ms), and rolls
-    const startDrop = (targetU: number, targetV: number) => {
-      pendingU = targetU;
-      pendingV = targetV;
-      phase = 'fading_out';
-      phaseTimer = 0.20; // 200ms fade out of current ball
+    const respawnDot = () => {
+      // Pick random spawn on the upper slopes away from minima
+      const angle = Math.random() * Math.PI * 2;
+      const radius = 1.35 + Math.random() * 0.85; // 1.35 to 2.2
+      u = Math.cos(angle) * radius;
+      v = Math.sin(angle) * radius;
+      vu = 0;
+      vv = 0;
+      settleFrames = 0;
+      phase = 'descending';
+      phaseTimer = 0;
+      dotOpacity = 1;
+      trailHistory.length = 0;
     };
-    startDropRef.current = startDrop;
 
-    // Reduced motion handling
+    // If reduced motion is requested, rest statically at global minimum
     if (prefersReducedMotion) {
-      surfaceGroup.rotation.x = BASE_PITCH_X;
+      u = G1.u;
+      v = G1.v;
+      const y = surfaceHeight(u, v) + 0.05;
+      dotGroup.position.set(u, y, v);
+      surfaceGroup.rotation.x = 0.40;
       surfaceGroup.rotation.y = 0.15;
       renderer.render(scene, camera);
       return () => {
@@ -299,9 +216,13 @@ const GradientDescentVisual: React.FC<GradientDescentVisualProps> = ({ triggerSc
       };
     }
 
-    // 5. Interactive Raycasting on Click
-    // Uses raycast against mesh so ball lands exactly where user clicked even when surface is tilted
-    // If click misses the mesh, ignores it
+    // Initialize trail history
+    const initialY = surfaceHeight(u, v) + 0.04;
+    for (let i = 0; i < TRAIL_LENGTH; i++) {
+      trailHistory.push(new THREE.Vector3(u, initialY, v));
+    }
+
+    // 6. Interactive Raycasting on Click
     const raycaster = new THREE.Raycaster();
     const mouseCoord = new THREE.Vector2();
 
@@ -313,93 +234,64 @@ const GradientDescentVisual: React.FC<GradientDescentVisualProps> = ({ triggerSc
       raycaster.setFromCamera(mouseCoord, camera);
       const intersects = raycaster.intersectObject(surfaceMesh);
 
-      // If click misses the mesh, ignore it
-      if (intersects.length === 0) {
-        return;
+      if (intersects.length > 0) {
+        const localPoint = surfaceMesh.worldToLocal(intersects[0].point.clone());
+        u = THREE.MathUtils.clamp(localPoint.x, -2.3, 2.3);
+        v = THREE.MathUtils.clamp(localPoint.z, -2.3, 2.3);
+      } else {
+        const plane = new THREE.Plane(new THREE.Vector3(0, 1, 0), 0);
+        const hit = new THREE.Vector3();
+        if (raycaster.ray.intersectPlane(plane, hit)) {
+          const localPoint = surfaceMesh.worldToLocal(hit);
+          u = THREE.MathUtils.clamp(localPoint.x, -2.2, 2.2);
+          v = THREE.MathUtils.clamp(localPoint.z, -2.2, 2.2);
+        } else {
+          return;
+        }
       }
 
-      const localPoint = surfaceMesh.worldToLocal(intersects[0].point.clone());
-      const targetU = THREE.MathUtils.clamp(localPoint.x, -2.3, 2.3);
-      const targetV = THREE.MathUtils.clamp(localPoint.z, -2.3, 2.3);
-
-      if (prefersReducedMotion) {
-        u = targetU;
-        v = targetV;
-        dotGroup.position.set(u, surfaceHeight(u, v) + 0.045, v);
-        renderer.render(scene, camera);
-        return;
-      }
-
-      // Start click drop sequence: cancels any running auto drop and replaces ball
-      startDrop(targetU, targetV);
+      vu = 0;
+      vv = 0;
+      settleFrames = 0;
+      phase = 'descending';
+      phaseTimer = 0;
+      dotOpacity = 1;
+      trailHistory.length = 0;
     };
     container.addEventListener('click', handleClick);
 
-    // 6. Cursor Interaction (Gentle tilt + soft mesh glow within visual bounds)
+    // 7. Mouse Parallax (Subtle Tilt)
+    let targetTiltX = 0;
+    let targetTiltZ = 0;
+    let currentTiltX = 0;
+    let currentTiltZ = 0;
+    let idleRotationY = 0;
+
     const handleMouseMove = (e: MouseEvent) => {
       if (isMobile || isTouch) return;
       const rect = container.getBoundingClientRect();
       const nx = ((e.clientX - rect.left) / rect.width) * 2 - 1;
       const ny = ((e.clientY - rect.top) / rect.height) * 2 - 1;
 
-      isHovered = true;
-      targetTiltX = -ny * MAX_TILT;
-      targetTiltZ = nx * MAX_TILT;
-
-      // Update 3D glow position on the surface under cursor
-      mouseCoord.x = nx;
-      mouseCoord.y = -ny;
-      raycaster.setFromCamera(mouseCoord, camera);
-      const intersects = raycaster.intersectObject(surfaceMesh);
-      if (intersects.length > 0) {
-        targetGlowPos.copy(intersects[0].point);
-      }
-    };
-
-    const handleMouseEnter = () => {
-      if (isMobile || isTouch) return;
-      isHovered = true;
+      // Max tilt: 12 degrees ≈ 0.209 radians
+      const maxTilt = 0.20;
+      targetTiltX = -ny * maxTilt;
+      targetTiltZ = nx * maxTilt;
     };
 
     const handleMouseLeave = () => {
-      isHovered = false;
       targetTiltX = 0;
       targetTiltZ = 0;
     };
 
-    container.addEventListener('mousemove', handleMouseMove);
-    container.addEventListener('mouseenter', handleMouseEnter);
+    window.addEventListener('mousemove', handleMouseMove);
     container.addEventListener('mouseleave', handleMouseLeave);
-
-    // 7. Standalone Scroll Entry Observer (fallback if prop not wired)
-    const aboutSection = container.closest('#about') || document.getElementById('about');
-    let scrollObserver: IntersectionObserver | null = null;
-
-    if (aboutSection && triggerScrollDrop === 0 && !hasTriggeredInitialDropRef.current) {
-      scrollObserver = new IntersectionObserver(
-        (entries) => {
-          for (const entry of entries) {
-            if (entry.isIntersecting && entry.intersectionRatio >= 0.35) {
-              if (!hasTriggeredInitialDropRef.current) {
-                hasTriggeredInitialDropRef.current = true;
-                scrollObserver?.disconnect(); // Disconnect immediately: never runs again
-                const pt = getRandomSpawnPoint();
-                startDrop(pt.u, pt.v);
-              }
-              break;
-            }
-          }
-        },
-        { threshold: [0, 0.4] }
-      );
-      scrollObserver.observe(aboutSection);
-    }
 
     // 8. Resize Handler
     const handleResize = () => {
       if (!container) return;
       const newW = container.clientWidth || 450;
-      const newH = container.clientHeight || 400;
+      const newH = container.clientHeight || 450;
       camera.aspect = newW / newH;
       camera.updateProjectionMatrix();
       renderer.setSize(newW, newH);
@@ -408,10 +300,10 @@ const GradientDescentVisual: React.FC<GradientDescentVisualProps> = ({ triggerSc
 
     // 9. Intersection Observer (Pause rendering when off-screen for performance)
     let isVisible = true;
-    const visibilityObserver = new IntersectionObserver(([entry]) => {
+    const observer = new IntersectionObserver(([entry]) => {
       isVisible = entry.isIntersecting;
     }, { threshold: 0.05 });
-    visibilityObserver.observe(container);
+    observer.observe(container);
 
     // 10. Animation Loop
     let animationFrameId: number;
@@ -425,47 +317,14 @@ const GradientDescentVisual: React.FC<GradientDescentVisualProps> = ({ triggerSc
         return;
       }
 
-      const dt = Math.min((time - lastTime) / 1000, 0.05);
+      const dt = Math.min((time - lastTime) / 1000, 0.05); // Cap dt to avoid large delta jumps
       lastTime = time;
-      pulseTime += dt;
 
-      // ── Ball State Machine ──
-      if (phase === 'fading_out') {
-        phaseTimer -= dt;
-        dotOpacity = Math.max(0, phaseTimer / 0.20);
-        trailMat.opacity = dotOpacity;
-
-        if (phaseTimer <= 0) {
-          // Fade-out complete: jump to target spawn position & start fade-in
-          u = pendingU;
-          v = pendingV;
-          vu = 0;
-          vv = 0;
-          settleFrames = 0;
-          phase = 'fading_in';
-          phaseTimer = 0.20; // 200ms fade in at new point
-          dotOpacity = 0;
-
-          const currentY = surfaceHeight(u, v) + 0.045;
-          dotGroup.position.set(u, currentY, v);
-          trailHistory.length = 0;
-          for (let i = 0; i < TRAIL_LENGTH; i++) {
-            trailHistory.push(new THREE.Vector3(u, currentY, v));
-          }
-        }
-      } else if (phase === 'fading_in') {
-        phaseTimer -= dt;
-        dotOpacity = Math.min(1.0, 1.0 - (phaseTimer / 0.20));
-        trailMat.opacity = dotOpacity;
-
-        if (phaseTimer <= 0) {
-          phase = 'descending';
-          dotOpacity = 1.0;
-        }
-      } else if (phase === 'descending') {
+      // ── Physical Gradient Descent Simulation ──
+      if (phase === 'descending') {
         const { du, dv } = surfaceGradient(u, v);
-        const lr = 0.012; // Well-conditioned learning rate for 50% steeper terrain
-        const momentum = 0.86; // Inertia
+        const lr = 0.016; // learning rate
+        const momentum = 0.88; // inertia
 
         vu = vu * momentum - lr * du;
         vv = vv * momentum - lr * dv;
@@ -483,95 +342,82 @@ const GradientDescentVisual: React.FC<GradientDescentVisualProps> = ({ triggerSc
           vv = -vv * 0.3;
         }
 
-        // Check if settled in a valley minimum
+        // Check if optimizer settled in a minimum
         const speed = Math.hypot(vu, vv);
         const gradNorm = Math.hypot(du, dv);
 
-        if (speed < 0.0035 && gradNorm < 0.16) {
+        if (speed < 0.0035 && gradNorm < 0.12) {
           settleFrames++;
-          if (settleFrames > 26) {
-            // Reached valley bottom: fade out the trail, ball stays resting here
-            phase = 'settling_trail';
-            phaseTimer = 0.40;
+          if (settleFrames > 28) {
+            phase = 'paused';
+            phaseTimer = 1.0; // 1-second pause when settled
           }
         } else {
           settleFrames = 0;
         }
-      } else if (phase === 'settling_trail') {
+      } else if (phase === 'paused') {
         phaseTimer -= dt;
-        trailMat.opacity = Math.max(0, phaseTimer / 0.40);
         if (phaseTimer <= 0) {
-          phase = 'resting';
-          trailHistory.length = 0;
-          trailMat.opacity = 0;
+          phase = 'fading';
+          phaseTimer = 0.45; // fade out duration
+        }
+      } else if (phase === 'fading') {
+        phaseTimer -= dt;
+        dotOpacity = Math.max(0, phaseTimer / 0.45);
+        if (phaseTimer <= 0) {
+          respawnDot();
         }
       }
 
-      // ── Update Ball Visuals (Glow pulse & position) ──
-      const currentY = surfaceHeight(u, v) + 0.045;
+      // Update Dot Position & Opacity
+      const currentY = surfaceHeight(u, v) + 0.045; // Slightly elevated above wireframe
       dotGroup.position.set(u, currentY, v);
+      dotMat.opacity = dotOpacity;
+      spriteMat.opacity = dotOpacity * 0.9;
+      trailMat.opacity = dotOpacity;
 
-      if (phase === 'resting') {
-        // Subtle, gentle glow pulse while resting at bottom of valley
-        const pulse = Math.sin(pulseTime * 1.8) * 0.05;
-        glowSprite.scale.set(0.42 + pulse, 0.42 + pulse, 1);
-        spriteMat.opacity = 0.88 + pulse * 1.5;
-        dotMat.opacity = 1.0;
-        trailMat.opacity = 0;
-      } else if (phase === 'descending' || phase === 'fading_in') {
-        glowSprite.scale.set(0.44, 0.44, 1);
-        spriteMat.opacity = dotOpacity * 0.95;
-        dotMat.opacity = dotOpacity;
-        trailMat.opacity = dotOpacity;
-
-        // Update Trail history
-        trailHistory.push(new THREE.Vector3(u, currentY, v));
-        if (trailHistory.length > TRAIL_LENGTH) {
-          trailHistory.shift();
-        }
-
-        const pArr = trailGeo.attributes.position.array as Float32Array;
-        const cArr = trailGeo.attributes.color.array as Float32Array;
-        const historyCount = trailHistory.length;
-
-        for (let i = 0; i < TRAIL_LENGTH; i++) {
-          const histIdx = Math.max(0, historyCount - TRAIL_LENGTH + i);
-          const pt = trailHistory[histIdx] || trailHistory[0];
-          pArr[i * 3] = pt.x;
-          pArr[i * 3 + 1] = pt.y;
-          pArr[i * 3 + 2] = pt.z;
-
-          const alpha = Math.pow(i / (TRAIL_LENGTH - 1), 1.2);
-          cArr[i * 3] = 0.0 * alpha;
-          cArr[i * 3 + 1] = 1.0 * alpha;
-          cArr[i * 3 + 2] = 0.95 * alpha;
-        }
-        trailGeo.attributes.position.needsUpdate = true;
-        trailGeo.attributes.color.needsUpdate = true;
-      } else {
-        glowSprite.scale.set(0.42, 0.42, 1);
-        spriteMat.opacity = dotOpacity * 0.9;
-        dotMat.opacity = dotOpacity;
+      // Update Trail
+      trailHistory.push(new THREE.Vector3(u, currentY, v));
+      if (trailHistory.length > TRAIL_LENGTH) {
+        trailHistory.shift();
       }
 
-      // ── Cursor Tilt Damping & Slow Idle Rotation ──
-      // Heavy smoothing / damping (lerp factor 0.05) so it never twitches
-      currentTiltX += (targetTiltX - currentTiltX) * 0.05;
-      currentTiltZ += (targetTiltZ - currentTiltZ) * 0.05;
+      const pArr = trailGeo.attributes.position.array as Float32Array;
+      const cArr = trailGeo.attributes.color.array as Float32Array;
+      const historyCount = trailHistory.length;
 
-      idleRotationY += IDLE_ROT_SPEED * dt;
+      for (let i = 0; i < TRAIL_LENGTH; i++) {
+        const histIdx = Math.max(0, historyCount - TRAIL_LENGTH + i);
+        const pt = trailHistory[histIdx] || trailHistory[0];
+        pArr[i * 3] = pt.x;
+        pArr[i * 3 + 1] = pt.y;
+        pArr[i * 3 + 2] = pt.z;
 
-      surfaceGroup.rotation.x = BASE_PITCH_X + currentTiltX;
-      surfaceGroup.rotation.y = idleRotationY;
-      surfaceGroup.rotation.z = currentTiltZ;
+        // Fading trail alpha/luminosity from tail (0) to head (1)
+        const alpha = Math.pow(i / (TRAIL_LENGTH - 1), 1.2);
+        cArr[i * 3] = 0.0 * alpha;
+        cArr[i * 3 + 1] = 1.0 * alpha;
+        cArr[i * 3 + 2] = 0.95 * alpha;
+      }
+      trailGeo.attributes.position.needsUpdate = true;
+      trailGeo.attributes.color.needsUpdate = true;
 
-      // ── Soft Mesh Glow Update ──
-      const targetIntensity = (isHovered && !isMobile && !isTouch) ? 1.0 : 0.0;
-      currentHoverIntensity += (targetIntensity - currentHoverIntensity) * 0.08;
-      currentGlowPos.lerp(targetGlowPos, 0.15);
+      // ── Parallax Tilt & Slow Idle Rotation ──
+      // Raised camera viewing angle (0.40 base tilt)
+      if (!isMobile && !isTouch) {
+        currentTiltX += (targetTiltX - currentTiltX) * 0.05;
+        currentTiltZ += (targetTiltZ - currentTiltZ) * 0.05;
+        idleRotationY += 0.00065; // Slow, almost imperceptible rotation
 
-      wireframeMaterial.uniforms.uCursorPos.value.copy(currentGlowPos);
-      wireframeMaterial.uniforms.uHoverIntensity.value = currentHoverIntensity;
+        surfaceGroup.rotation.x = 0.40 + currentTiltX;
+        surfaceGroup.rotation.y = idleRotationY;
+        surfaceGroup.rotation.z = currentTiltZ;
+      } else {
+        idleRotationY += 0.00055;
+        surfaceGroup.rotation.x = 0.40;
+        surfaceGroup.rotation.y = idleRotationY;
+        surfaceGroup.rotation.z = 0;
+      }
 
       renderer.render(scene, camera);
     };
@@ -581,14 +427,10 @@ const GradientDescentVisual: React.FC<GradientDescentVisualProps> = ({ triggerSc
     // 11. Complete Cleanup on Unmount
     return () => {
       cancelAnimationFrame(animationFrameId);
-      visibilityObserver.disconnect();
-      if (scrollObserver) scrollObserver.disconnect();
-      startDropRef.current = null;
-
-      container.removeEventListener('click', handleClick);
-      container.removeEventListener('mousemove', handleMouseMove);
-      container.removeEventListener('mouseenter', handleMouseEnter);
+      observer.disconnect();
+      window.removeEventListener('mousemove', handleMouseMove);
       container.removeEventListener('mouseleave', handleMouseLeave);
+      container.removeEventListener('click', handleClick);
       window.removeEventListener('resize', handleResize);
 
       geometry.dispose();
@@ -605,13 +447,13 @@ const GradientDescentVisual: React.FC<GradientDescentVisualProps> = ({ triggerSc
         container.removeChild(renderer.domElement);
       }
     };
-  }, [triggerScrollDrop]);
+  }, []);
 
   return (
     <div
       ref={containerRef}
       className="gradient-descent-container"
-      title="Click anywhere on the surface to drop the optimizer"
+      title="Click anywhere to drop the optimizer"
     />
   );
 };

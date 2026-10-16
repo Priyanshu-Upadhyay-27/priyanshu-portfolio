@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import GradientDescentVisual from './GradientDescentVisual';
@@ -10,7 +10,6 @@ const About: React.FC = () => {
   const sectionRef = useRef<HTMLDivElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
   const barRef = useRef<HTMLDivElement>(null);
-  const [triggerScrollDrop, setTriggerScrollDrop] = useState(0);
 
   // Scroll-Triggered Text Reveal Animation
   useEffect(() => {
@@ -38,8 +37,8 @@ const About: React.FC = () => {
     return () => ctx.revert();
   }, []);
 
-  // Section Scroll Entry Observer: triggers 600ms heading bar draw and ball drop ONLY the first time ever
-  const hasTriggeredFirstDropRef = useRef(false);
+  // Section Scroll Entry Observer: triggers 600ms heading bar draw ONLY the first time ever
+  const hasTriggeredBarRef = useRef(false);
 
   useEffect(() => {
     const section = sectionRef.current;
@@ -52,7 +51,7 @@ const About: React.FC = () => {
     }
 
     // Guard against React strict-mode double invocation or subsequent re-entries
-    if (hasTriggeredFirstDropRef.current) {
+    if (hasTriggeredBarRef.current) {
       if (barRef.current) barRef.current.style.transform = 'scaleX(1)';
       return;
     }
@@ -61,11 +60,11 @@ const About: React.FC = () => {
       (entries) => {
         for (const entry of entries) {
           if (entry.isIntersecting && entry.intersectionRatio >= 0.35) {
-            if (!hasTriggeredFirstDropRef.current) {
-              hasTriggeredFirstDropRef.current = true;
+            if (!hasTriggeredBarRef.current) {
+              hasTriggeredBarRef.current = true;
               observer.disconnect(); // Disconnect immediately: never runs again
 
-              // 1. Animate accent bar drawing in from left to right over 600ms (stays drawn permanently)
+              // Animate accent bar drawing in from left to right over 600ms (stays drawn permanently)
               if (barRef.current) {
                 gsap.fromTo(
                   barRef.current,
@@ -78,9 +77,6 @@ const About: React.FC = () => {
                   }
                 );
               }
-
-              // 2. Trigger automatic ball drop in GradientDescentVisual once
-              setTriggerScrollDrop(1);
             }
             break;
           }
@@ -122,7 +118,7 @@ const About: React.FC = () => {
           </div>
 
           <div className="about-visual-column about-reveal">
-            <GradientDescentVisual triggerScrollDrop={triggerScrollDrop} />
+            <GradientDescentVisual />
           </div>
         </div>
       </div>

@@ -2,7 +2,7 @@
 .gradient-descent-container {
   position: relative;
   width: 100%;
-  height: clamp(340px, 40vh, 440px);
+  height: clamp(420px, 52vh, 580px);
   max-width: 640px;
   margin: 0 auto;
   display: flex;
@@ -11,7 +11,7 @@
   /* Soft edge fade on all sides: completely eliminates hard boundary cuts */
   mask-image: radial-gradient(ellipse 65% 65% at 50% 50%, #000 30%, rgba(0, 0, 0, 0.75) 55%, rgba(0, 0, 0, 0.2) 75%, transparent 95%);
   -webkit-mask-image: radial-gradient(ellipse 65% 65% at 50% 50%, #000 30%, rgba(0, 0, 0, 0.75) 55%, rgba(0, 0, 0, 0.2) 75%, transparent 95%);
-  cursor: pointer;
+  cursor: crosshair;
   user-select: none;
 }
 
