@@ -3,7 +3,7 @@ import { ExternalLink, Github } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 const archiveProjects = [
-  { year: "2026", title: "End-to-End Churn ML Pipeline", category: "MLOps", tech: ["FastAPI", "Docker", "scikit-learn", "Streamlit"], repo: "https://github.com/Priyanshu-Upadhyay-27/end-to-end-churn-ml", live: "https://priyanshu-retention-intelligence.streamlit.app/" },
+  { year: "2026", title: "End-to-End Churn & MLOps Pipeline", category: "MLOps", tech: ["FastAPI", "Docker", "scikit-learn", "Streamlit"], repo: "https://github.com/Priyanshu-Upadhyay-27/end-to-end-churn-ml", live: "https://youtu.be/C1ZnjDaaIDM?si=Lc42UvHckPz0jzkN" },
   { year: "2025", title: "Context-Aware Jupyter RAG", category: "GenAI", tech: ["LangChain", "Local LLMs", "AST", "Python"], repo: "https://github.com/Priyanshu-Upadhyay-27/QnA_With_Jupyter", live: "" },
   { year: "2025", title: "Loan Risk Modeling System", category: "Machine Learning", tech: ["XGBoost", "KMeans", "SHAP", "Pandas"], repo: "https://github.com/Priyanshu-Upadhyay-27/LoanClassinator", live: "https://loanclassinator-classifier-cluster.streamlit.app/" },
   { year: "2024", title: "Vision Board (Retail CV)", category: "Computer Vision", tech: ["YOLOv8", "MediaPipe", "React"], repo: "https://github.com/Priyanshu-Upadhyay-27/2047-Visual-Shop/tree/new_updates", live: "https://www.youtube.com/watch?v=U_d6wnP3iDM" },
@@ -26,7 +26,7 @@ const Archive = () => {
         <div className="mb-12">
           <Link 
             to="/#archive-link" 
-            className="inline-flex items-center gap-2 text-[#f4f4f5]/50 hover:text-[#00E0C7] transition-colors font-sans text-sm tracking-widest uppercase"
+            className="inline-flex items-center gap-2 text-[#f4f4f5]/50 hover:text-[#00BFA6] transition-colors font-sans text-sm tracking-widest uppercase"
           >
             <span>← Back to Main Portfolio</span>
           </Link>
@@ -55,7 +55,7 @@ const Archive = () => {
               {archiveProjects.map((project, index) => (
                 <tr key={index} className="border-b border-white/5 hover:bg-white/5 transition-colors group">
                   <td className="py-6 pr-4 text-[#f4f4f5]/50 font-sans text-sm">{project.year}</td>
-                  <td className="py-6 pr-4 font-semibold text-[#f4f4f5] group-hover:text-[#00E0C7] transition-colors">
+                  <td className="py-6 pr-4 font-semibold text-[#f4f4f5] group-hover:text-[#00BFA6] transition-colors">
                     {project.title}
                   </td>
                   <td className="py-6 pr-4 text-[#f4f4f5]/60 text-sm hidden md:table-cell">{project.category}</td>

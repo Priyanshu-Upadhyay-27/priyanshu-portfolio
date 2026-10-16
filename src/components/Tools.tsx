@@ -5,6 +5,10 @@ import './Tools.css';
 
 const toolsList = [
   { name: "Git & GitHub", url: "https://github.com/" },
+  { name: "MLflow", url: "https://mlflow.org/" },
+  { name: "AWS EC2", url: "https://aws.amazon.com/ec2/" },
+  { name: "Docker Compose", url: "https://docs.docker.com/compose/" },
+  { name: "XGBoost", url: "https://xgboost.readthedocs.io/" },
   { name: "Jupyter Ecosystem", url: "https://jupyter.org/" },
   { name: "VS Code", url: "https://code.visualstudio.com/" },
   { name: "PyCharm", url: "https://www.jetbrains.com/pycharm/" },
@@ -14,7 +18,7 @@ const toolsList = [
 
 const Tools = () => {
   const doubled = [...toolsList, ...toolsList];
-  const ghostColors = ['0, 224, 199', '0, 147, 148', '0, 98, 112'];
+  const ghostColors = ['0, 191, 166', '0, 127, 116', '0, 80, 74'];
 
   const [isHovered, setIsHovered] = useState(false);
   const topMarqueeRef = useRef<HTMLDivElement>(null);
@@ -44,7 +48,7 @@ const Tools = () => {
       topTweenRef.current = gsap.to(topMarqueeRef.current, {
         xPercent: -50,
         repeat: -1,
-        duration: 15, // Fast linear moving speed
+        duration: 25, // Steady linear moving speed for expanded list
         ease: 'none',
         force3D: true,
       });
@@ -55,7 +59,7 @@ const Tools = () => {
       botTweenRef.current = gsap.to(botMarqueeRef.current, {
         xPercent: 0,
         repeat: -1,
-        duration: 15, // Must match top for same speed
+        duration: 25, // Must match top for same speed
         ease: 'none',
         force3D: true,
       });

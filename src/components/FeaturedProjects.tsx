@@ -1,20 +1,22 @@
 import { useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ExternalLink, Github, ChevronLeft, ChevronRight, X, Play } from 'lucide-react';
+import { ExternalLink, Github, ChevronLeft, ChevronRight, X, Play, Youtube } from 'lucide-react';
 import { useAntiGravity } from '../hooks/useAntiGravity';
 
 const projects = [
   {
     title: "End-to-End Churn & MLOps Pipeline",
-    description: "A production-grade machine learning system designed to predict telecom customer churn, optimized for business decision-making (Recall@20). Built with a decoupled architecture featuring a FastAPI inference engine and a Streamlit UI.",
+    description: "A production-oriented machine learning system for predicting telecom customer churn, optimized around Recall@20% to prioritize high-risk customers. The system covers model training and versioning through MLflow, containerized services, database integration, and cloud deployment.",
     bullets: [
-      "Engineered a custom scikit-learn pipeline with Pydantic validation to handle real-world edge cases like the 'Zero Tenure Trap'.",
-      "Containerized with Docker and exposed via a RESTful API for seamless, high-traffic serving.",
-      "Implemented continuous monitoring to simulate concept drift, triggering automated challenger model retraining."
+      "Built a reproducible scikit-learn/XGBoost training pipeline with validation and preprocessing, including handling of real-world edge cases such as the Zero Tenure Trap.",
+      "Used MLflow during model development to track experiments and maintain model versions, keeping the training and inference workflow organized.",
+      "Containerized the backend, Streamlit frontend, and PostgreSQL database, and orchestrated the three services using Docker Compose.",
+      "Built an interactive concept-drift simulator that lets users see how model performance and behavior can change over time, and how models can be replaced as conditions evolve."
     ],
     stack: ["FastAPI", "Docker", "scikit-learn", "Streamlit"],
     repo: "https://github.com/Priyanshu-Upadhyay-27/end-to-end-churn-ml",
-    live: "https://priyanshu-retention-intelligence.streamlit.app/",
+    live: "",
+    video: "https://youtu.be/C1ZnjDaaIDM?si=Lc42UvHckPz0jzkN",
     images: [
       '/projects/pro_ch_1.png',
       '/projects/pro_ch_2.png',
@@ -33,6 +35,7 @@ const projects = [
     stack: ["LangChain", "Python", "Local LLMs", "AST"],
     repo: "https://github.com/Priyanshu-Upadhyay-27/QnA_With_Jupyter",
     live: "",
+    video: "",
     images: [
       '/projects/pro_jy_1.png',
       '/projects/pro_jy_2.png',
@@ -51,6 +54,7 @@ const projects = [
     stack: ["XGBoost", "KMeans", "SHAP", "Pandas"],
     repo: "https://github.com/Priyanshu-Upadhyay-27/LoanClassinator",
     live: "https://loanclassinator-classifier-cluster.streamlit.app/",
+    video: "",
     images: [
       '/projects/pro_loan_1.png',
       '/projects/pro_loan_2.png',
@@ -142,7 +146,7 @@ const ProjectFeature = ({ project }: { project: typeof projects[0] }) => {
         <ul className="space-y-3 mb-10">
           {project.bullets.map((bullet, i) => (
             <li key={i} className="flex items-start text-soft-white/60 font-sans">
-              <span className="block w-1.5 h-1.5 rounded-full bg-teal mt-2.5 mr-4 flex-shrink-0" />
+              <span className="block w-1.5 h-1.5 rounded-full bg-teal-highlight mt-2.5 mr-4 flex-shrink-0" />
               <span className="leading-relaxed">{bullet}</span>
             </li>
           ))}
@@ -158,7 +162,7 @@ const ProjectFeature = ({ project }: { project: typeof projects[0] }) => {
 
         <div className="flex items-center gap-6 mt-auto">
           {project.live && (
-            <a href={project.live} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-soft-white hover:text-teal transition-colors uppercase tracking-widest text-sm font-semibold">
+            <a href={project.live} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-soft-white hover:text-teal-highlight transition-colors uppercase tracking-widest text-sm font-semibold">
               <span>{project.live.includes('youtube.com') || project.live.includes('youtu.be') ? 'Watch Demo' : 'View Live'}</span>
               {project.live.includes('youtube.com') || project.live.includes('youtu.be') ? <Play size={16} /> : <ExternalLink size={16} />}
             </a>
@@ -167,6 +171,12 @@ const ProjectFeature = ({ project }: { project: typeof projects[0] }) => {
             <span>Source</span>
             <Github size={16} />
           </a>
+          {project.video && (
+            <a href={project.video} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-soft-white/50 hover:text-teal-highlight transition-colors uppercase tracking-widest text-sm font-semibold">
+              <span>Deployment Video</span>
+              <Youtube size={16} />
+            </a>
+          )}
         </div>
       </div>
 
@@ -203,7 +213,7 @@ const ProjectFeature = ({ project }: { project: typeof projects[0] }) => {
             </button>
 
             <button
-              className="absolute left-6 top-1/2 -translate-y-1/2 text-white/50 hover:text-[#00E0C7] transition-colors cursor-pointer"
+              className="absolute left-6 top-1/2 -translate-y-1/2 text-white/50 hover:text-[#00BFA6] transition-colors cursor-pointer"
               onClick={(e) => {
                 e.stopPropagation();
                 setLightboxIndex((prev) => (prev === 0 ? images.length - 1 : prev! - 1));
@@ -213,7 +223,7 @@ const ProjectFeature = ({ project }: { project: typeof projects[0] }) => {
             </button>
 
             <button
-              className="absolute right-6 top-1/2 -translate-y-1/2 text-white/50 hover:text-[#00E0C7] transition-colors cursor-pointer"
+              className="absolute right-6 top-1/2 -translate-y-1/2 text-white/50 hover:text-[#00BFA6] transition-colors cursor-pointer"
               onClick={(e) => {
                 e.stopPropagation();
                 setLightboxIndex((prev) => (prev === images.length - 1 ? 0 : prev! + 1));
