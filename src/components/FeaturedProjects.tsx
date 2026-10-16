@@ -6,7 +6,7 @@ import { useAntiGravity } from '../hooks/useAntiGravity';
 const projects = [
   {
     title: "End-to-End Churn & MLOps Pipeline",
-    description: "A production-oriented machine learning system for predicting telecom customer churn, optimized around Recall@20% to prioritize high-risk customers. The system covers model training and versioning through MLflow, containerized services, database integration, and cloud deployment.",
+    description: "A production-oriented machine learning system for predicting telecom customer churn, optimized around Recall@20% to prioritize high-risk customers. The system covers model training and versioning through MLflow, containerized services, and cloud deployment.",
     bullets: [
       "Built a reproducible scikit-learn/XGBoost training pipeline with validation and preprocessing, including handling of real-world edge cases such as the Zero Tenure Trap.",
       "Used MLflow during model development to track experiments and maintain model versions, keeping the training and inference workflow organized.",
@@ -15,7 +15,7 @@ const projects = [
     ],
     stack: ["FastAPI", "Docker", "scikit-learn", "Streamlit"],
     repo: "https://github.com/Priyanshu-Upadhyay-27/end-to-end-churn-ml",
-    live: "",
+    live: "https://priyanshu-retention-intelligence.streamlit.app/",
     video: "https://youtu.be/C1ZnjDaaIDM?si=Lc42UvHckPz0jzkN",
     images: [
       '/projects/pro_ch_1.png',
