@@ -37,12 +37,12 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       text: `Name: ${name}\nEmail: ${email}\n\nMessage:\n${message}`,
       html: `
         <div style="font-family: sans-serif; max-width: 600px;">
-          <h2 style="color: #009394; margin-bottom: 4px;">New Portfolio Message</h2>
+          <h2 style="color: #007F74; margin-bottom: 4px;">New Portfolio Message</h2>
           <hr style="border: 1px solid #eee;" />
           <p><strong>Name:</strong> ${name}</p>
           <p><strong>Email:</strong> <a href="mailto:${email}">${email}</a></p>
           <p><strong>Message:</strong></p>
-          <blockquote style="border-left: 3px solid #009394; padding-left: 12px; color: #333;">
+          <blockquote style="border-left: 3px solid #007F74; padding-left: 12px; color: #333;">
             ${message.replace(/\n/g, '<br />')}
           </blockquote>
         </div>

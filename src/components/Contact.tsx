@@ -13,7 +13,9 @@ const Contact = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [isError, setIsError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
   const [honey, setHoney] = useState("");
+  const [botcheck, setBotcheck] = useState(false);
   const [loadTime, setLoadTime] = useState(0);
 
   useEffect(() => {
@@ -31,46 +33,79 @@ const Contact = () => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    // 1. Honeypot Check Only
-    if (honey !== "") {
-      console.log("Bot trapped by honeypot.");
-      setIsSuccess(true);
+    // 1. Prevent Double Submissions while already submitting
+    if (isLoading) return;
+
+    // 2. Validate Required Fields & Email Format
+    const trimmedName = name.trim();
+    const trimmedEmail = email.trim();
+    const trimmedMessage = message.trim();
+
+    if (!trimmedName || !trimmedEmail || !trimmedMessage) {
+      setIsError(true);
+      setErrorMessage("// Please fill in all required fields.");
       return;
     }
 
-    // 2. Prevent Double Submissions
-    if (isLoading) return;
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(trimmedEmail)) {
+      setIsError(true);
+      setErrorMessage("// Please enter a valid email address.");
+      return;
+    }
 
-    // 3. Start Loading State
+    // 3. Honeypot Check (Silently drop bots if honey or botcheck is filled)
+    if (honey !== "" || botcheck) {
+      console.log("Bot trapped by honeypot.");
+      setIsSuccess(true);
+      setName('');
+      setEmail('');
+      setMessage('');
+      setHoney('');
+      setBotcheck(false);
+      return;
+    }
+
+    // 4. Start Loading State
     setIsLoading(true);
     setIsError(false);
     setIsSuccess(false);
+    setErrorMessage('');
 
     try {
-      const response = await fetch('/api/contact', {
+      const response = await fetch('https://api.web3forms.com/submit', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
         body: JSON.stringify({
-          name,
-          email,
-          message,
-          'bot-field': honey,
+          access_key: '493e8ab0-48c5-48af-8bb9-c152587603e9',
+          name: trimmedName,
+          email: trimmedEmail,
+          message: trimmedMessage,
+          botcheck: false
         }),
       });
 
-      if (response.ok) {
+      const result = await response.json();
+
+      if (response.status === 200 && result.success) {
         setIsSuccess(true);
         setName('');
         setEmail('');
         setMessage('');
         setHoney('');
+        setBotcheck(false);
       } else {
-        console.error('Form submission failed:', response.status, response.statusText);
+        console.error('Web3Forms submission failed:', result);
         setIsError(true);
+        setErrorMessage(result.message ? `// ${result.message}` : "// Transmission Failed. Please try again.");
       }
     } catch (error) {
       console.error("Network Error:", error);
       setIsError(true);
+      setErrorMessage("// Transmission Failed. Check Network Context.");
     } finally {
       setIsLoading(false);
     }
@@ -149,7 +184,7 @@ const Contact = () => {
       ctx.fillRect(0, 0, width, height);
 
       // Draw and update dots
-      ctx.fillStyle = 'rgba(0, 147, 148, 0.4)'; // Faint teal dots
+      ctx.fillStyle = 'rgba(0, 127, 116, 0.4)'; // Faint teal dots
 
       for (let i = 0; i < dots.length; i++) {
         const dot = dots[i];
@@ -175,7 +210,7 @@ const Contact = () => {
           ctx.moveTo(dot.x, dot.y);
           ctx.lineTo(mouse.x, mouse.y);
           const opacity = 1 - (distToMouse / 150);
-          ctx.strokeStyle = `rgba(0, 147, 148, ${opacity * 0.8})`;
+          ctx.strokeStyle = `rgba(0, 127, 116, ${opacity * 0.8})`;
           ctx.lineWidth = 1;
           ctx.stroke();
         }
@@ -192,7 +227,7 @@ const Contact = () => {
             ctx.moveTo(dot.x, dot.y);
             ctx.lineTo(otherDot.x, otherDot.y);
             const opacity = 1 - (distToDot / 80);
-            ctx.strokeStyle = `rgba(0, 147, 148, ${opacity * 0.5})`;
+            ctx.strokeStyle = `rgba(0, 127, 116, ${opacity * 0.5})`;
             ctx.lineWidth = 0.5;
             ctx.stroke();
           }
@@ -246,47 +281,47 @@ const Contact = () => {
           <div className="flex flex-col gap-6 w-full max-w-md mt-12">
             {/* Email Link */}
             <a href="mailto:priyanshuupadhyay2005@gmail.com" className="flex items-center gap-4 group w-fit">
-              <div className="w-12 h-12 flex items-center justify-center border border-white/10 group-hover:border-[#009394] group-hover:bg-[#009394]/10 transition-all text-zinc-300 group-hover:text-[#00E0C7]">
+              <div className="w-12 h-12 flex items-center justify-center border border-white/10 group-hover:border-[#007F74] group-hover:bg-[#007F74]/10 transition-all text-zinc-300 group-hover:text-[#00BFA6]">
                 <Mail size={24} />
               </div>
-              <span className="text-zinc-300 group-hover:text-[#00E0C7] font-sans text-base md:text-lg transition-all tracking-wide">
+              <span className="text-zinc-300 group-hover:text-[#00BFA6] font-sans text-base md:text-lg transition-all tracking-wide">
                 priyanshuupadhyay2005@gmail.com
               </span>
             </a>
 
             {/* Github Link */}
             <a href="https://github.com/Priyanshu-Upadhyay-27" target="_blank" rel="noreferrer" className="flex items-center gap-4 group w-fit">
-              <div className="w-12 h-12 flex items-center justify-center border border-white/10 group-hover:border-[#009394] group-hover:bg-[#009394]/10 transition-all text-zinc-300 group-hover:text-[#00E0C7]">
+              <div className="w-12 h-12 flex items-center justify-center border border-white/10 group-hover:border-[#007F74] group-hover:bg-[#007F74]/10 transition-all text-zinc-300 group-hover:text-[#00BFA6]">
                 <Github size={24} />
               </div>
-              <span className="text-zinc-300 group-hover:text-[#00E0C7] font-sans text-base md:text-lg transition-all tracking-wide">
+              <span className="text-zinc-300 group-hover:text-[#00BFA6] font-sans text-base md:text-lg transition-all tracking-wide">
                 Github
               </span>
             </a>
 
             {/* LinkedIn Link */}
             <a href="https://linkedin.com/in/priyanshu-upadhyay-cse" target="_blank" rel="noreferrer" className="flex items-center gap-4 group w-fit">
-              <div className="w-12 h-12 flex items-center justify-center border border-white/10 group-hover:border-[#009394] group-hover:bg-[#009394]/10 transition-all text-zinc-300 group-hover:text-[#00E0C7]">
+              <div className="w-12 h-12 flex items-center justify-center border border-white/10 group-hover:border-[#007F74] group-hover:bg-[#007F74]/10 transition-all text-zinc-300 group-hover:text-[#00BFA6]">
                 <Linkedin size={24} />
               </div>
-              <span className="text-zinc-300 group-hover:text-[#00E0C7] font-sans text-base md:text-lg transition-all tracking-wide">
+              <span className="text-zinc-300 group-hover:text-[#00BFA6] font-sans text-base md:text-lg transition-all tracking-wide">
                 LinkedIn
               </span>
             </a>
 
             {/* Location */}
             <div className="flex items-center gap-4 w-fit group">
-              <div className="w-12 h-12 flex items-center justify-center border border-white/10 text-zinc-300 group-hover:border-[#009394] group-hover:bg-[#009394]/10 group-hover:text-[#00E0C7] transition-all">
+              <div className="w-12 h-12 flex items-center justify-center border border-white/10 text-zinc-300 group-hover:border-[#007F74] group-hover:bg-[#007F74]/10 group-hover:text-[#00BFA6] transition-all">
                 <MapPin size={24} />
               </div>
-              <span className="text-zinc-300 font-sans text-base md:text-lg group-hover:text-[#00E0C7] transition-all tracking-wide">
+              <span className="text-zinc-300 font-sans text-base md:text-lg group-hover:text-[#00BFA6] transition-all tracking-wide">
                 Delhi NCR, India
               </span>
             </div>
           </div>
 
           <div className="flex items-center gap-6 mt-16 pt-4 border-t border-white/10 w-full max-w-sm">
-            <a href="/resume.pdf" target="_blank" rel="noopener noreferrer" className="text-sm font-medium text-zinc-300 hover:text-[#009394] transition-colors flex items-center gap-2">
+            <a href="/resume.pdf" target="_blank" rel="noopener noreferrer" className="text-sm font-medium text-zinc-300 hover:text-[#00BFA6] transition-colors flex items-center gap-2">
               VIEW RESUME ↗
             </a>
             <a href="/resume.pdf" download className="text-sm font-medium text-zinc-500 hover:text-zinc-300 transition-colors flex items-center gap-2">
@@ -303,7 +338,7 @@ const Contact = () => {
             className="w-full flex flex-col gap-8 cyberpunk-form-container p-4 lg:p-10 relative z-20"
           >
 
-            {/* Invisible Honeypot Field */}
+            {/* Invisible Honeypot Fields */}
             <div aria-hidden="true" className="opacity-0 absolute -left-[9999px] top-0 -z-50 pointer-events-none">
               <label htmlFor="bot-check">Website</label>
               <input
@@ -315,6 +350,16 @@ const Contact = () => {
                 value={honey}
                 onChange={(e) => setHoney(e.target.value)}
               />
+              <label htmlFor="botcheck">Bot Check</label>
+              <input
+                type="checkbox"
+                id="botcheck"
+                name="botcheck"
+                tabIndex={-1}
+                checked={botcheck}
+                onChange={(e) => setBotcheck(e.target.checked)}
+                style={{ display: 'none' }}
+              />
             </div>
 
             <div className="flex flex-col gap-2">
@@ -325,7 +370,7 @@ const Contact = () => {
                 name="name"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                className="glass-input text-soft-white focus:outline-none focus:border-[#009394] focus:ring-1 focus:ring-[#009394]/50 transition-all duration-300"
+                className="glass-input text-soft-white focus:outline-none focus:border-[#007F74] focus:ring-1 focus:ring-[#007F74]/50 transition-all duration-300"
                 required
               />
             </div>
@@ -338,7 +383,7 @@ const Contact = () => {
                 name="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="glass-input text-soft-white focus:outline-none focus:border-[#009394] focus:ring-1 focus:ring-[#009394]/50 transition-all duration-300"
+                className="glass-input text-soft-white focus:outline-none focus:border-[#007F74] focus:ring-1 focus:ring-[#007F74]/50 transition-all duration-300"
                 required
               />
             </div>
@@ -351,7 +396,7 @@ const Contact = () => {
                 rows={4}
                 value={message}
                 onChange={(e) => setMessage(e.target.value)}
-                className="glass-input text-soft-white resize-none mt-2 focus:outline-none focus:border-[#009394] focus:ring-1 focus:ring-[#009394]/50 transition-all duration-300"
+                className="glass-input text-soft-white resize-none mt-2 focus:outline-none focus:border-[#007F74] focus:ring-1 focus:ring-[#007F74]/50 transition-all duration-300"
                 required
               />
             </div>
@@ -359,19 +404,19 @@ const Contact = () => {
             <button
               type="submit"
               disabled={isLoading}
-              className="mt-6 terminal-button bg-teal text-charcoal hover:bg-white"
+              className="mt-6 terminal-button bg-teal text-white hover:bg-white hover:text-charcoal transition-all"
             >
               {isLoading ? 'SENDING...' : 'SEND MESSAGE ↗'}
             </button>
 
             {isSuccess && (
-              <p className="text-[#009394] font-sans text-sm tracking-widest uppercase mt-4 animate-pulse">
+              <p className="text-[#00BFA6] font-sans text-sm tracking-widest uppercase mt-4 animate-pulse">
                 [✓] CONNECTION ESTABLISHED. Thank you for reaching out, I will be in touch shortly.
               </p>
             )}
             {isError && (
               <p className="text-red-500 font-sans text-sm tracking-widest uppercase mt-4 animate-pulse">
-                // Transmission Failed. Check Network Context.
+                {errorMessage || "// Transmission Failed. Check Network Context."}
               </p>
             )}
           </form>
