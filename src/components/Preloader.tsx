@@ -241,11 +241,11 @@ const Preloader: React.FC<PreloaderProps> = ({ onComplete }) => {
               }}
             >
               <div className="face front" style={faceStyle(0, 0, 40, 0, 0, '#161616')} />
-              <div className="face back" style={faceStyle(0, 0, -40, 180, 0, '#00E0C7')} />
-              <div className="face right" style={faceStyle(40, 0, 0, 0, 90, '#00E0C7')} />
-              <div className="face left" style={faceStyle(-40, 0, 0, 0, -90, '#00E0C7')} />
-              <div className="face top" style={faceStyle(0, -40, 0, 90, 0, '#00E0C7')} />
-              <div className="face bottom" style={faceStyle(0, 40, 0, -90, 0, '#00E0C7')} />
+              <div className="face back" style={faceStyle(0, 0, -40, 180, 0, '#007F74')} />
+              <div className="face right" style={faceStyle(40, 0, 0, 0, 90, '#007F74')} />
+              <div className="face left" style={faceStyle(-40, 0, 0, 0, -90, '#007F74')} />
+              <div className="face top" style={faceStyle(0, -40, 0, 90, 0, '#007F74')} />
+              <div className="face bottom" style={faceStyle(0, 40, 0, -90, 0, '#007F74')} />
             </div>
           ))}
         </div>
@@ -295,7 +295,7 @@ const Preloader: React.FC<PreloaderProps> = ({ onComplete }) => {
           height: 100%;
           box-sizing: border-box;
           backface-visibility: hidden;
-          border: 1px solid #009394;
+          border: 1px solid #007F74;
         }
         .face.front {
           border: 1px solid #333;
