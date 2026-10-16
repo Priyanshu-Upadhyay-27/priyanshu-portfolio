@@ -88,7 +88,7 @@
   height: 42px;
   overflow: hidden;
   cursor: pointer;
-  background: #00E0C7;
+  background: var(--teal-primary, #007F74);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -119,7 +119,7 @@
   opacity: 0;
   background: #080808;
   gap: 1.5rem;
-  border: 1px solid #009394;
+  border: 1px solid var(--teal-primary, #007F74);
   pointer-events: none;
 }
 
@@ -132,7 +132,7 @@
 }
 
 .resume-icon-link {
-  color: #00E0C7;
+  color: var(--teal-highlight, #00BFA6);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -151,7 +151,7 @@
 .resume-icon-divider {
   width: 1px;
   height: 50%;
-  background: rgba(0, 224, 199, 0.3);
+  background: rgba(0, 191, 166, 0.3);
 }
 
 /* ── Ticker & Nav Dropdown ── */
@@ -160,7 +160,7 @@
 }
 
 .ticker-btn {
-  background: #00E0C7;
+  background: var(--teal-primary, #007F74);
   color: #ffffff;
   border: none;
   font-family: 'Inter', -apple-system, 'SF Pro Display', sans-serif;
@@ -189,7 +189,7 @@
   width: 210px;
   background: rgba(0, 0, 0, 0.7);
   backdrop-filter: blur(12px);
-  border: 1px solid #009394;
+  border: 1px solid var(--teal-primary, #007F74);
   opacity: 0;
   transform: translateY(-10px);
   pointer-events: none;
@@ -221,12 +221,12 @@
 }
 
 .nav-dropdown-list li a:hover {
-  background: rgba(0, 224, 199, 0.15);
-  color: #00E0C7;
+  background: rgba(0, 127, 116, 0.2);
+  color: var(--teal-highlight, #00BFA6);
 }
 
 .nav-index {
-  color: #00E0C7;
+  color: var(--teal-highlight, #00BFA6);
   font-family: 'Inter', -apple-system, 'SF Pro Display', sans-serif;
   font-size: 0.65rem;
 }

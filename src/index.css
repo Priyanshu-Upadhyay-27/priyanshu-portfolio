@@ -1,8 +1,16 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Anton&display=swap');
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+:root {
+  --teal-primary: #007F74;
+  --teal-highlight: #00BFA6;
+  --bg-main: #080808;
+  --headline-main: #E2E4E4;
+}
 
 @layer base {
   html {
@@ -21,11 +29,11 @@
   background: #0a0a0a;
 }
 ::-webkit-scrollbar-thumb {
-  background: #006270;
+  background: var(--teal-primary);
   border-radius: 4px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #009394;
+  background: var(--teal-highlight);
 }
 
 @layer utilities {

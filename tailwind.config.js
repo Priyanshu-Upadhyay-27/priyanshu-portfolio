@@ -16,7 +16,8 @@ export default {
         'charcoal': '#121212',
         'near-black': '#0a0a0a',
         'soft-white': '#f5f5f5',
-        'teal': '#009394',
+        'teal': '#007F74',
+        'teal-highlight': '#00BFA6',
         'muted-green': '#006270',
       },
       fontFamily: {
