@@ -14,6 +14,42 @@ const BOWL = 0.16;
 const R_AMP = 0.038;
 const R_FREQ = 1.8;
 
+// ── Edge Irregularity Controls ──
+// Expose amplitude as a single constant (roughly 3-6% of mesh width).
+// Set to 0 to completely disable irregularity and restore straight cuts.
+const EDGE_IRREGULARITY = 0.04; // 4% of mesh width (~0.21 units)
+
+// Smooth vertical envelope: 1.0 in the middle (v = 0), smoothly blending to 0 at top/bottom edges (v = +-2.6)
+function getVerticalEnvelope(v: number): number {
+  const normV = Math.max(-1, Math.min(1, v / 2.6));
+  const c = Math.cos(normV * Math.PI * 0.5);
+  return c * c;
+}
+
+// Low-frequency deterministic noise along v for left and right edges (2-3 smooth sine octaves)
+function getEdgeOffset(v: number, isRight: boolean): number {
+  if (EDGE_IRREGULARITY <= 0) return 0;
+  const envelope = getVerticalEnvelope(v);
+  // Independent fixed phases for left vs right so the two sides wander organically and independently
+  const phase = isRight ? 0.35 : 2.48;
+  const wave = (
+    Math.sin(1.65 * v + phase) * 0.58 +
+    Math.sin(3.40 * v + phase * 1.4 + 0.9) * 0.32 +
+    Math.cos(5.10 * v - phase * 0.8 + 1.4) * 0.10
+  );
+  return envelope * wave * (5.2 * EDGE_IRREGULARITY);
+}
+
+// Compute dynamic left and right boundary positions for a given v
+function getEdgeBounds(v: number): { left: number; right: number } {
+  if (EDGE_IRREGULARITY <= 0) {
+    return { left: -2.38, right: 2.38 };
+  }
+  const right = 2.48 + getEdgeOffset(v, true);
+  const left = -2.48 - getEdgeOffset(v, false);
+  return { left, right };
+}
+
 function surfaceHeight(u: number, v: number): number {
   let h = BOWL * (u * u + v * v);
   h -= G1.A * Math.exp(-((u - G1.u) ** 2 + (v - G1.v) ** 2) / G1.s2);
@@ -142,30 +178,80 @@ const GradientDescentVisual: React.FC = () => {
     }
     geometry.computeVertexNormals();
 
-    // Color mesh lines by height: dim teal on ridges, brighter in valleys, brightest at global basin
+    // Color mesh lines by height + soft per-vertex alpha fade at noisy boundary
     const colors = new Float32Array(posAttr.count * 3);
+    const vertexAlphas = new Float32Array(posAttr.count);
     const yRange = Math.max(maxY - minY, 0.001);
+    const fadeBand = 0.22; // Short soft band for smooth line tapering
 
     for (let i = 0; i < posAttr.count; i++) {
+      const u = posAttr.getX(i);
+      const v = posAttr.getZ(i);
       const y = posAttr.getY(i);
-      // t is 0.0 at the deepest point of global basin, 1.0 at highest ridges
-      const t = (y - minY) / yRange;
-      const depthFactor = 1.0 - t; // 1.0 at lowest, 0.0 at highest
-      const intensity = Math.pow(depthFactor, 1.2);
 
       // Distinct height gradient:
       // Ridges (high): dim teal (R=0.0, G=0.32, B=0.30)
       // Mid slopes: vibrant teal (R=0.0, G=0.85, B=0.80)
       // Basin floor: brilliant luminous cyan (R=0.25, G=1.0, B=0.95)
+      const t = (y - minY) / yRange;
+      const depthFactor = 1.0 - t; // 1.0 at lowest, 0.0 at highest
+      const intensity = Math.pow(depthFactor, 1.2);
+
       const r = 0.25 * Math.pow(depthFactor, 2.5);
       const g = 0.32 + (1.0 - 0.32) * intensity;
       const b = 0.30 + (0.95 - 0.30) * intensity;
 
-      colors[i * 3] = r;
-      colors[i * 3 + 1] = g;
-      colors[i * 3 + 2] = b;
+      // Calculate per-vertex alpha along the noisy boundary
+      let alpha = 1.0;
+      if (EDGE_IRREGULARITY > 0) {
+        const { left, right } = getEdgeBounds(v);
+        if (u > 0) {
+          const innerRight = right - fadeBand;
+          if (u <= innerRight) {
+            alpha = 1.0;
+          } else if (u >= right) {
+            alpha = 0.0;
+          } else {
+            const step = (u - innerRight) / fadeBand;
+            alpha = 1.0 - step * step * (3.0 - 2.0 * step);
+          }
+        } else {
+          const innerLeft = left + fadeBand;
+          if (u >= innerLeft) {
+            alpha = 1.0;
+          } else if (u <= left) {
+            alpha = 0.0;
+          } else {
+            const step = (innerLeft - u) / fadeBand;
+            alpha = 1.0 - step * step * (3.0 - 2.0 * step);
+          }
+        }
+      }
+
+      vertexAlphas[i] = alpha;
+      colors[i * 3] = r * alpha;
+      colors[i * 3 + 1] = g * alpha;
+      colors[i * 3 + 2] = b * alpha;
     }
     geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+
+    // Filter triangles so that triangles fully outside the boundary are not drawn
+    const originalIndices = geometry.index ? geometry.index.array : null;
+    if (originalIndices && EDGE_IRREGULARITY > 0) {
+      const filteredIndices: number[] = [];
+      for (let j = 0; j < originalIndices.length; j += 3) {
+        const a = originalIndices[j];
+        const b = originalIndices[j + 1];
+        const c = originalIndices[j + 2];
+
+        if (vertexAlphas[a] <= 0.001 && vertexAlphas[b] <= 0.001 && vertexAlphas[c] <= 0.001) {
+          continue; // Completely outside boundary: omitted
+        }
+
+        filteredIndices.push(a, b, c);
+      }
+      geometry.setIndex(filteredIndices);
+    }
 
     const wireframeMaterial = new THREE.MeshBasicMaterial({
       vertexColors: true,
@@ -278,16 +364,18 @@ const GradientDescentVisual: React.FC = () => {
               firstVisitObserver.disconnect(); // Disconnect immediately: never runs again
 
               if (!prefersReducedMotion) {
-                // Pick a random point far enough from the global minimum for a visible descent
-                let spawnU = -1.5;
+                // Pick a random point far enough from the global minimum for a visible descent,
+                // and strictly inside the visible irregular boundary
+                let spawnU = -1.4;
                 let spawnV = 1.3;
-                for (let attempts = 0; attempts < 15; attempts++) {
+                for (let attempts = 0; attempts < 25; attempts++) {
                   const angle = Math.random() * Math.PI * 2;
                   const rad = 1.35 + Math.random() * 0.85;
                   const candU = Math.cos(angle) * rad;
                   const candV = Math.sin(angle) * rad;
+                  const { left, right } = getEdgeBounds(candV);
                   const dist = Math.hypot(candU - G1.u, candV - G1.v);
-                  if (dist > 1.4) {
+                  if (dist > 1.4 && candU > left + 0.15 && candU < right - 0.15 && Math.abs(candV) < 2.3) {
                     spawnU = candU;
                     spawnV = candV;
                     break;
@@ -304,7 +392,7 @@ const GradientDescentVisual: React.FC = () => {
     );
     firstVisitObserver.observe(targetSection);
 
-    // 8. User Click / Tap Interaction (Raycast against mesh, ignore misses)
+    // 8. User Click / Tap Interaction (Raycast against mesh, ignore misses & outside outline)
     const raycaster = new THREE.Raycaster();
     const mouseCoord = new THREE.Vector2();
 
@@ -319,8 +407,15 @@ const GradientDescentVisual: React.FC = () => {
       // Must hit the mesh; ignore clicks that miss
       if (intersects.length > 0) {
         const localPoint = surfaceMesh.worldToLocal(intersects[0].point.clone());
-        const clickedU = THREE.MathUtils.clamp(localPoint.x, -2.4, 2.4);
-        const clickedV = THREE.MathUtils.clamp(localPoint.z, -2.4, 2.4);
+        const clickedU = THREE.MathUtils.clamp(localPoint.x, -2.5, 2.5);
+        const clickedV = THREE.MathUtils.clamp(localPoint.z, -2.5, 2.5);
+
+        // Ignore clicks that land outside the visible outline
+        const { left, right } = getEdgeBounds(clickedV);
+        if (clickedU < left || clickedU > right || Math.abs(clickedV) > 2.45) {
+          return;
+        }
+
         // Overrides any existing animation immediately
         triggerDrop(clickedU, clickedV);
       }
@@ -444,11 +539,19 @@ const GradientDescentVisual: React.FC = () => {
         u += vu;
         v += vv;
 
-        // Boundaries
-        if (Math.abs(u) > 2.38) {
-          u = Math.sign(u) * 2.38;
-          vu = -vu * 0.2;
+        // Organic boundary reflection & damping
+        const { left, right } = getEdgeBounds(v);
+        const minU = left + 0.08;
+        const maxU = right - 0.08;
+
+        if (u < minU) {
+          u = minU;
+          vu = Math.abs(vu) * 0.2;
+        } else if (u > maxU) {
+          u = maxU;
+          vu = -Math.abs(vu) * 0.2;
         }
+
         if (Math.abs(v) > 2.38) {
           v = Math.sign(v) * 2.38;
           vv = -vv * 0.2;
